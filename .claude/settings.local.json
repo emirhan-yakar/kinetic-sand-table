@@ -25,7 +25,18 @@
       "Read(//tmp/**)",
       "Bash(qlmanage -t -s 1400 -o . composite-top.svg composite-bottom.svg top_silk.svg)",
       "Bash(ls -la *.png)",
-      "Bash(qlmanage -t -s 1400 -o . top_cu.svg bot_cu.svg edge.svg)"
+      "Bash(qlmanage -t -s 1400 -o . top_cu.svg bot_cu.svg edge.svg)",
+      "Bash(curl -s \"https://kicad-downloads.s3.cern.ch/?list-type=2&prefix=osx/stable/&max-keys=400\")",
+      "Bash(curl -L -s -o kicad.dmg \"https://kicad-downloads.s3.cern.ch/osx/stable/kicad-unified-universal-9.0.9.dmg\")",
+      "Bash(awk '{print \"indirilen:\",$5}')",
+      "Bash(hdiutil attach *)",
+      "Read(//Volumes/KiCad/**)",
+      "Bash(mkdir -p ~/Applications)",
+      "Bash(cp -R /Volumes/KiCad/KiCad.app ~/Applications/)",
+      "Read(//Users/emirhanyakar/Applications/KiCad/KiCad.app/Contents/MacOS/**)",
+      "Read(//Users/emirhanyakar/Applications/KiCad.app/Contents/MacOS/**)",
+      "Bash(chmod +x kicad_export.sh)",
+      "Bash(bash kicad_export.sh)"
     ]
   }
 }

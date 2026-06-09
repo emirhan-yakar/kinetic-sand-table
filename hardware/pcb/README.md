@@ -121,3 +121,50 @@ Bu Gerber'lar geometrik olarak geçerlidir ve fabrikaya yüklenebilir, ancak
 | R1 | 330Ω 0805 | LED DIN seri direnç |
 | C1 | 1000µF | 5V tampon |
 | C2/C3 | 100nF 0805 | sürücü decoupling |
+
+---
+
+# KİCAD İLE FİNAL ÇIKTI (Gerber + STEP 3D)
+
+Kart artık gerçek bir **KiCad 9 projesi** olarak da üretiliyor — gerçek footprint'ler,
+net'ler, GND ground plane ve KiCad'in kendi motoruyla export edilmiş Gerber + STEP.
+
+## Araç zinciri
+```
+python build_kicad.py   # pcbnew API ile controller.kicad_pcb uretir
+bash   kicad_export.sh   # kicad-cli ile final/ -> Gerber + STEP + PDF + DRC
+```
+> KiCad ~/Applications/KiCad.app altında (9.0.9). `build_kicad.py` KiCad'in
+> kendi python'u ile çalışır (bkz. script başı / kicad_export.sh içindeki yol tespiti).
+
+## Üretilen dosyalar
+| Yol | İçerik |
+|---|---|
+| `controller.kicad_pcb` | KiCad PCB (GUI'de açılır) — yerleşim + 25 net + GND zone |
+| `build_kicad.py` | pcbnew ile kartı kuran script (footprint + net + iz + zone) |
+| `kicad_export.sh` | kicad-cli export (Gerber/Drill/STEP/PDF/DRC) |
+| `final/gerbers/*.gbr` + `controller.drl` | **KiCad'in ürettiği final Gerber + Excellon** |
+| `final/controller.step` | **STEP 3D model** (2.1 MB, ISO-10303, e-CAD/mekanik için) |
+| `final/top.pdf` / `bottom.pdf` | katman PDF çıktıları |
+| `final/drc.json` + `DRC_SUMMARY.txt` | DRC raporu |
+| `final/plots/final-B_Cu-groundplane.png` | alt katman GND plane render'ı |
+
+## Durum (dürüst)
+- ✅ **Bakır kısa devre yok** (DRC `shorting_items = 0`) — yönlendirme ped-farkında.
+- ✅ **GND ground plane** alt katmanda dolu (clearance'lı), Gerber'da mevcut.
+- ✅ **STEP 3D** geçerli; konnektör/header 3D modelleri dahil (jenerik MaiXu
+  klemenslerin STEP modeli kütüphanede yok, atlandı — kart + soketler görünür).
+- ⚠️ **16/32 sinyal izi** otomatik yönlendirildi; kalan **18 ratsnest** yoğun
+  ESP32↔sürücü bölgesinde — bunlar KiCad'de tamamlanmalı (THT pad'ler her iki
+  katmanı kapattığı için headless greedy router buradan geçemiyor; gerçek iş bir
+  autorouter/elle routing'dir).
+- ⚠️ DRC'deki `clearance`/`silk_*` ihlalleri büyük ölçüde **self-fill geometrisi**
+  ve kütüphane footprint silk'inden (kozmetik). **Önemli:** ZONE_FILLER headless
+  pcbnew'de segfault verdiği için zone'u kendim hesapladım; KiCad GUI'de açıp
+  **`B`** (Edit → Fill All Zones) ile yeniden doldurunca KiCad'in kendi filler'ı
+  kusursuz plane üretir ve bu ihlaller büyük ölçüde temizlenir.
+
+## Üretim öncesi son adım (KiCad GUI'de)
+1. `controller.kicad_pcb`'yi aç → **`B`** ile zone'ları yeniden doldur.
+2. 18 ratsnest izini tamamla (elle veya Freerouting eklentisi).
+3. **DRC** çalıştır, temizle → `kicad_export.sh` ile final Gerber/STEP'i tazele.

@@ -1,0 +1,13 @@
+KiCad 9.0.9 DRC ozeti (controller.kicad_pcb)
+============================================
+KOPYA/BAKIR SHORT (shorting_items): 0  <- 0 = bakir kisa devre yok
+Toplam ihlal: 222 | Baglanmamis (ratsnest): 18
+    74 clearance
+    73 silk_overlap
+    56 silk_over_copper
+    10 isolated_copper
+     2 courtyards_overlap
+     2 solder_mask_bridge
+     2 track_dangling
+     2 silk_edge_clearance
+     1 starved_thermal
