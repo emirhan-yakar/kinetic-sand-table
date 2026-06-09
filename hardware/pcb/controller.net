@@ -1,0 +1,43 @@
+(export (version D)
+  (components
+    (comp (ref "U1") (value "U1 ESP32"))
+    (comp (ref "A1") (value "A1 TMC(th)"))
+    (comp (ref "A2") (value "A2 TMC(rh)"))
+    (comp (ref "BK1") (value "BK1 5V"))
+    (comp (ref "J1") (value "J1 12V"))
+    (comp (ref "J2") (value "J2 TH-MOT"))
+    (comp (ref "J3") (value "J3 RH-MOT (slipring)"))
+    (comp (ref "J4") (value "J4 LED"))
+    (comp (ref "R1") (value "R1"))
+    (comp (ref "C1") (value "C1"))
+    (comp (ref "J5") (value "J5 ENDSTOP"))
+  )
+  (nets
+    (net (code "1") (name "GPIO23")) ;; 1 pad
+    (net (code "2") (name "N_12V")) ;; 4 pad
+    (net (code "3") (name "N_3V3")) ;; 2 pad
+    (net (code "4") (name "N_5V")) ;; 8 pad
+    (net (code "5") (name "N_EN")) ;; 3 pad
+    (net (code "6") (name "N_ENDSTOP")) ;; 2 pad
+    (net (code "7") (name "N_EN_BTN")) ;; 1 pad
+    (net (code "8") (name "N_GND")) ;; 20 pad
+    (net (code "9") (name "N_LEDDIN")) ;; 2 pad
+    (net (code "10") (name "N_LEDG")) ;; 2 pad
+    (net (code "11") (name "N_MS1")) ;; 2 pad
+    (net (code "12") (name "N_MS2")) ;; 2 pad
+    (net (code "13") (name "N_RHDIR")) ;; 2 pad
+    (net (code "14") (name "N_RHSTEP")) ;; 2 pad
+    (net (code "15") (name "N_THDIR")) ;; 2 pad
+    (net (code "16") (name "N_THSTEP")) ;; 2 pad
+    (net (code "17") (name "N_UART")) ;; 3 pad
+    (net (code "18") (name "N_UART_RX")) ;; 1 pad
+    (net (code "19") (name "RHM_A1")) ;; 2 pad
+    (net (code "20") (name "RHM_A2")) ;; 2 pad
+    (net (code "21") (name "RHM_B1")) ;; 2 pad
+    (net (code "22") (name "RHM_B2")) ;; 2 pad
+    (net (code "23") (name "THM_A1")) ;; 2 pad
+    (net (code "24") (name "THM_A2")) ;; 2 pad
+    (net (code "25") (name "THM_B1")) ;; 2 pad
+    (net (code "26") (name "THM_B2")) ;; 2 pad
+  )
+)

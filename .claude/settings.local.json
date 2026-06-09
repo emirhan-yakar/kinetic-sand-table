@@ -9,7 +9,23 @@
       "Bash(git init *)",
       "Bash(git add *)",
       "Bash(git -c user.name=Emirhan -c user.email=emirhanyakarclaude@gmail.com commit -q -m 'Kinetik kum sanati masasi uretim projesi \\(polar/theta-rho, Ø60cm\\) *)",
-      "Bash(ssh -o BatchMode=yes -o ConnectTimeout=5 -T git@github.com)"
+      "Bash(ssh -o BatchMode=yes -o ConnectTimeout=5 -T git@github.com)",
+      "Bash(git branch *)",
+      "Bash(git remote *)",
+      "Bash(git push *)",
+      "Bash(kicad-cli version *)",
+      "Read(//Applications/**)",
+      "Bash(python3 -c \"import skidl\")",
+      "Bash(python3 -c \"import pcbnew\")",
+      "Bash(python3 -m pip --version)",
+      "Bash(python3 -m pip install --quiet --user gerbonara)",
+      "Bash(python3 -c \"import gerbonara; from gerbonara import LayerStack; print\\('gerbonara', gerbonara.__version__ if hasattr\\(gerbonara,'__version__'\\) else 'ok'\\)\")",
+      "Bash(python3 *)",
+      "Read(//private/tmp/**)",
+      "Read(//tmp/**)",
+      "Bash(qlmanage -t -s 1400 -o . composite-top.svg composite-bottom.svg top_silk.svg)",
+      "Bash(ls -la *.png)",
+      "Bash(qlmanage -t -s 1400 -o . top_cu.svg bot_cu.svg edge.svg)"
     ]
   }
 }
