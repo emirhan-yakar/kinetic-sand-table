@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:nikolatoy.com)",
+      "WebSearch",
+      "Bash(openscad -o /tmp/st.stl hardware/sand_table.scad)",
+      "Bash(gh auth *)",
+      "Bash(git config *)",
+      "Bash(git init *)",
+      "Bash(git add *)",
+      "Bash(git -c user.name=Emirhan -c user.email=emirhanyakarclaude@gmail.com commit -q -m 'Kinetik kum sanati masasi uretim projesi \\(polar/theta-rho, Ø60cm\\) *)",
+      "Bash(ssh -o BatchMode=yes -o ConnectTimeout=5 -T git@github.com)"
+    ]
+  }
+}
