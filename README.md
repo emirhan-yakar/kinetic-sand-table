@@ -31,7 +31,8 @@ kum tabakasındaki **çelik bilyeyi** sürükleyerek sonsuz desenler çizer. Ken
 | `hardware/sand_table.scad` | Parametrik 3D model (OpenSCAD) — gövde, kol, cam, LED halka |
 | `hardware/pcb/` | Kontrol kartı: `pcb_gen.py` üreteci, **hazır Gerber + Excellon** (`gerbers/`), katman çizimleri (`plots/`), `controller.net` netlist, `board3d.scad` 3D model. Detay: `hardware/pcb/README.md` |
 | `firmware/README.md` | Dune Weaver / FluidNC kurulumu + Sandify ile desen üretimi |
-| `docs/render-recipe.md` | Blender/KeyShot fotogerçekçi render reçetesi (malzeme + ışık) |
+| `render/` | **Blender fotogerçekçi render** — `render_table.py` (prosedürel sahne, Cycles), `table_hero.png` (aydınlık) + `table_dark.png` (LED parıltılı). Bkz. `render/README.md` |
+| `docs/render-recipe.md` | Render reçetesi (malzeme + ışık), `render/`'ın temeli |
 
 ## Hızlı başlangıç
 1. `BOM.md` → parçaları sipariş et.

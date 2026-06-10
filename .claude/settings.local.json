@@ -46,7 +46,11 @@
       "Bash(chmod +x freeroute.sh)",
       "Bash(bash freeroute.sh)",
       "Bash(git rm *)",
-      "Bash(git -c user.name=Emirhan -c user.email=emirhanyakarclaude@gmail.com commit -q -m 'Freerouting: kalan sinyaller tamamlandi -> TAM ROUTING \\(ratsnest=0\\) *)"
+      "Bash(git -c user.name=Emirhan -c user.email=emirhanyakarclaude@gmail.com commit -q -m 'Freerouting: kalan sinyaller tamamlandi -> TAM ROUTING \\(ratsnest=0\\) *)",
+      "Bash(awk '{print \"bos:\",$4}')",
+      "Bash(curl -s https://download.blender.org/release/)",
+      "Bash(curl -s https://download.blender.org/release/Blender4.5/)",
+      "Bash(curl -L -s -o blender.dmg \"https://download.blender.org/release/Blender4.5/blender-4.5.10-macos-arm64.dmg\")"
     ]
   }
 }
