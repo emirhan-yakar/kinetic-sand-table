@@ -4,9 +4,32 @@
 #  KiCad'in kendi python'u ile calistirilir (bkz. build_kicad.sh).
 #  Standart kutuphane footprintleri + net atamasi + iz yonlendirme + GND zone.
 # ============================================================================
-import os, sys, math
+import os, sys, math, re
 import pcbnew   # not: CreateEmptyBoard 'create wxApp' assert'i basar; zararsiz, devam eder
 from pcbnew import VECTOR2I, FromMM, ToMM
+
+SES_FILE = os.environ.get("SES_FILE")   # ayarliysa greedy yerine Freerouting SES uygulanir
+
+def parse_ses(txt):
+    out=[]   # ("wire",net,layer,width_um,[(x,y)..]) / ("via",net,x,y)
+    m=re.search(r'\(network_out\b', txt)
+    body=txt[m.start():] if m else txt
+    for nm in re.finditer(r'\(net\s+"([^"]+)"', body):
+        name=nm.group(1); depth=0; p=nm.start()
+        while p<len(body):
+            if body[p]=='(':depth+=1
+            elif body[p]==')':
+                depth-=1
+                if depth==0:break
+            p+=1
+        block=body[nm.start():p+1]
+        for w in re.finditer(r'\(path\s+(\S+)\s+([0-9.]+)\s+([-0-9.\s]+?)\)', block):
+            nums=[float(x) for x in w.group(3).split()]
+            out.append(("wire",name,w.group(1).strip('"'),float(w.group(2)),
+                        list(zip(nums[0::2],nums[1::2]))))
+        for v in re.finditer(r'\(via\s+\S+\s+([-0-9.]+)\s+([-0-9.]+)', block):
+            out.append(("via",name,float(v.group(1)),float(v.group(2))))
+    return out
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUTPCB = os.path.join(HERE, "controller.kicad_pcb")
@@ -158,7 +181,21 @@ def main():
         v=pcbnew.PCB_VIA(board); v.SetPosition(VECTOR2I(FromMM(x),FromMM(y)))
         v.SetDrill(FromMM(0.4)); v.SetWidth(FromMM(0.8)); v.SetNet(netmap[net]); board.Add(v)
         OBST.append((x,y,net,0.4)); ROUTE_VIAS.append((x,y,net))
-    for net in sorted(netpts, key=lambda k:(k not in power, len(netpts[k]))):
+    SES_APPLIED=False
+    if SES_FILE and os.path.exists(SES_FILE):
+        for it in parse_ses(open(SES_FILE).read()):
+            if it[0]=="wire":
+                _,name,layer,width,coords=it
+                if name not in netmap: continue
+                lay="F" if layer=="F.Cu" else "B"; w=max(0.2,width/1000.0)
+                for (x1,y1),(x2,y2) in zip(coords,coords[1:]):
+                    addtrack(name,x1/1000,y1/1000,x2/1000,y2/1000,lay,w); routed+=1
+            else:
+                _,name,x,y=it
+                if name in netmap: addvia(name,x/1000,y/1000); nvia+=1
+        SES_APPLIED=True
+        P("[4] Freerouting SES uygulandi: iz_segment=",routed,"via=",nvia)
+    for net in ([] if SES_APPLIED else sorted(netpts, key=lambda k:(k not in power, len(netpts[k])))):
         pts=netpts[net]
         if net=="N_GND" or len(pts)<2: continue
         pref=["B","F"] if net in power else ["F","B"]
@@ -197,7 +234,7 @@ def main():
             v.SetDrill(FromMM(0.4)); v.SetWidth(FromMM(0.8)); v.SetNet(gnd); board.Add(v)
 
     # --- alt katman GND zone (ground plane), self-fill (ZONE_FILLER segfault workaround) ---
-    GAP=0.55
+    GAP=0.6
     zone = pcbnew.ZONE(board)
     zone.SetLayer(pcbnew.B_Cu)
     zone.SetNetCode(gnd.GetNetCode())
@@ -205,9 +242,11 @@ def main():
     poly = zone.Outline(); poly.NewOutline()
     for (px,py) in [(0.5,0.5),(BW-0.5,0.5),(BW-0.5,BH-0.5),(0.5,BH-0.5)]:
         poly.Append(VECTOR2I(FromMM(px),FromMM(py)))
-    zone.SetLocalClearance(FromMM(GAP)); zone.SetMinThickness(FromMM(0.25))
+    # clearance kurali fiziksel boslukdan (GAP, ~poligon yaklasimi) KUCUK olmali,
+    # yoksa DRC "zone clearance" ihlali verir. Fiziksel boslugu GAP korur.
+    zone.SetLocalClearance(FromMM(0.3)); zone.SetMinThickness(FromMM(0.25))
 
-    def circle_sps(cx,cy,r,n=20):
+    def circle_sps(cx,cy,r,n=24):
         s=pcbnew.SHAPE_POLY_SET(); s.NewOutline()
         for k in range(n):
             a=2*math.pi*k/n

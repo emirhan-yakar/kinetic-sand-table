@@ -36,7 +36,17 @@
       "Read(//Users/emirhanyakar/Applications/KiCad/KiCad.app/Contents/MacOS/**)",
       "Read(//Users/emirhanyakar/Applications/KiCad.app/Contents/MacOS/**)",
       "Bash(chmod +x kicad_export.sh)",
-      "Bash(bash kicad_export.sh)"
+      "Bash(bash kicad_export.sh)",
+      "Bash(git -c user.name=Emirhan -c user.email=emirhanyakarclaude@gmail.com commit -q -m 'KiCad final: gercek .kicad_pcb + KiCad-export Gerber + STEP 3D + DRC *)",
+      "Bash(curl -L -s -o freerouting.jar \"https://github.com/freerouting/freerouting/releases/download/v2.2.4/freerouting-2.2.4.jar\")",
+      "Bash(curl -s \"https://api.github.com/repos/adoptium/temurin25-binaries/releases/latest\")",
+      "Bash(curl -L -s -o jdk25.tar.gz \"https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.3%2B9/OpenJDK25U-jdk_aarch64_mac_hotspot_25.0.3_9.tar.gz\")",
+      "Bash(sed -i '' 's/    GAP=0.55/    GAP=0.6/' build_kicad.py)",
+      "Bash(sed -i '' 's/def circle_sps\\(cx,cy,r,n=20\\):/def circle_sps\\(cx,cy,r,n=24\\):/' build_kicad.py)",
+      "Bash(chmod +x freeroute.sh)",
+      "Bash(bash freeroute.sh)",
+      "Bash(git rm *)",
+      "Bash(git -c user.name=Emirhan -c user.email=emirhanyakarclaude@gmail.com commit -q -m 'Freerouting: kalan sinyaller tamamlandi -> TAM ROUTING \\(ratsnest=0\\) *)"
     ]
   }
 }
