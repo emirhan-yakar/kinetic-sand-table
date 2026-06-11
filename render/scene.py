@@ -20,6 +20,7 @@ WOOD_NOR=os.path.join(DIR,"assets","wood_nor.jpg")
 SAND_DIFF=os.path.join(DIR,"assets","sand_diff.jpg")
 SAND_ROUGH=os.path.join(DIR,"assets","sand_rough.jpg")
 SAND_NOR=os.path.join(DIR,"assets","sand_nor.jpg")
+GROOVE_HMAP=os.path.join(DIR,"assets","groove_height.png")  # gercek oluk yukseklik haritasi
 THR = os.environ.get("PATTERN_THR") or os.path.join(ROOT,"firmware","patterns","spiral_rose.thr")
 if not os.path.isabs(THR): THR=os.path.join(ROOT,"firmware","patterns",THR)
 
@@ -119,8 +120,17 @@ bpy.ops.mesh.primitive_torus_add(major_radius=(R+WELL_R)/2,minor_radius=(R-WELL_
     location=(0,0,TOP_Z),major_segments=160,minor_segments=20)
 Rim=bpy.context.active_object; Rim.name="Rim"; bpy.ops.object.shade_smooth()
 
-# --- kum diski ---
-Sand=cyl("Sand",WELL_R*0.985,0.012,SAND_Z,256)
+# --- kum diski (render'da gercek oluk icin yuksek-coz grid; glb'de silindir) ---
+R_CAP=WELL_R*0.985
+if MODE!="glb" and os.path.exists(GROOVE_HMAP):
+    import bmesh
+    bpy.ops.mesh.primitive_grid_add(x_subdivisions=600,y_subdivisions=600,size=2*R_CAP,location=(0,0,SAND_TOP))
+    Sand=bpy.context.active_object; Sand.name="Sand"
+    bm=bmesh.new(); bm.from_mesh(Sand.data); R2=R_CAP*R_CAP
+    bmesh.ops.delete(bm,geom=[v for v in bm.verts if v.co.x*v.co.x+v.co.y*v.co.y>R2],context='VERTS')
+    bm.to_mesh(Sand.data); bm.free(); bpy.ops.object.shade_smooth()
+else:
+    Sand=cyl("Sand",R_CAP,0.012,SAND_Z,256)
 
 # --- .thr deseni -> oluk egrisi ---
 def load_thr(p):
@@ -140,6 +150,8 @@ for i,(x,y) in enumerate(pts): sp.points[i].co=(x,y,SAND_TOP-0.0006,1)
 # yogun portre desenlerinde cizgiler birlesmesin -> ince oluk (hafif geometri)
 cu.bevel_depth=(0.0007 if len(pts)>6000 else 0.0015); cu.bevel_resolution=1
 Groove=bpy.data.objects.new("Groove",cu); link(Groove)
+# render'da oluk = gercek kum displacement (asagi); ince tup sadece glb/patlatma icin
+if MODE!="glb" and os.path.exists(GROOVE_HMAP): Groove.hide_render=True
 ball_xy=pts[-1]
 
 # --- celik bilye (desenin ucunda) ---
@@ -200,6 +212,14 @@ else:
     b1=sn.new("ShaderNodeBump"); b1.inputs["Strength"].default_value=0.1
     sl.new(tcs.outputs["Object"],n1.inputs["Vector"]); sl.new(n1.outputs["Fac"],b1.inputs["Height"]); sl.new(b1.outputs["Normal"],sb.inputs["Normal"])
 Sand.data.materials.append(sm)
+
+# --- GERCEK OLUK: yuksek-coz grid + Displace modifier (bounded, OOM yok) ---
+if MODE!="glb" and os.path.exists(GROOVE_HMAP):
+    gtex=bpy.data.textures.new("groove","IMAGE"); gtex.image=bpy.data.images.load(GROOVE_HMAP)
+    gtex.image.colorspace_settings.name='Non-Color'; gtex.extension='EXTEND'
+    dm=Sand.modifiers.new("groove","DISPLACE")
+    dm.texture=gtex; dm.texture_coords='UV'; dm.direction='Z'
+    dm.mid_level=0.5; dm.strength=0.007    # oluk ~1.6mm cukur + kenar kabarma
 grm,_=mat("Groove",(0.42,0.33,0.21),rough=0.97); Groove.data.materials.append(grm)
 stm,_=mat("Steel",(0.80,0.80,0.82),rough=0.07,metal=1.0); Ball.data.materials.append(stm)
 # LED: goze batmayan yumusak/los glow -> dusuk emisyon (glare esigi 1.7'yi gecip

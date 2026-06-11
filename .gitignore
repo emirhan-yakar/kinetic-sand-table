@@ -11,3 +11,6 @@ render/assets/ataturk_sig.png
 firmware/patterns/*_preview.png
 firmware/patterns/sig_inkmap.png
 docs/uretim/*.svg.png
+docs/uretim/montaj_patlatma_raw.png
+docs/uretim/montaj_patlatma_labels.json
+render/assets/groove_height.png

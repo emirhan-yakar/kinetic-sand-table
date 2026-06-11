@@ -101,7 +101,7 @@ renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFSoftShadowMap;
 
 const controls=new OrbitControls(camera,canvas);
 controls.enableDamping=true; controls.dampingFactor=0.08; controls.minDistance=0.4; controls.maxDistance=4;
-controls.autoRotate=true; controls.autoRotateSpeed=0.6;
+controls.autoRotate=false; controls.autoRotateSpeed=0.5;  // varsayilan kapali -> tam manuel kontrol
 
 // ---- postprocessing: bloom (LED parildamasi) ----
 const composer=new EffectComposer(renderer);
@@ -148,7 +148,9 @@ loader.load('table.glb',(g)=>{
       if(/Body|Legs|Rim/i.test(nm)){ m.roughness=0.6; m.clearcoat=0; m.metalness=0; }
       else if(/Sand|Groove/i.test(nm)){ m.roughness=0.96; m.metalness=0; }
       else if(/Ball/i.test(nm)){ m.roughness=0.25; m.metalness=1; }                 // mat celik
-      else if(/Glass/i.test(nm)){ m.roughness=0.06; m.metalness=0; m.transparent=true; m.opacity=0.12; if('transmission' in m) m.transmission=0.95; m.envMapIntensity=0.25; }
+      else if(/Glass/i.test(nm)){ m.roughness=0.07; m.metalness=0; m.transparent=true; m.opacity=0.10;
+        if('transmission' in m) m.transmission=0.95; m.envMapIntensity=0.15;
+        m.depthWrite=false; o.renderOrder=4; }   // arkasindaki imza gorunsun (occlude etmesin)
       else if(/PCB/i.test(nm)){ m.roughness=0.55; m.metalness=0; }
       else if(/Motor|Arm|Carriage|theta|Magnet|BasePlate/i.test(nm)){ m.roughness=0.45; }
       m.needsUpdate=true;
@@ -189,15 +191,16 @@ async function loadPattern(){
   path=[];
   for(let i=0;i<raw.length;i+=step){
     const [th,rho]=raw[i];
-    path.push(new THREE.Vector3(sandCenter.x+rho*sandR*Math.cos(th), sandTopY+0.003, sandCenter.z+rho*sandR*Math.sin(th)));
+    // glb Y-up donusumu: render Blender-Y -> three -Z; sin terimini negatif al (ayna duzeltme)
+    path.push(new THREE.Vector3(sandCenter.x+rho*sandR*Math.cos(th), sandTopY+0.003, sandCenter.z-rho*sandR*Math.sin(th)));
   }
   // dinamik cizgi (Line2)
   if(drawLine){ simGroup.remove(drawLine); drawLine.geometry.dispose(); }
   const pos=[]; path.forEach(p=>pos.push(p.x,p.y,p.z));
   const lg=new LineGeometry(); lg.setPositions(pos);
-  const lm=new LineMaterial({color:0xefe2c2, linewidth:3.4, transparent:true, opacity:1.0});  // acik oluk -> koyu kumda net
+  const lm=new LineMaterial({color:0xefe2c2, linewidth:3.4});  // opak acik oluk -> camda da gorunur
   lm.resolution.set(innerWidth,innerHeight);
-  drawLine=new Line2(lg,lm); drawLine.computeLineDistances();
+  drawLine=new Line2(lg,lm); drawLine.computeLineDistances(); drawLine.renderOrder=2;
   totalSeg=path.length-1; drawLine.geometry.instanceCount=Math.floor(drawn*totalSeg);
   simGroup.add(drawLine);
   placeBall();
@@ -267,7 +270,8 @@ renderer.setAnimationLoop((now)=>{
   if(ledOn && LEDMODES[ledIdx].c===-1 && ledMesh){ hue=(hue+dt*0.12)%1;
     const col=new THREE.Color().setHSL(hue,0.85,0.6); ledMesh.material.emissive.copy(col); ledLight.color.copy(col); }
   // çizim/patlatma sirasinda otomatik dönmeyi durdur (netlik)
-  controls.autoRotate = !running && explodeTarget<0.5;
+  // otomatik donus kapali (kullanici kontrolu); istenirse 'R' ile acilir
+
   controls.update(); composer.render();
 });
 setLED();
