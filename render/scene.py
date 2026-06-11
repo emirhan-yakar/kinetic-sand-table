@@ -202,8 +202,10 @@ else:
 Sand.data.materials.append(sm)
 grm,_=mat("Groove",(0.42,0.33,0.21),rough=0.97); Groove.data.materials.append(grm)
 stm,_=mat("Steel",(0.80,0.80,0.82),rough=0.07,metal=1.0); Ball.data.materials.append(stm)
-LEDc=(0.2,0.55,1.0) if MODE=="dark" else (0.35,0.6,1.0)
-lm,_=mat("LED",(0,0,0),emis=LEDc,emis_str=(26 if MODE=="dark" else 14)); LED.data.materials.append(lm)
+# LED: goze batmayan yumusak/los glow -> dusuk emisyon (glare esigi 1.7'yi gecip
+# hafif halo verir ama beyaz yanmaz); hafif sicak-beyaz-mavi ton
+LEDc=(0.45,0.62,0.95) if MODE=="dark" else (0.55,0.68,0.92)
+lm,_=mat("LED",(0,0,0),emis=LEDc,emis_str=(6.0 if MODE=="dark" else 3.2)); LED.data.materials.append(lm)
 alu,_=mat("Aluminum",(0.55,0.56,0.58),rough=0.35,metal=1.0)
 for o in (ThetaMotor,RhoMotor,shaft,Carriage): o.data.materials.append(alu)
 arm_m,_=mat("ArmAlu",(0.7,0.71,0.73),rough=0.3,metal=1.0); Arm.data.materials.append(arm_m)

@@ -1,0 +1,75 @@
+/* Kinetik Kum Masası — ortak site stili */
+:root{
+  --bg:#0c1017; --bg2:#0f141d; --card:#151b26; --bd:#222b39; --fg:#e7edf4; --mut:#8b98a8;
+  --acc:#4aa3ff; --acc2:#7cc4ff; --gold:#e0b341; --ok:#3fb950; --maxw:1080px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);
+  font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased}
+a{color:var(--acc);text-decoration:none}
+a:hover{color:var(--acc2)}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 22px}
+
+/* ---- üst menü ---- */
+.nav{position:sticky;top:0;z-index:50;background:#0b0f17e6;backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--bd)}
+.nav .wrap{display:flex;align-items:center;gap:6px;height:58px}
+.nav .brand{font-weight:700;font-size:16px;margin-right:auto;color:var(--fg);letter-spacing:-.2px}
+.nav .brand small{color:var(--mut);font-weight:500;font-size:12px}
+.nav a.link{padding:8px 12px;border-radius:9px;color:var(--mut);font-size:14.5px;font-weight:600}
+.nav a.link:hover{color:var(--fg);background:#1a2230}
+.nav a.link.active{color:var(--fg);background:#16304a}
+@media(max-width:720px){.nav a.link{padding:7px 8px;font-size:13px} .nav .brand small{display:none}}
+
+/* ---- başlık/hero ---- */
+.hero{padding:70px 0 40px;text-align:center;
+  background:radial-gradient(900px 380px at 50% -8%,#16304a55,transparent)}
+.hero h1{font-size:38px;line-height:1.12;margin:0 0 12px;letter-spacing:-.6px}
+.hero p.lead{color:var(--mut);font-size:19px;max-width:680px;margin:0 auto}
+.badges{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.badge{background:var(--card);border:1px solid var(--bd);border-radius:999px;padding:6px 14px;font-size:13px;color:var(--mut)}
+.badge b{color:var(--ok)}
+
+/* ---- bölüm ---- */
+section.block{padding:46px 0;border-top:1px solid var(--bd)}
+h2.kicker{font-size:12.5px;letter-spacing:2px;text-transform:uppercase;color:var(--acc);margin:0 0 8px}
+h2.kicker + h3{margin:0 0 6px;font-size:26px;letter-spacing:-.3px}
+.sub{color:var(--mut);margin:0 0 24px;font-size:16px}
+p{margin:0 0 14px}
+
+/* ---- grid & kart ---- */
+.grid{display:grid;gap:18px}
+.g2{grid-template-columns:1fr 1fr}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:860px){.g3,.g4{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.g2,.g3,.g4{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;overflow:hidden}
+.card img,.card video{width:100%;display:block;background:#000}
+.card .cap{padding:13px 16px;font-size:14px;color:var(--mut)}
+.card .cap b{color:var(--fg)}
+.card.pad{padding:20px}
+.card.pad h4{margin:0 0 10px;font-size:17px}
+.card.pad ul{margin:0;padding-left:18px;color:var(--mut)} .card.pad li{margin:4px 0}
+
+/* ---- tablo ---- */
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:10px 12px;border-bottom:1px solid var(--bd);text-align:left}
+th{color:var(--mut);font-weight:600}
+.pill{display:inline-block;background:#10271a;color:var(--ok);border:1px solid #1f5132;border-radius:6px;padding:2px 8px;font-size:12px;font-weight:700}
+
+/* ---- link kartları / butonlar ---- */
+.links{display:flex;gap:12px;flex-wrap:wrap}
+.lnk{display:inline-flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--bd);
+  border-radius:11px;padding:13px 16px;color:var(--fg);font-size:14px}
+.lnk:hover{border-color:var(--acc);color:var(--fg)}
+.lnk .t{color:var(--mut);font-size:12px}
+.btn{display:inline-block;background:var(--acc);color:#fff;border-radius:11px;padding:12px 22px;font-weight:700;font-size:15px}
+.btn:hover{background:#388bfd;color:#fff}
+.btn.ghost{background:transparent;border:1px solid var(--bd);color:var(--fg)}
+.cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px}
+
+code{background:#1b2330;padding:2px 6px;border-radius:5px;font-size:13px}
+footer{padding:34px 0 60px;color:var(--mut);font-size:13px;border-top:1px solid var(--bd);text-align:center}

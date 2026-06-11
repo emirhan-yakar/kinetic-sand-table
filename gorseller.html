@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Görseller & Reklam Filmi — Kinetik Kum Masası</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="nav"><div class="wrap">
+  <a class="brand" href="index.html">Kinetik Kum Masası <small>· üretim paketi</small></a>
+  <a class="link" href="index.html">Genel Bakış</a>
+  <a class="link active" href="gorseller.html">Görseller</a>
+  <a class="link" href="simulasyon.html">Simülasyon</a>
+  <a class="link" href="muhendislik.html">Mühendislik</a>
+  <a class="link" href="https://github.com/emirhan-yakar/kinetic-sand-table" target="_blank">GitHub ↗</a>
+</div></nav>
+
+<div class="wrap">
+
+  <section class="block" style="border-top:0">
+    <h2 class="kicker">Reklam Filmi</h2>
+    <h3>Bilye Atatürk imzasını çiziyor</h3>
+    <p class="sub">Kamera yörüngede dönerken çelik bilye, kumda <b>"K. Atatürk" imzasını</b> gerçek zamanlı çiziyor;
+       LED halka yumuşak ışıkla yanıyor. Blender / Cycles, bloom post.</p>
+    <div class="card">
+      <video src="render/table_ad.mp4" autoplay muted loop playsinline controls
+             poster="render/room_top.png" style="aspect-ratio:16/9"></video>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="kicker">Stüdyo Render'ları</h2>
+    <h3>Reklam kalitesinde 4 açı</h3>
+    <p class="sub">Gerçek PBR doku haritaları (ceviz + kum), stüdyo HDRI, yumuşak LED — Blender/Cycles, 2K/384 örnek.</p>
+    <div class="grid g2">
+      <div class="card"><img src="render/room_top.png" alt="desen" style="aspect-ratio:16/11;object-fit:cover">
+        <div class="cap"><b>Desen (üstten)</b> — Atatürk imzası kuma çizilmiş, ucunda çelik bilye</div></div>
+      <div class="card"><img src="render/room_hero.png" alt="hero" style="aspect-ratio:16/11;object-fit:cover">
+        <div class="cap"><b>Ürün çekimi</b> — mat ceviz sehpa, yumuşak LED, parlak zemin</div></div>
+      <div class="card"><img src="render/room_room.png" alt="oda" style="aspect-ratio:16/11;object-fit:cover">
+        <div class="cap"><b>Oturma odası</b> — HDRI ortam, cam üst görünür</div></div>
+      <div class="card"><img src="render/room_dark.png" alt="dark" style="aspect-ratio:16/11;object-fit:cover">
+        <div class="cap"><b>Ambiyans</b> — koyu sahne, loş LED halka parıltısı</div></div>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="kicker">Nasıl üretildi</h2>
+    <h3>Prosedürel sahne</h3>
+    <p>Tüm görseller <code>render/scene.py</code> içinde kod ile kuruluyor (ölçüler <code>sand_table.scad</code> ile aynı):
+       ahşaba boolean kum havuzu, gerçek <code>.thr</code> desen → kumda oluk, PBR malzemeler, stüdyo/oda HDRI,
+       kompozitör post (LED bloom + vignette). Desenler <code>firmware/patterns/</code> (imza izi, spiral).</p>
+    <div class="cta">
+      <a class="btn" href="simulasyon.html">▶ İnteraktif simülasyon</a>
+      <a class="btn ghost" href="render/table_ad.mp4" target="_blank">Videoyu tam ekran aç</a>
+    </div>
+  </section>
+
+</div>
+<footer><div class="wrap">Kinetik Kum Sanatı Masası ·
+  <a href="https://github.com/emirhan-yakar/kinetic-sand-table">GitHub</a></div></footer>
+</body>
+</html>

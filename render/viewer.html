@@ -106,7 +106,7 @@ controls.autoRotate=true; controls.autoRotateSpeed=0.6;
 // ---- postprocessing: bloom (LED parildamasi) ----
 const composer=new EffectComposer(renderer);
 composer.addPass(new RenderPass(scene,camera));
-const bloom=new UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),0.32,0.4,1.0);
+const bloom=new UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),0.18,0.5,1.1);  // yumusak/los glow
 composer.addPass(bloom);
 composer.addPass(new OutputPass());
 
@@ -218,7 +218,7 @@ function setLED(){
   if(ledMesh){
     const mm=ledMesh.material;
     if(m.c===0){ mm.emissiveIntensity=0.0; ledLight.intensity=0; }
-    else { mm.emissiveIntensity=2.4; if(m.c>0){ mm.emissive.setHex(m.c); ledLight.color.setHex(m.c);} ledLight.intensity=1.6; }
+    else { mm.emissiveIntensity=0.85; if(m.c>0){ mm.emissive.setHex(m.c); ledLight.color.setHex(m.c);} ledLight.intensity=0.55; }  // goze batmayan los glow
   }
 }
 function run(){

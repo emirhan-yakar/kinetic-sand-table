@@ -3,146 +3,86 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Kinetik Kum Sanatı Masası — Ürün Paketi</title>
-<style>
-  :root{--bg:#0d1117;--card:#161b22;--bd:#222a35;--fg:#e6edf3;--mut:#8b98a5;--acc:#3ea6ff;--gold:#e0b341;--ok:#2ea043}
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
-  .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
-  header{padding:64px 0 36px;text-align:center;background:radial-gradient(900px 380px at 50% -10%,#16304a55,transparent)}
-  h1{font-size:34px;margin:0 0 8px;letter-spacing:-.5px}
-  .sub{color:var(--mut);font-size:18px;margin:0 auto;max-width:640px}
-  .badges{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px}
-  .b{background:var(--card);border:1px solid var(--bd);border-radius:999px;padding:6px 14px;font-size:13px;color:var(--mut)}
-  .b b{color:var(--ok)}
-  section{padding:40px 0;border-top:1px solid var(--bd)}
-  h2{font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--acc);margin:0 0 6px}
-  h2+p{margin:0 0 22px;color:var(--mut)}
-  .grid{display:grid;gap:18px}
-  .g2{grid-template-columns:1fr 1fr}
-  .g3{grid-template-columns:repeat(3,1fr)}
-  @media(max-width:780px){.g2,.g3{grid-template-columns:1fr}}
-  .card{background:var(--card);border:1px solid var(--bd);border-radius:14px;overflow:hidden}
-  .card img{width:100%;display:block;background:#000;aspect-ratio:4/3;object-fit:cover}
-  .card .cap{padding:12px 16px;font-size:14px;color:var(--mut)}
-  .card .cap b{color:var(--fg)}
-  table{width:100%;border-collapse:collapse;font-size:14px}
-  td,th{padding:9px 12px;border-bottom:1px solid var(--bd);text-align:left}
-  th{color:var(--mut);font-weight:600}
-  .pill{display:inline-block;background:#14271a;color:var(--ok);border:1px solid #1f5132;border-radius:6px;padding:2px 8px;font-size:12px;font-weight:600}
-  .links{display:flex;gap:12px;flex-wrap:wrap}
-  .lnk{display:inline-flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:12px 16px;color:var(--fg);text-decoration:none;font-size:14px}
-  .lnk:hover{border-color:var(--acc)}
-  .lnk .t{color:var(--mut);font-size:12px}
-  footer{padding:36px 0 60px;color:var(--mut);font-size:13px;text-align:center;border-top:1px solid var(--bd)}
-  code{background:#1d2430;padding:2px 6px;border-radius:5px;font-size:13px}
-</style>
+<title>Kinetik Kum Masası — Genel Bakış</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header>
-  <div class="wrap">
-    <h1>Kinetik Kum Sanatı Masası</h1>
-    <p class="sub">Sisyphus tipi, Ø60 cm polar (theta-rho) tasarım — fikirden üretilebilir
-    ürüne: BOM, 3D model, PCB (Gerber + STEP) ve fotogerçekçi render.</p>
-    <div class="badges">
-      <span class="b">Ø60 cm · polar</span>
-      <span class="b">ESP32 · Dune Weaver</span>
-      <span class="b">PCB: <b>0 ratsnest · 0 short</b></span>
-      <span class="b">Blender · Cycles</span>
-    </div>
+
+<nav class="nav"><div class="wrap">
+  <a class="brand" href="index.html">Kinetik Kum Masası <small>· üretim paketi</small></a>
+  <a class="link active" href="index.html">Genel Bakış</a>
+  <a class="link" href="gorseller.html">Görseller</a>
+  <a class="link" href="simulasyon.html">Simülasyon</a>
+  <a class="link" href="muhendislik.html">Mühendislik</a>
+  <a class="link" href="https://github.com/emirhan-yakar/kinetic-sand-table" target="_blank">GitHub ↗</a>
+</div></nav>
+
+<header class="hero"><div class="wrap">
+  <h1>Kinetik Kum Sanatı Masası</h1>
+  <p class="lead">Sisyphus tipi, Ø60 cm polar (theta-rho) sehpa. Cam altındaki bir mıknatıs,
+  kumdaki çelik bilyeyi gezdirerek sonsuz desenler — hatta <b>"K. Atatürk" imzasını</b> — çizer.
+  Fikirden üretilebilir ürüne: BOM, PCB, montaj, görsel ve interaktif simülasyon.</p>
+  <div class="badges">
+    <span class="badge">Ø60 cm · polar</span>
+    <span class="badge">ESP32 · Dune Weaver</span>
+    <span class="badge">PCB: <b>0 short · 0 ratsnest</b></span>
+    <span class="badge">Blender · Cycles</span>
   </div>
-</header>
+  <div class="cta" style="justify-content:center;margin-top:24px">
+    <a class="btn" href="simulasyon.html">▶ İnteraktif simülasyonu dene</a>
+    <a class="btn ghost" href="gorseller.html">Reklam filmi & görseller</a>
+  </div>
+</div></header>
 
 <div class="wrap">
 
-  <section>
-    <h2>Reklam Filmi</h2>
-    <p>Kamera yörüngede dönerken bilye <b>"K. Atatürk" imzasını</b> çiziyor, LED yanıyor — Blender / Cycles, post (bloom).</p>
-    <div class="card">
-      <video src="render/table_ad.mp4" autoplay muted loop playsinline controls poster="render/room_top.png"
-             style="width:100%;display:block;aspect-ratio:16/9;background:#000"></video>
+  <section class="block">
+    <div class="card"><img src="render/room_hero.png" alt="ürün görseli" style="aspect-ratio:16/10;object-fit:cover">
+      <div class="cap"><b>Ayaklı ceviz sehpa</b> — kumda Atatürk imzası, yumuşak LED halka aydınlatma (Blender/Cycles render)</div>
     </div>
   </section>
 
-  <section>
-    <h2>İnteraktif 3D Simülasyon</h2>
-    <p>Gerçek makine gibi: <b>tıkla → LED yanar, bilye <code>.thr</code> yörüngesinde gezerek deseni çizer.</b>
-       LED modları (mavi/sıcak/gökkuşağı), desen seçimi (<b>Atatürk imzası</b>/spiral/klasik) ve <b>patlatma</b> ile tüm alt bileşenleri gör.</p>
-    <div class="card" style="aspect-ratio:16/10">
-      <iframe src="render/viewer.html" style="width:100%;height:100%;border:0;display:block"></iframe>
-    </div>
-    <p style="margin-top:10px"><a class="lnk" href="render/viewer.html" target="_blank"><span>🧊</span><span>Tam ekran aç<br><span class="t">Three.js · table.glb (16 parça) · canlı çizim + LED</span></span></a></p>
-  </section>
-
-  <section>
-    <h2>Fotogerçekçi Render (Blender / Cycles)</h2>
-    <p>Ayaklı sehpa · gerçek <code>.thr</code> Sandify deseni · oturma odası HDRI · PBR malzemeler (<code>render/scene.py</code>).</p>
-    <div class="grid g2">
-      <div class="card"><img src="render/room_top.png" alt="pattern" style="aspect-ratio:16/11">
-        <div class="cap"><b>Desen (üstten)</b> — <b>Atatürk imzası</b> kuma çizilmiş, ucunda çelik bilye</div></div>
-      <div class="card"><img src="render/room_hero.png" alt="hero" style="aspect-ratio:16/11">
-        <div class="cap"><b>Ürün çekimi</b> — mat ceviz sehpa, açık kum yüzey</div></div>
-      <div class="card"><img src="render/room_room.png" alt="room" style="aspect-ratio:16/11">
-        <div class="cap"><b>Oturma odası</b> — HDRI ortam, cam üst görünür</div></div>
-      <div class="card"><img src="render/room_dark.png" alt="dark" style="aspect-ratio:16/11">
-        <div class="cap"><b>Ambiyans</b> — koyu sahne, LED halka parıltısı</div></div>
-    </div>
-  </section>
-
-  <section>
-    <h2>Kontrol Kartı (PCB)</h2>
-    <p>KiCad 9 + Freerouting ile tam routing — DRC: <span class="pill">0 ratsnest</span>
-       <span class="pill">0 kısa devre</span> <span class="pill">0 bakır clearance</span></p>
+  <section class="block">
+    <h2 class="kicker">Bu nedir?</h2>
+    <h3>Çalışma prensibi</h3>
+    <p class="sub">Gerçek bir kum sanatı masasının nasıl çalıştığı.</p>
     <div class="grid g3">
-      <div class="card"><img src="hardware/pcb/final/plots/final-F_Cu-routed.png" alt="F.Cu">
-        <div class="cap"><b>Üst bakır</b> — sinyal routing (139 iz + 3 via)</div></div>
-      <div class="card"><img src="hardware/pcb/final/plots/final-B_Cu-groundplane.png" alt="B.Cu">
-        <div class="cap"><b>Alt bakır</b> — GND ground plane (clearance'lı)</div></div>
-      <div class="card"><img src="hardware/pcb/plots/assembly.svg.png" alt="assembly">
-        <div class="cap"><b>Montaj çizimi</b> — ESP32 + 2× TMC2209 + buck + klemensler</div></div>
+      <div class="card pad"><h4>1 · Polar mekanizma</h4><ul>
+        <li>Dönen kol (θ) + kol üstünde kayan taşıyıcı (ρ)</li>
+        <li>2× NEMA17 step motor, slip ring</li>
+        <li>Yuvarlak masa için doğru mimari</li></ul></div>
+      <div class="card pad"><h4>2 · Mıknatıs + bilye</h4><ul>
+        <li>Taşıyıcıdaki N52 mıknatıs</li>
+        <li>Kumdaki çelik bilyeyi sürükler</li>
+        <li>Cam yüzeyin altından, sessizce</li></ul></div>
+      <div class="card pad"><h4>3 · Desen + ışık</h4><ul>
+        <li>ESP32 + Dune Weaver firmware</li>
+        <li>Sandify <code>.thr</code> desenleri</li>
+        <li>WS2812B yumuşak LED halka</li></ul></div>
     </div>
   </section>
 
-  <section>
-    <h2>Teknik Özet & Maliyet</h2>
-    <p>Yaklaşık prototip maliyeti (Haziran 2026, yurt içi).</p>
+  <section class="block">
+    <h2 class="kicker">Hızlı bakış</h2>
+    <h3>Neler hazır?</h3>
     <div class="grid g2">
-      <div class="card"><div style="padding:6px 4px"><table>
-        <tr><th>Mekanik</th><th></th></tr>
-        <tr><td>Hareket</td><td>2× NEMA17 + TMC2209 (θ/ρ), slip ring</td></tr>
-        <tr><td>Beyin</td><td>ESP32 — Dune Weaver firmware</td></tr>
-        <tr><td>Desen</td><td>Sandify <code>.thr</code> (theta-rho)</td></tr>
-        <tr><td>Aydınlatma</td><td>WS2812B RGB halka</td></tr>
-      </table></div></div>
-      <div class="card"><div style="padding:6px 4px"><table>
-        <tr><th>Maliyet</th><th></th></tr>
-        <tr><td>Prototip</td><td><b>~6.000–10.000 ₺</b> ($180–300)</td></tr>
-        <tr><td>Seri (50+)</td><td>parça başı ~3.500–5.500 ₺</td></tr>
-        <tr><td>Yazılım</td><td>0 ₺ (açık kaynak)</td></tr>
-        <tr><td>Referans satış</td><td>$699 (≈ 22.000+ ₺)</td></tr>
-      </table></div></div>
-    </div>
-  </section>
-
-  <section>
-    <h2>Dosyalar & İndirmeler</h2>
-    <p>Tüm üretim çıktıları repo içinde.</p>
-    <div class="links">
-      <a class="lnk" href="hardware/pcb/final/controller.step"><span>📦</span><span>STEP 3D model<br><span class="t">controller.step (2.1 MB)</span></span></a>
-      <a class="lnk" href="hardware/pcb/final/gerbers/"><span>🛠️</span><span>Gerber + Excellon<br><span class="t">final/gerbers/ (fab'a hazır)</span></span></a>
-      <a class="lnk" href="hardware/pcb/final/DRC_SUMMARY.txt"><span>✅</span><span>DRC raporu<br><span class="t">DRC_SUMMARY.txt</span></span></a>
-      <a class="lnk" href="docs/uretim/BOM_uretim.md"><span>📋</span><span>Üretim BOM (TR fiyat)<br><span class="t">gerçek malzeme + tedarik + ₺</span></span></a>
-      <a class="lnk" href="docs/uretim/montaj.md"><span>🔧</span><span>Montaj sheet<br><span class="t">açı/PCD/vida çizelgesi</span></span></a>
-      <a class="lnk" href="docs/uretim/montaj_sheet.svg"><span>📐</span><span>Ölçülü çizim<br><span class="t">ön + üst görünüş (SVG)</span></span></a>
-      <a class="lnk" href="hardware/sand_table.scad"><span>🧩</span><span>Parametrik 3D<br><span class="t">sand_table.scad</span></span></a>
-      <a class="lnk" href="README.md"><span>📖</span><span>Genel bakış<br><span class="t">README.md</span></span></a>
+      <a class="card pad" href="gorseller.html"><h4>🎬 Görseller & reklam filmi →</h4>
+        <p style="color:var(--mut);margin:0">Reklam kalitesinde 4 stüdyo render + kameranın döndüğü,
+        bilyenin Atatürk imzasını çizdiği reklam videosu.</p></a>
+      <a class="card pad" href="simulasyon.html"><h4>🧊 İnteraktif 3D simülasyon →</h4>
+        <p style="color:var(--mut);margin:0">Tıkla → LED yanar, bilye deseni çizer. 16 parça patlatma,
+        desen/LED modu seçimi — gerçek makine gibi.</p></a>
+      <a class="card pad" href="muhendislik.html"><h4>🔧 Mühendislik & üretim →</h4>
+        <p style="color:var(--mut);margin:0">KiCad PCB (Gerber + STEP), ölçülü montaj sheet,
+        gerçek malzemeli BOM ve Türkiye fiyatları.</p></a>
+      <a class="card pad" href="muhendislik.html#maliyet"><h4>₺ Maliyet →</h4>
+        <p style="color:var(--mut);margin:0">Prototip <b>~13.5–15k ₺</b>, seri <b>~7.3k ₺/adet</b>.
+        Karşılaştırma: benzeri ürün $699 (≈23k ₺).</p></a>
     </div>
   </section>
 
 </div>
-<footer>
-  Kinetik Kum Sanatı Masası · üretim paketi ·
-  <a href="https://github.com/emirhan-yakar/kinetic-sand-table" style="color:var(--acc)">github.com/emirhan-yakar/kinetic-sand-table</a>
-</footer>
+<footer><div class="wrap">Kinetik Kum Sanatı Masası · Sisyphus tipi Ø60 cm polar ·
+  <a href="https://github.com/emirhan-yakar/kinetic-sand-table">github.com/emirhan-yakar/kinetic-sand-table</a></div></footer>
 </body>
 </html>
