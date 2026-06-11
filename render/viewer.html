@@ -119,6 +119,7 @@ const offFor=n=>{ for(const k in OFF) if(n.startsWith(k)) return OFF[k]; return 
 const SAND_OFF=new THREE.Vector3(...OFF.Sand);
 
 let parts=[], ball=null, ledMesh=null, sandCenter=new THREE.Vector3(), sandTopY=0, sandR=0.24;
+let simGroup=null, simBall=null;
 let explodeT=0, explodeTarget=0;
 
 // ---- simülasyon durumu ----
@@ -147,16 +148,16 @@ loader.load('table.glb',(g)=>{
       if(/Body|Legs|Rim/i.test(nm)){ m.roughness=0.6; m.clearcoat=0; m.metalness=0; }
       else if(/Sand|Groove/i.test(nm)){ m.roughness=0.96; m.metalness=0; }
       else if(/Ball/i.test(nm)){ m.roughness=0.25; m.metalness=1; }                 // mat celik
-      else if(/Glass/i.test(nm)){ m.roughness=0.06; m.metalness=0; m.transparent=true; m.opacity=0.45; if('transmission' in m) m.transmission=0.9; }
+      else if(/Glass/i.test(nm)){ m.roughness=0.06; m.metalness=0; m.transparent=true; m.opacity=0.12; if('transmission' in m) m.transmission=0.95; m.envMapIntensity=0.25; }
       else if(/PCB/i.test(nm)){ m.roughness=0.55; m.metalness=0; }
       else if(/Motor|Arm|Carriage|theta|Magnet|BasePlate/i.test(nm)){ m.roughness=0.45; }
       m.needsUpdate=true;
     }
     o.userData.base=o.position.clone(); o.userData.off=new THREE.Vector3(...offFor(o.name));
-    if(o.name.startsWith('Ball')){ ball=o; }
+    if(o.name.startsWith('Ball')){ ball=o; o.visible=false; }      // glb top gizli; sim topu ayri
+    else if(o.name.startsWith('Groove')){ o.visible=false; }       // dinamik cizgi ile degistirilir
     else if(o.name.startsWith('LED_Ring')){ ledMesh=o; parts.push(o); }
     else { parts.push(o); }
-    if(o.name.startsWith('Groove')) o.visible=false;       // dinamik cizimle degistirilecek
     if(o.name.startsWith('Sand')){
       const b=new THREE.Box3().setFromObject(o); const cc=b.getCenter(new THREE.Vector3());
       sandCenter.set(cc.x,0,cc.z); sandTopY=b.max.y; sandR=(b.max.x-b.min.x)/2*0.93;
@@ -173,6 +174,11 @@ loader.load('table.glb',(g)=>{
   const d=Math.max(s.x,s.y,s.z);
   camera.position.set(d*1.25,d*0.85,d*1.4); controls.target.set(0,0,0); controls.update();
   ledLight.position.set(sandCenter.x,sandTopY+0.02,sandCenter.z);
+  // simulasyon (cizgi + top) world-uzayinda tek grup -> her zaman masa uzerinde, tutarli
+  simGroup=new THREE.Group(); scene.add(simGroup);
+  simBall=new THREE.Mesh(new THREE.SphereGeometry(0.009,28,18),
+            new THREE.MeshStandardMaterial({color:0xccd0d6,metalness:1,roughness:0.22}));
+  simBall.castShadow=true; simGroup.add(simBall);
   loadPattern().then(resize);
 },undefined,e=>{ document.querySelector('.panel h1').textContent='GLB yüklenemedi'; console.error(e); });
 
@@ -186,22 +192,22 @@ async function loadPattern(){
     path.push(new THREE.Vector3(sandCenter.x+rho*sandR*Math.cos(th), sandTopY+0.003, sandCenter.z+rho*sandR*Math.sin(th)));
   }
   // dinamik cizgi (Line2)
-  if(drawLine){ scene.remove(drawLine); drawLine.geometry.dispose(); }
+  if(drawLine){ simGroup.remove(drawLine); drawLine.geometry.dispose(); }
   const pos=[]; path.forEach(p=>pos.push(p.x,p.y,p.z));
   const lg=new LineGeometry(); lg.setPositions(pos);
-  const lm=new LineMaterial({color:0x5a4226, linewidth:2.4, transparent:true, opacity:0.95});
+  const lm=new LineMaterial({color:0xefe2c2, linewidth:3.4, transparent:true, opacity:1.0});  // acik oluk -> koyu kumda net
   lm.resolution.set(innerWidth,innerHeight);
   drawLine=new Line2(lg,lm); drawLine.computeLineDistances();
   totalSeg=path.length-1; drawLine.geometry.instanceCount=Math.floor(drawn*totalSeg);
-  scene.add(drawLine);
+  simGroup.add(drawLine);
   placeBall();
   document.getElementById('pat').textContent='🌀 '+PATTERNS[patIdx].n;
 }
 function placeBall(){
-  if(!ball||!path.length) return;
+  if(!simBall||!path.length) return;
   const idx=running?Math.floor(runT*(path.length-1)):Math.floor(drawn*(path.length-1));
   const p=path[Math.max(0,Math.min(path.length-1,idx))];
-  ball.position.set(p.x,p.y+0.006,p.z).addScaledVector(SAND_OFF,explodeT);
+  simBall.position.set(p.x,p.y+0.006,p.z);   // world; explode'u simGroup tasiyor
 }
 
 // ---- aksiyonlar ----
@@ -249,7 +255,7 @@ renderer.setAnimationLoop((now)=>{
   explodeT+=(explodeTarget-explodeT)*0.08;
   const ee=explodeT<0.5?2*explodeT*explodeT:1-Math.pow(-2*explodeT+2,2)/2;
   for(const o of parts) o.position.copy(o.userData.base).addScaledVector(o.userData.off,ee);
-  if(drawLine) drawLine.position.copy(SAND_OFF).multiplyScalar(ee);
+  if(simGroup) simGroup.position.set(0,SAND_OFF.y*ee,0);
   // cizim animasyonu
   if(running){
     runT+=dt/DRAW_SECS;
@@ -265,6 +271,7 @@ renderer.setAnimationLoop((now)=>{
   controls.update(); composer.render();
 });
 setLED();
+if(location.hash==='#run') setTimeout(()=>run(),1400);   // test/otomatik baslat
 </script>
 </body>
 </html>
