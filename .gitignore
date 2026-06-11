@@ -3,3 +3,8 @@
 /tmp/
 hardware/pcb/logs/
 *.jar
+# Render-only buyuk varliklar (calisma-zamaninda gerekmiyor; dokular glb'ye gomulu)
+render/assets/living_room.hdr
+render/assets/wood_diff.jpg
+render/assets/wood_rough.jpg
+render/assets/wood_nor.jpg

@@ -50,7 +50,27 @@
       "Bash(awk '{print \"bos:\",$4}')",
       "Bash(curl -s https://download.blender.org/release/)",
       "Bash(curl -s https://download.blender.org/release/Blender4.5/)",
-      "Bash(curl -L -s -o blender.dmg \"https://download.blender.org/release/Blender4.5/blender-4.5.10-macos-arm64.dmg\")"
+      "Bash(curl -L -s -o blender.dmg \"https://download.blender.org/release/Blender4.5/blender-4.5.10-macos-arm64.dmg\")",
+      "Bash(curl -s \"https://api.polyhaven.com/files/lythwood_room\")",
+      "Bash(mkdir -p assets)",
+      "Bash(curl -L -s -o assets/living_room.hdr \"https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/2k/lythwood_room_2k.hdr\")",
+      "Bash(awk '{print $5}')",
+      "Bash(curl -s \"https://api.polyhaven.com/files/studio_small_08\")",
+      "Bash(curl -s \"https://api.polyhaven.com/files/wood_table_001\")",
+      "Bash(curl -L -s -o studio.hdr \"https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/2k/studio_small_08_2k.hdr\")",
+      "Bash(curl -L -s -o wood_diff.jpg \"https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/wood_table_001/wood_table_001_diff_2k.jpg\")",
+      "Bash(curl -L -s -o wood_rough.jpg \"https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/wood_table_001/wood_table_001_rough_2k.jpg\")",
+      "Bash(curl -L -s -o wood_nor.jpg \"https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/wood_table_001/wood_table_001_nor_gl_2k.jpg\")",
+      "Bash(wait)",
+      "Bash(awk '{print $9,$5}')",
+      "Bash(curl -s -o /dev/null -w '%{http_code} studio.hdr\\\\n' http://127.0.0.1:__CMDSUB_OUTPUT__/render/assets/studio.hdr)",
+      "Bash(node -e ' *)",
+      "Bash(pkill -f \"scene.py -- video\")",
+      "Bash(awk '{print \"mp4:\",$5}')",
+      "Bash(awk '{print \"mp4 boyut:\",$5,\"byte\"}')",
+      "Bash(awk '{print $5\"b\"}')",
+      "Bash(awk '{print \"boyut:\",$5\"b\"}')",
+      "Bash(curl -s -o /dev/null -w 'HTTP %{http_code} %{size_download}b /render/table_ad.mp4\\\\n' http://127.0.0.1:__TRACKED_VAR__/render/table_ad.mp4)"
     ]
   }
 }

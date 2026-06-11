@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kinetik Kum Masası — Simülasyon</title>
+<style>
+  html,body{margin:0;height:100%;background:#0b0e14;color:#e6edf3;font:15px/1.5 -apple-system,Segoe UI,Roboto,Arial,sans-serif;overflow:hidden}
+  #c{position:fixed;inset:0;display:block}
+  .panel{position:fixed;left:16px;top:14px;z-index:5;background:#10151ecc;border:1px solid #222a35;border-radius:14px;padding:14px;backdrop-filter:blur(8px);width:230px}
+  h1{font-size:16px;margin:0 0 2px}
+  .mut{color:#8b98a5;font-size:12px;margin:0 0 12px}
+  .row{display:flex;gap:8px;margin:8px 0}
+  button{flex:1;background:#161d29;color:#e6edf3;border:1px solid #2a3442;border-radius:10px;padding:10px;font-size:13.5px;font-weight:600;cursor:pointer}
+  button:hover{border-color:#3ea6ff}
+  button.pri{background:#1f6feb;border-color:#1f6feb}
+  button.pri:hover{background:#388bfd}
+  button.on{background:#14391f;border-color:#2ea043;color:#7ee2a0}
+  .lab{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#5b6673;margin:12px 0 2px}
+  .legend{position:fixed;right:14px;top:14px;z-index:5;background:#10151ecc;border:1px solid #222a35;border-radius:12px;padding:11px 13px;backdrop-filter:blur(8px);font-size:12px;max-width:200px}
+  .legend b{color:#3ea6ff;display:block;margin-bottom:5px;font-size:10px;letter-spacing:1px;text-transform:uppercase}
+  .legend div{color:#c2cdd8;padding:1px 0}
+  .legend span{color:#7a8694}
+  a.back{position:fixed;left:18px;bottom:14px;z-index:5;color:#8b98a5;text-decoration:none;font-size:13px}
+  a.back:hover{color:#3ea6ff}
+  .stat{position:fixed;right:14px;bottom:14px;z-index:5;color:#5b6673;font-size:12px}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="panel">
+  <h1>Kum Masası · Simülasyon</h1>
+  <p class="mut">Döndür: sürükle · Yakınlaş: tekerlek · <b>Modele tıkla → çalıştır</b></p>
+  <div class="row"><button id="run" class="pri">▶ Çalıştır</button></div>
+  <div class="lab">LED modu</div>
+  <div class="row"><button id="led">💡 Mavi</button></div>
+  <div class="lab">Desen</div>
+  <div class="row"><button id="pat">🌀 Spiral</button></div>
+  <div class="lab">Görünüm</div>
+  <div class="row">
+    <button id="exp">⊕ Patlat</button>
+    <button id="clr">⟳ Sıfırla</button>
+  </div>
+</div>
+<div class="legend">
+  <b>Alt bileşenler</b>
+  <div>● Cam üst <span>· glass</span></div>
+  <div>● Kum + desen <span>· sand</span></div>
+  <div>● LED halka <span>· WS2812B</span></div>
+  <div>● Çelik bilye <span>· ball</span></div>
+  <div>● Dönen kol + ρ motor</div>
+  <div>● θ motor + mıknatıs</div>
+  <div>● Kontrol kartı (PCB)</div>
+  <div>● Gövde + ayaklar</div>
+</div>
+<a class="back" href="../">← proje sayfası</a>
+<div class="stat" id="stat">hazır</div>
+
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+}}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { Line2 } from 'three/addons/lines/Line2.js';
+import { LineGeometry } from 'three/addons/lines/LineGeometry.js';
+import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
+import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
+import { Reflector } from 'three/addons/objects/Reflector.js';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+
+const canvas=document.getElementById('c'), stat=document.getElementById('stat');
+const renderer=new THREE.WebGLRenderer({canvas,antialias:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.toneMapping=THREE.ACESFilmicToneMapping; renderer.toneMappingExposure=1.05;
+const scene=new THREE.Scene(); scene.background=new THREE.Color(0x0b0e14);
+const camera=new THREE.PerspectiveCamera(38,1,0.01,100);
+const pmrem=new THREE.PMREMGenerator(renderer);
+// gercek studyo HDRI -> net yansimalar (yuklenmezse RoomEnvironment fallback)
+new RGBELoader().load('assets/studio.hdr',(hdr)=>{
+  hdr.mapping=THREE.EquirectangularReflectionMapping;
+  scene.environment=pmrem.fromEquirectangular(hdr).texture;
+},undefined,()=>{ scene.environment=pmrem.fromScene(new RoomEnvironment(),0.04).texture; });
+scene.add(new THREE.HemisphereLight(0xffffff,0x2a2a34,0.4));
+const key=new THREE.DirectionalLight(0xffffff,2.4); key.position.set(2.5,4,2); key.castShadow=true;
+key.shadow.mapSize.set(2048,2048); key.shadow.bias=-0.0005;
+key.shadow.camera.near=0.5; key.shadow.camera.far=12;
+key.shadow.camera.left=key.shadow.camera.bottom=-2; key.shadow.camera.right=key.shadow.camera.top=2; scene.add(key);
+const fill=new THREE.DirectionalLight(0xbcd0ff,0.5); fill.position.set(-3,2,-2); scene.add(fill);
+const ledLight=new THREE.PointLight(0x3aa0ff,0,1.4,2); scene.add(ledLight);
+renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+
+const controls=new OrbitControls(camera,canvas);
+controls.enableDamping=true; controls.dampingFactor=0.08; controls.minDistance=0.4; controls.maxDistance=4;
+controls.autoRotate=true; controls.autoRotateSpeed=0.6;
+
+// ---- postprocessing: bloom (LED parildamasi) ----
+const composer=new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene,camera));
+const bloom=new UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),0.55,0.5,0.92);
+composer.addPass(bloom);
+composer.addPass(new OutputPass());
+
+// ---- patlatma ofsetleri (Y yukari) ----
+const OFF={ Ball:[0,0.30,0],Glass:[0,0.20,0],Rim:[0,0.13,0],LED_Ring:[0,0.085,0],
+  Sand:[0,0.045,0],Groove:[0,0.045,0],Body:[0,0,0],
+  Arm:[0,-0.06,0],Rho_Motor:[0.13,-0.06,0],Carriage:[0.06,-0.04,0],Magnet:[0,-0.02,0],
+  Theta_Motor:[0,-0.11,0],theta_shaft:[0,-0.09,0],BasePlate:[0,-0.15,0],PCB:[0.20,-0.15,0],Legs:[0,-0.10,0]};
+const offFor=n=>{ for(const k in OFF) if(n.startsWith(k)) return OFF[k]; return [0,0,0]; };
+const SAND_OFF=new THREE.Vector3(...OFF.Sand);
+
+let parts=[], ball=null, ledMesh=null, sandCenter=new THREE.Vector3(), sandTopY=0, sandR=0.24;
+let explodeT=0, explodeTarget=0;
+
+// ---- simülasyon durumu ----
+let path=[], drawLine=null, totalSeg=0, runT=0, running=false, drawn=0; // drawn 0..1
+const DRAW_SECS=11;
+
+// ---- LED modlari ----
+const LEDMODES=[{n:'Mavi',c:0x3aa0ff},{n:'Sıcak',c:0xffb060},{n:'Gökkuşağı',c:-1},{n:'Kapalı',c:0}];
+let ledIdx=3, ledOn=false, hue=0;   // kapali basla -> calistirinca acilir
+const PATTERNS=[{n:'Spiral',f:'../firmware/patterns/spiral_rose.thr'},{n:'Klasik',f:'../firmware/patterns/classic.thr'}];
+let patIdx=0;
+
+const loader=new GLTFLoader();
+loader.load('table.glb',(g)=>{
+  const root=g.scene;
+  const box=new THREE.Box3().setFromObject(root);
+  const c=box.getCenter(new THREE.Vector3()), s=box.getSize(new THREE.Vector3());
+  root.position.sub(c);
+  root.updateMatrixWorld(true);
+  root.traverse(o=>{ if(o.isMesh){
+    o.castShadow=true; o.receiveShadow=true;
+    o.userData.base=o.position.clone(); o.userData.off=new THREE.Vector3(...offFor(o.name));
+    if(o.name.startsWith('Ball')){ ball=o; }
+    else if(o.name.startsWith('LED_Ring')){ ledMesh=o; parts.push(o); }
+    else { parts.push(o); }
+    if(o.name.startsWith('Groove')) o.visible=false;       // dinamik cizimle degistirilecek
+    if(o.name.startsWith('Sand')){
+      const b=new THREE.Box3().setFromObject(o); const cc=b.getCenter(new THREE.Vector3());
+      sandCenter.set(cc.x,0,cc.z); sandTopY=b.max.y; sandR=(b.max.x-b.min.x)/2*0.93;
+    }
+  }});
+  scene.add(root);
+  // yansitici studyo zemini (premium urun gorunumu)
+  const floorY=box.min.y-c.y-0.001;
+  const refl=new Reflector(new THREE.CircleGeometry(2.2,64),{clipBias:0.003,textureWidth:1024,textureHeight:1024,color:0x141821});
+  refl.rotation.x=-Math.PI/2; refl.position.y=floorY; scene.add(refl);
+  const shadowCatcher=new THREE.Mesh(new THREE.CircleGeometry(2.2,64),new THREE.ShadowMaterial({opacity:0.35}));
+  shadowCatcher.rotation.x=-Math.PI/2; shadowCatcher.position.y=floorY+0.0005; shadowCatcher.receiveShadow=true; scene.add(shadowCatcher);
+  const d=Math.max(s.x,s.y,s.z);
+  camera.position.set(d*1.25,d*0.85,d*1.4); controls.target.set(0,0,0); controls.update();
+  ledLight.position.set(sandCenter.x,sandTopY+0.02,sandCenter.z);
+  loadPattern().then(resize);
+},undefined,e=>{ document.querySelector('.panel h1').textContent='GLB yüklenemedi'; console.error(e); });
+
+async function loadPattern(){
+  const txt=await (await fetch(PATTERNS[patIdx].f)).text();
+  const raw=txt.trim().split('\n').map(l=>l.split(/\s+/).map(Number)).filter(a=>a.length===2);
+  const step=Math.max(1,Math.floor(raw.length/1400));
+  path=[];
+  for(let i=0;i<raw.length;i+=step){
+    const [th,rho]=raw[i];
+    path.push(new THREE.Vector3(sandCenter.x+rho*sandR*Math.cos(th), sandTopY+0.003, sandCenter.z+rho*sandR*Math.sin(th)));
+  }
+  // dinamik cizgi (Line2)
+  if(drawLine){ scene.remove(drawLine); drawLine.geometry.dispose(); }
+  const pos=[]; path.forEach(p=>pos.push(p.x,p.y,p.z));
+  const lg=new LineGeometry(); lg.setPositions(pos);
+  const lm=new LineMaterial({color:0x5a4226, linewidth:2.4, transparent:true, opacity:0.95});
+  lm.resolution.set(innerWidth,innerHeight);
+  drawLine=new Line2(lg,lm); drawLine.computeLineDistances();
+  totalSeg=path.length-1; drawLine.geometry.instanceCount=Math.floor(drawn*totalSeg);
+  scene.add(drawLine);
+  placeBall();
+  document.getElementById('pat').textContent='🌀 '+PATTERNS[patIdx].n;
+}
+function placeBall(){
+  if(!ball||!path.length) return;
+  const idx=running?Math.floor(runT*(path.length-1)):Math.floor(drawn*(path.length-1));
+  const p=path[Math.max(0,Math.min(path.length-1,idx))];
+  ball.position.set(p.x,p.y+0.006,p.z).addScaledVector(SAND_OFF,explodeT);
+}
+
+// ---- aksiyonlar ----
+function setLED(){
+  const m=LEDMODES[ledIdx]; ledOn=m.c!==0;
+  document.getElementById('led').textContent='💡 '+m.n;
+  document.getElementById('led').className=ledOn?'on':'';
+  if(ledMesh){
+    const mm=ledMesh.material;
+    if(m.c===0){ mm.emissiveIntensity=0.0; ledLight.intensity=0; }
+    else { mm.emissiveIntensity=2.4; if(m.c>0){ mm.emissive.setHex(m.c); ledLight.color.setHex(m.c);} ledLight.intensity=1.6; }
+  }
+}
+function run(){
+  if(running){ running=false; document.getElementById('run').textContent='▶ Çalıştır'; stat.textContent='durduruldu'; return; }
+  if(!ledOn){ ledIdx=0; setLED(); }                 // calistirinca LED ac
+  drawn=0; runT=0; running=true; drawLine.geometry.instanceCount=0;
+  document.getElementById('run').textContent='⏹ Durdur';
+  stat.textContent='çiziyor…';
+}
+function clearSand(){ running=false; drawn=0; runT=0; drawLine.geometry.instanceCount=0;
+  document.getElementById('run').textContent='▶ Çalıştır'; placeBall(); stat.textContent='temizlendi'; }
+
+document.getElementById('run').onclick=run;
+document.getElementById('clr').onclick=clearSand;
+document.getElementById('led').onclick=()=>{ ledIdx=(ledIdx+1)%LEDMODES.length; setLED(); };
+document.getElementById('pat').onclick=async()=>{ patIdx=(patIdx+1)%PATTERNS.length; await loadPattern(); clearSand(); };
+document.getElementById('exp').onclick=()=>{ const e=explodeTarget<0.5; explodeTarget=e?1:0;
+  document.getElementById('exp').textContent=e?'⊖ Birleştir':'⊕ Patlat'; };
+
+// modele tikla -> calistir (suruklemeyi ayirt et)
+let down=null;
+canvas.addEventListener('pointerdown',e=>down=[e.clientX,e.clientY]);
+canvas.addEventListener('pointerup',e=>{ if(!down)return; if(Math.hypot(e.clientX-down[0],e.clientY-down[1])<5) run(); down=null; });
+
+function resize(){ const w=innerWidth,h=innerHeight; renderer.setSize(w,h,false);
+  composer.setSize(w,h); bloom.setSize(w,h);
+  camera.aspect=w/h; camera.updateProjectionMatrix(); if(drawLine) drawLine.material.resolution.set(w,h); }
+addEventListener('resize',resize); resize();
+
+let last=performance.now();
+renderer.setAnimationLoop((now)=>{
+  const dt=Math.min(0.05,(now-last)/1000); last=now;
+  // patlatma lerp
+  explodeT+=(explodeTarget-explodeT)*0.08;
+  const ee=explodeT<0.5?2*explodeT*explodeT:1-Math.pow(-2*explodeT+2,2)/2;
+  for(const o of parts) o.position.copy(o.userData.base).addScaledVector(o.userData.off,ee);
+  if(drawLine) drawLine.position.copy(SAND_OFF).multiplyScalar(ee);
+  // cizim animasyonu
+  if(running){
+    runT+=dt/DRAW_SECS;
+    if(runT>=1){ runT=1; running=false; drawn=1; document.getElementById('run').textContent='▶ Çalıştır'; stat.textContent='tamamlandı'; }
+    drawn=runT; drawLine.geometry.instanceCount=Math.floor(drawn*totalSeg);
+  }
+  placeBall();
+  // LED gokkusagi
+  if(ledOn && LEDMODES[ledIdx].c===-1 && ledMesh){ hue=(hue+dt*0.12)%1;
+    const col=new THREE.Color().setHSL(hue,0.85,0.6); ledMesh.material.emissive.copy(col); ledLight.color.copy(col); }
+  // çizim/patlatma sirasinda otomatik dönmeyi durdur (netlik)
+  controls.autoRotate = !running && explodeTarget<0.5;
+  controls.update(); composer.render();
+});
+setLED();
+</script>
+</body>
+</html>
