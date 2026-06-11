@@ -3,10 +3,15 @@
 **Kart:** ESP32 + 2× TMC2209 + WS2812 + güç (`hardware/pcb/controller.kicad_pcb`)
 
 ## Durum (net)
-- ✅ KiCad'de tasarlandı, Freerouting ile tam yönlendirildi, **DRC temiz** (0 short, 0 ratsnest, 0 bakır clearance).
-- ✅ Final Gerber + STEP + Excellon üretildi (fab formatında).
-- ❌ **Fiziksel olarak ÜRETİLMEDİ, lehimlenmedi, ölçülmedi, test edilmedi.**
-- ⚠️ Aşağıdaki **elektriksel inceleme bulguları üretimden önce düzeltilmelidir** (Rev-B).
+- ✅ **Rev-B uygulandı** — aşağıdaki inceleme bulguları `build_kicad.py`'ye işlendi,
+  yeniden route edildi (Freerouting), **DRC: 0 short, 0 ratsnest, 0 bakır clearance**.
+  Yeni Gerber + STEP üretildi (`hardware/pcb/final/`).
+- ✅ Rev-B eklenen bileşenler: **U2** (74AHCT1G125 level-shifter), **F1** (sigorta) +
+  **Q1** (P-FET ters polarite) + **D1/R2** (gate clamp/pulldown), **C6** (100µF bulk),
+  **C7/C8** (VM decap), **R3** (10k EN pull-up), **R4** (1k UART), ayrı UART adresleri.
+- ❌ **Hâlâ fiziksel ÜRETİLMEDİ/TEST EDİLMEDİ.** Rev-B tasarımı dondurdu; sıra prototip + bring-up.
+- ⚠️ Rev-B tasarım değerleri (P-FET parça seçimi, zener 10V, PTC ~3A) **üretim öncesi
+  bir donanımcı tarafından son kez gözden geçirilmeli** (özellikle Vgs limiti / koruma topolojisi).
 
 > DRC "geometri/clearance" kontrolüdür — **devrenin doğru çalışacağını garanti etmez.**
 > Aşağıdakiler ancak gözden geçirme ile yakalanır.

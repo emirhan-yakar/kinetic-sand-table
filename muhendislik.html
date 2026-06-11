@@ -28,7 +28,7 @@
     <div class="card pad"><div style="overflow:auto"><table>
       <tr><th>Alt sistem</th><th>Durum</th><th>Not</th></tr>
       <tr><td>Mekanik tasarım</td><td>🟡 Tasarlandı</td><td>Geometri + montaj sheet + patlatma; fiziksel prototip yapılmadı</td></tr>
-      <tr><td><b>Kontrol kartı (PCB)</b></td><td>🟠 Tasarlandı, DRC temiz — <b>test EDİLMEDİ</b></td><td>Elektriksel inceleme düzeltme gerektiren bulgular buldu (UART adres, LED level-shift…)</td></tr>
+      <tr><td><b>Kontrol kartı (PCB)</b></td><td>🟠 <b>Rev-B</b> tasarlandı (bulgular işlendi), DRC temiz — <b>fiziksel test EDİLMEDİ</b></td><td>UART adres, LED level-shifter, giriş koruması, bulk cap, EN pull-up eklendi → yeniden route (0 short). Sıra: prototip + bring-up</td></tr>
       <tr><td>Firmware</td><td>🟠 Yazılmadı — mimari+config var</td><td>FluidNC + Dune Weaver; örnek config hazır, cihazda doğrulanmadı</td></tr>
       <tr><td>BOM / maliyet / tedarik</td><td>🟢 Hazır</td><td>Gerçek malzeme + TR fiyat</td></tr>
       <tr><td>Görseller</td><td>🟢 Hazır</td><td>Ön-görselleştirme (satış için fiziksel ürün fotosu gerekir)</td></tr>
@@ -52,7 +52,7 @@
       ESP32 + 2× TMC2209 + WS2812 + güç. Final Gerber + STEP 3D üretildi.</p>
     <div class="grid g3">
       <div class="card"><img src="hardware/pcb/final/plots/final-F_Cu-routed.png" alt="F.Cu" style="aspect-ratio:1/1;object-fit:contain;background:#0d1117">
-        <div class="cap"><b>Üst bakır</b> — sinyal routing (139 iz + 3 via)</div></div>
+        <div class="cap"><b>Üst bakır</b> — sinyal routing (196 iz + 12 via, Rev-B)</div></div>
       <div class="card"><img src="hardware/pcb/final/plots/final-B_Cu-groundplane.png" alt="B.Cu" style="aspect-ratio:1/1;object-fit:contain;background:#0d1117">
         <div class="cap"><b>Alt bakır</b> — GND ground plane (clearance'lı)</div></div>
       <div class="card"><img src="hardware/pcb/plots/assembly.svg.png" alt="assembly" style="aspect-ratio:1/1;object-fit:contain;background:#0d1117">

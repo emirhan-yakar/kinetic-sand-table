@@ -40,6 +40,9 @@ RES = FPROOT+"/Resistor_SMD.pretty"
 CTH = FPROOT+"/Capacitor_THT.pretty"
 CSM = FPROOT+"/Capacitor_SMD.pretty"
 MH  = FPROOT+"/MountingHole.pretty"
+SOT = FPROOT+"/Package_TO_SOT_SMD.pretty"   # Rev-B: level shifter, P-FET
+FUSE= FPROOT+"/Fuse.pretty"
+DSMD= FPROOT+"/Diode_SMD.pretty"
 
 BW, BH = 100.0, 75.0
 WSIG, WPWR = 0.25, 0.5
@@ -48,21 +51,21 @@ WSIG, WPWR = 0.25, 0.5
 COMPONENTS = [
   # ESP32 -> iki 1x15 soket strip (25.4mm arali)
   ("U1L", PS, "PinSocket_1x15_P2.54mm_Vertical", 30.0, 12.0, 0, {
-      "1":"N_3V3","2":"N_EN_BTN","6":"N_THDIR","7":"N_RHDIR","8":"N_UART","9":"N_EN","10":"N_LEDG"}),
+      "1":"N_3V3","2":"N_EN_BTN","6":"N_THDIR","7":"N_RHDIR","8":"N_UART_TX","9":"N_EN","10":"N_LEDG"}),
   ("U1R", PS, "PinSocket_1x15_P2.54mm_Vertical", 55.4, 12.0, 0, {
-      "1":"N_GND","5":"N_5V","6":"N_THSTEP","7":"N_RHSTEP","8":"N_UART_RX","9":"N_ENDSTOP","15":"N_GND"}),
-  # TMC2209 theta -> 2x08 soket
+      "1":"N_GND","5":"N_5V","6":"N_THSTEP","7":"N_RHSTEP","8":"N_PDN","9":"N_ENDSTOP","15":"N_GND"}),
+  # TMC2209 theta -> 2x08 soket  (Rev-B: MS1/MS2 ile adres 0; PDN tek-hat UART)
   ("A1", PS, "PinSocket_2x08_P2.54mm_Vertical", 10.0, 20.0, 0, {
-      "1":"N_GND","3":"N_5V","5":"N_THDIR","7":"N_THSTEP","9":"N_UART","11":"N_MS2","13":"N_MS1","15":"N_EN",
+      "1":"N_GND","3":"N_5V","5":"N_THDIR","7":"N_THSTEP","9":"N_PDN","11":"N_GND","13":"N_GND","15":"N_EN",
       "2":"N_GND","4":"N_GND","6":"THM_A1","8":"THM_A2","10":"THM_B1","12":"THM_B2","14":"N_GND","16":"N_12V"}),
-  ("A2", PS, "PinSocket_2x08_P2.54mm_Vertical", 80.0, 20.0, 0, {
-      "1":"N_GND","3":"N_5V","5":"N_RHDIR","7":"N_RHSTEP","9":"N_UART","11":"N_MS2","13":"N_MS1","15":"N_EN",
+  ("A2", PS, "PinSocket_2x08_P2.54mm_Vertical", 80.0, 20.0, 0, {  # adres 1: MS1=5V
+      "1":"N_GND","3":"N_5V","5":"N_RHDIR","7":"N_RHSTEP","9":"N_PDN","11":"N_GND","13":"N_5V","15":"N_EN",
       "2":"N_GND","4":"N_GND","6":"RHM_A1","8":"RHM_A2","10":"RHM_B1","12":"RHM_B2","14":"N_GND","16":"N_12V"}),
   # buck 12->5
   ("BK1", PS, "PinSocket_1x04_P2.54mm_Vertical", 36.0, 56.0, 0, {
       "1":"N_12V","2":"N_GND","3":"N_5V","4":"N_GND"}),
   # klemensler (MaiXu 5.0mm generic)
-  ("J1", TB, "TerminalBlock_MaiXu_MX126-5.0-02P_1x02_P5.00mm", 6.0, 60.0, 0, {"1":"N_12V","2":"N_GND"}),
+  ("J1", TB, "TerminalBlock_MaiXu_MX126-5.0-02P_1x02_P5.00mm", 6.0, 60.0, 0, {"1":"N_12VIN","2":"N_GND"}),
   ("J2", TB, "TerminalBlock_MaiXu_MX126-5.0-04P_1x04_P5.00mm", 6.0, 6.0, 0, {
       "1":"THM_A1","2":"THM_A2","3":"THM_B1","4":"THM_B2"}),
   ("J3", TB, "TerminalBlock_MaiXu_MX126-5.0-04P_1x04_P5.00mm", 72.0, 6.0, 0, {
@@ -72,10 +75,26 @@ COMPONENTS = [
   ("J5", TB, "TerminalBlock_MaiXu_MX126-5.0-03P_1x03_P5.00mm", 40.0, 6.0, 0, {
       "1":"N_3V3","2":"N_ENDSTOP","3":"N_GND"}),
   # pasifler
-  ("R1", RES, "R_0805_2012Metric", 64.0, 47.0, 0, {"1":"N_LEDG","2":"N_LEDDIN"}),
-  ("C1", CTH, "CP_Radial_D10.0mm_P5.00mm", 52.0, 47.0, 0, {"1":"N_5V","2":"N_GND"}),
-  ("C2", CSM, "C_0805_2012Metric", 24.0, 42.0, 0, {"1":"N_5V","2":"N_GND"}),
-  ("C3", CSM, "C_0805_2012Metric", 88.0, 42.0, 0, {"1":"N_5V","2":"N_GND"}),
+  ("R1", RES, "R_0805_2012Metric", 64.0, 47.0, 0, {"1":"N_LEDDIN5","2":"N_LEDDIN"}),  # 330R, shifter cikisi -> LED
+  ("C1", CTH, "CP_Radial_D10.0mm_P5.00mm", 52.0, 47.0, 0, {"1":"N_5V","2":"N_GND"}),  # 1000uF 5V tampon
+  ("C2", CSM, "C_0805_2012Metric", 24.0, 42.0, 0, {"1":"N_5V","2":"N_GND"}),          # A1 VIO decap
+  ("C3", CSM, "C_0805_2012Metric", 88.0, 42.0, 0, {"1":"N_5V","2":"N_GND"}),          # A2 VIO decap
+
+  # ===== Rev-B eklemeleri =====
+  # WS2812 level shifter 74AHCT1G125 (3.3V->5V): 1=OE(GND),2=A(in),3=GND,4=Y(out),5=VCC
+  ("U2", SOT, "SOT-23-5", 78.0, 50.0, 0, {"1":"N_GND","2":"N_LEDG","3":"N_GND","4":"N_LEDDIN5","5":"N_5V"}),
+  ("C5", CSM, "C_0805_2012Metric", 84.0, 52.0, 0, {"1":"N_5V","2":"N_GND"}),          # U2 decap 100nF
+  # 12V giris korumasi:  J1 -> F1(sigorta) -> Q1(P-FET ters polarite) -> N_12V (korumali)
+  ("F1", FUSE, "Fuse_1206_3216Metric", 16.0, 66.0, 0, {"1":"N_12VIN","2":"N_12VF"}),   # PTC ~3A
+  ("Q1", SOT, "SOT-23", 24.0, 66.0, 0, {"1":"N_PGATE","2":"N_12V","3":"N_12VF"}),       # AO3401 G,S,D
+  ("R2", RES, "R_0805_2012Metric", 30.0, 64.0, 0, {"1":"N_PGATE","2":"N_GND"}),         # 100k gate
+  ("D1", DSMD, "D_SOD-323", 30.0, 68.0, 0, {"1":"N_12V","2":"N_PGATE"}),                # 10V zener Vgs clamp
+  # bulk + VM decap (TMC VM)
+  ("C6", CTH, "CP_Radial_D8.0mm_P3.50mm", 46.0, 67.0, 0, {"1":"N_12V","2":"N_GND"}),    # 100uF/25V bulk
+  ("C7", CSM, "C_0805_2012Metric", 18.0, 34.0, 0, {"1":"N_12V","2":"N_GND"}),           # A1 VM 100nF
+  ("C8", CSM, "C_0805_2012Metric", 72.0, 34.0, 0, {"1":"N_12V","2":"N_GND"}),           # A2 VM 100nF
+  ("R3", RES, "R_0805_2012Metric", 60.0, 66.0, 0, {"1":"N_EN","2":"N_5V"}),             # 10k EN pull-up (boot pasif)
+  ("R4", RES, "R_0805_2012Metric", 52.0, 64.0, 0, {"1":"N_UART_TX","2":"N_PDN"}),       # 1k UART half-duplex
 ]
 MOUNT = [(4,4),(BW-4,4),(BW-4,BH-4),(4,BH-4)]
 

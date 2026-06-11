@@ -1,11 +1,12 @@
-KiCad 9.0.9 DRC -- Freerouting ile tam routing
-ratsnest: 0 | bakir short: 0 | toplam ihlal: 148
+KiCad 9.0.9 DRC -- Rev-B (Freerouting tam routing)
+ratsnest: 0 | bakir short: 0 | bakir clearance: 1
+toplam ihlal: 171 (cogu kozmetik silk + plane artefakti; GUI 'B' refill ile temizlenir)
+    73 silk_over_copper
     73 silk_overlap
-    56 silk_over_copper
-     6 isolated_copper
-     5 starved_thermal
-     2 courtyards_overlap
+    10 isolated_copper
+     6 starved_thermal
+     3 courtyards_overlap
      2 solder_mask_bridge
      2 silk_edge_clearance
+     1 clearance
      1 hole_clearance
-     1 copper_sliver

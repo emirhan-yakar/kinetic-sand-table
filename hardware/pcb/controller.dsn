@@ -11,28 +11,52 @@
     (rule (width 250) (clearance 220))
   )
   (placement
-    (component IMG_J3 (place J3 72000 6000 front 0))
-    (component IMG_U1R (place U1R 55400 12000 front 0))
-    (component IMG_A1 (place A1 10000 20000 front 0))
-    (component IMG_J5 (place J5 40000 6000 front 0))
-    (component IMG_J4 (place J4 66000 60000 front 0))
-    (component IMG_R1 (place R1 64000 47000 front 0))
-    (component IMG_REF** (place REF** 96000 4000 front 0))
-    (component IMG_U1L (place U1L 30000 12000 front 0))
-    (component IMG_C1 (place C1 52000 47000 front 0))
-    (component IMG_BK1 (place BK1 36000 56000 front 0))
-    (component IMG_C3 (place C3 88000 42000 front 0))
-    (component IMG_J2 (place J2 6000 6000 front 0))
-    (component IMG_A2 (place A2 80000 20000 front 0))
-    (component IMG_C2 (place C2 24000 42000 front 0))
+    (component IMG_U2 (place U2 78000 50000 front 0))
+    (component IMG_REF** (place REF** 4000 4000 front 0))
     (component IMG_J1 (place J1 6000 60000 front 0))
+    (component IMG_C8 (place C8 72000 34000 front 0))
+    (component IMG_C1 (place C1 52000 47000 front 0))
+    (component IMG_U1R (place U1R 55400 12000 front 0))
+    (component IMG_J4 (place J4 66000 60000 front 0))
+    (component IMG_R4 (place R4 52000 64000 front 0))
+    (component IMG_BK1 (place BK1 36000 56000 front 0))
+    (component IMG_J5 (place J5 40000 6000 front 0))
+    (component IMG_C6 (place C6 46000 67000 front 0))
+    (component IMG_A1 (place A1 10000 20000 front 0))
+    (component IMG_C2 (place C2 24000 42000 front 0))
+    (component IMG_C3 (place C3 88000 42000 front 0))
+    (component IMG_Q1 (place Q1 24000 66000 front 0))
+    (component IMG_U1L (place U1L 30000 12000 front 0))
+    (component IMG_R3 (place R3 60000 66000 front 0))
+    (component IMG_R2 (place R2 30000 64000 front 0))
+    (component IMG_F1 (place F1 16000 66000 front 0))
+    (component IMG_R1 (place R1 64000 47000 front 0))
+    (component IMG_J3 (place J3 72000 6000 front 0))
+    (component IMG_C5 (place C5 84000 52000 front 0))
+    (component IMG_D1 (place D1 30000 68000 front 0))
+    (component IMG_A2 (place A2 80000 20000 front 0))
+    (component IMG_J2 (place J2 6000 6000 front 0))
+    (component IMG_C7 (place C7 18000 34000 front 0))
   )
   (library
-    (image IMG_J3
+    (image IMG_U2
+      (pin PS_SMD_1325x600 1 -1138 -950)
+      (pin PS_SMD_1325x600 2 -1138 0)
+      (pin PS_SMD_1325x600 3 -1138 950)
+      (pin PS_SMD_1325x600 4 1138 950)
+      (pin PS_SMD_1325x600 5 1138 -950)
+    )
+    (image IMG_J1
       (pin PS_RND_3762 1 0 0)
       (pin PS_RND_2809 2 5000 0)
-      (pin PS_RND_2809 3 10000 0)
-      (pin PS_RND_2809 4 15000 0)
+    )
+    (image IMG_C8
+      (pin PS_SMD_1000x1450 1 -950 0)
+      (pin PS_SMD_1000x1450 2 950 0)
+    )
+    (image IMG_C1
+      (pin PS_RND_2631 1 0 0)
+      (pin PS_RND_2010 2 5000 0)
     )
     (image IMG_U1R
       (pin PS_RND_2404 1 0 0)
@@ -51,58 +75,14 @@
       (pin PS_RND_1708 14 0 33020)
       (pin PS_RND_1708 15 0 35560)
     )
-    (image IMG_A1
-      (pin PS_RND_2404 1 0 0)
-      (pin PS_RND_1708 2 -2540 0)
-      (pin PS_RND_1708 3 0 2540)
-      (pin PS_RND_1708 4 -2540 2540)
-      (pin PS_RND_1708 5 0 5080)
-      (pin PS_RND_1708 6 -2540 5080)
-      (pin PS_RND_1708 7 0 7620)
-      (pin PS_RND_1708 8 -2540 7620)
-      (pin PS_RND_1708 9 0 10160)
-      (pin PS_RND_1708 10 -2540 10160)
-      (pin PS_RND_1708 11 0 12700)
-      (pin PS_RND_1708 12 -2540 12700)
-      (pin PS_RND_1708 13 0 15240)
-      (pin PS_RND_1708 14 -2540 15240)
-      (pin PS_RND_1708 15 0 17780)
-      (pin PS_RND_1708 16 -2540 17780)
-    )
-    (image IMG_J5
-      (pin PS_RND_3762 1 0 0)
-      (pin PS_RND_2809 2 5000 0)
-      (pin PS_RND_2809 3 10000 0)
-    )
     (image IMG_J4
       (pin PS_RND_3762 1 0 0)
       (pin PS_RND_2809 2 5000 0)
       (pin PS_RND_2809 3 10000 0)
     )
-    (image IMG_R1
+    (image IMG_R4
       (pin PS_SMD_1025x1400 1 -913 0)
-      (pin PS_SMD_1025x1400 2 912 0)
-    )
-    (image IMG_U1L
-      (pin PS_RND_2404 1 0 0)
-      (pin PS_RND_1708 2 0 2540)
-      (pin PS_RND_1708 3 0 5080)
-      (pin PS_RND_1708 4 0 7620)
-      (pin PS_RND_1708 5 0 10160)
-      (pin PS_RND_1708 6 0 12700)
-      (pin PS_RND_1708 7 0 15240)
-      (pin PS_RND_1708 8 0 17780)
-      (pin PS_RND_1708 9 0 20320)
-      (pin PS_RND_1708 10 0 22860)
-      (pin PS_RND_1708 11 0 25400)
-      (pin PS_RND_1708 12 0 27940)
-      (pin PS_RND_1708 13 0 30480)
-      (pin PS_RND_1708 14 0 33020)
-      (pin PS_RND_1708 15 0 35560)
-    )
-    (image IMG_C1
-      (pin PS_RND_2631 1 0 0)
-      (pin PS_RND_2010 2 5000 0)
+      (pin PS_SMD_1025x1400 2 913 0)
     )
     (image IMG_BK1
       (pin PS_RND_2404 1 0 0)
@@ -110,17 +90,16 @@
       (pin PS_RND_1708 3 0 5080)
       (pin PS_RND_1708 4 0 7620)
     )
-    (image IMG_C3
-      (pin PS_SMD_1000x1450 1 -950 0)
-      (pin PS_SMD_1000x1450 2 950 0)
-    )
-    (image IMG_J2
+    (image IMG_J5
       (pin PS_RND_3762 1 0 0)
       (pin PS_RND_2809 2 5000 0)
       (pin PS_RND_2809 3 10000 0)
-      (pin PS_RND_2809 4 15000 0)
     )
-    (image IMG_A2
+    (image IMG_C6
+      (pin PS_RND_2065 1 0 0)
+      (pin PS_RND_1608 2 3500 0)
+    )
+    (image IMG_A1
       (pin PS_RND_2404 1 0 0)
       (pin PS_RND_1708 2 -2540 0)
       (pin PS_RND_1708 3 0 2540)
@@ -142,9 +121,93 @@
       (pin PS_SMD_1000x1450 1 -950 0)
       (pin PS_SMD_1000x1450 2 950 0)
     )
-    (image IMG_J1
+    (image IMG_C3
+      (pin PS_SMD_1000x1450 1 -950 0)
+      (pin PS_SMD_1000x1450 2 950 0)
+    )
+    (image IMG_Q1
+      (pin PS_SMD_1475x600 1 -938 -950)
+      (pin PS_SMD_1475x600 2 -938 950)
+      (pin PS_SMD_1475x600 3 938 0)
+    )
+    (image IMG_U1L
+      (pin PS_RND_2404 1 0 0)
+      (pin PS_RND_1708 2 0 2540)
+      (pin PS_RND_1708 3 0 5080)
+      (pin PS_RND_1708 4 0 7620)
+      (pin PS_RND_1708 5 0 10160)
+      (pin PS_RND_1708 6 0 12700)
+      (pin PS_RND_1708 7 0 15240)
+      (pin PS_RND_1708 8 0 17780)
+      (pin PS_RND_1708 9 0 20320)
+      (pin PS_RND_1708 10 0 22860)
+      (pin PS_RND_1708 11 0 25400)
+      (pin PS_RND_1708 12 0 27940)
+      (pin PS_RND_1708 13 0 30480)
+      (pin PS_RND_1708 14 0 33020)
+      (pin PS_RND_1708 15 0 35560)
+    )
+    (image IMG_R3
+      (pin PS_SMD_1025x1400 1 -913 0)
+      (pin PS_SMD_1025x1400 2 913 0)
+    )
+    (image IMG_R2
+      (pin PS_SMD_1025x1400 1 -913 0)
+      (pin PS_SMD_1025x1400 2 913 0)
+    )
+    (image IMG_F1
+      (pin PS_SMD_1250x1750 1 -1400 0)
+      (pin PS_SMD_1250x1750 2 1400 0)
+    )
+    (image IMG_R1
+      (pin PS_SMD_1025x1400 1 -913 0)
+      (pin PS_SMD_1025x1400 2 912 0)
+    )
+    (image IMG_J3
       (pin PS_RND_3762 1 0 0)
       (pin PS_RND_2809 2 5000 0)
+      (pin PS_RND_2809 3 10000 0)
+      (pin PS_RND_2809 4 15000 0)
+    )
+    (image IMG_C5
+      (pin PS_SMD_1000x1450 1 -950 0)
+      (pin PS_SMD_1000x1450 2 950 0)
+    )
+    (image IMG_D1
+      (pin PS_SMD_600x450 1 -1050 0)
+      (pin PS_SMD_600x450 2 1050 0)
+    )
+    (image IMG_A2
+      (pin PS_RND_2404 1 0 0)
+      (pin PS_RND_1708 2 -2540 0)
+      (pin PS_RND_1708 3 0 2540)
+      (pin PS_RND_1708 4 -2540 2540)
+      (pin PS_RND_1708 5 0 5080)
+      (pin PS_RND_1708 6 -2540 5080)
+      (pin PS_RND_1708 7 0 7620)
+      (pin PS_RND_1708 8 -2540 7620)
+      (pin PS_RND_1708 9 0 10160)
+      (pin PS_RND_1708 10 -2540 10160)
+      (pin PS_RND_1708 11 0 12700)
+      (pin PS_RND_1708 12 -2540 12700)
+      (pin PS_RND_1708 13 0 15240)
+      (pin PS_RND_1708 14 -2540 15240)
+      (pin PS_RND_1708 15 0 17780)
+      (pin PS_RND_1708 16 -2540 17780)
+    )
+    (image IMG_J2
+      (pin PS_RND_3762 1 0 0)
+      (pin PS_RND_2809 2 5000 0)
+      (pin PS_RND_2809 3 10000 0)
+      (pin PS_RND_2809 4 15000 0)
+    )
+    (image IMG_C7
+      (pin PS_SMD_1000x1450 1 -950 0)
+      (pin PS_SMD_1000x1450 2 950 0)
+    )
+    (padstack PS_SMD_1325x600
+      (shape (rect F.Cu -662 -300 662 300))
+      (attach off)
     )
     (padstack PS_RND_3762
       (shape (circle F.Cu 3762))
@@ -154,6 +217,20 @@
     (padstack PS_RND_2809
       (shape (circle F.Cu 2809))
       (shape (circle B.Cu 2809))
+      (attach off)
+    )
+    (padstack PS_SMD_1000x1450
+      (shape (rect F.Cu -500 -725 500 725))
+      (attach off)
+    )
+    (padstack PS_RND_2631
+      (shape (circle F.Cu 2631))
+      (shape (circle B.Cu 2631))
+      (attach off)
+    )
+    (padstack PS_RND_2010
+      (shape (circle F.Cu 2010))
+      (shape (circle B.Cu 2010))
       (attach off)
     )
     (padstack PS_RND_2404
@@ -170,18 +247,26 @@
       (shape (rect F.Cu -512 -700 512 700))
       (attach off)
     )
-    (padstack PS_RND_2631
-      (shape (circle F.Cu 2631))
-      (shape (circle B.Cu 2631))
+    (padstack PS_RND_2065
+      (shape (circle F.Cu 2065))
+      (shape (circle B.Cu 2065))
       (attach off)
     )
-    (padstack PS_RND_2010
-      (shape (circle F.Cu 2010))
-      (shape (circle B.Cu 2010))
+    (padstack PS_RND_1608
+      (shape (circle F.Cu 1608))
+      (shape (circle B.Cu 1608))
       (attach off)
     )
-    (padstack PS_SMD_1000x1450
-      (shape (rect F.Cu -500 -725 500 725))
+    (padstack PS_SMD_1475x600
+      (shape (rect F.Cu -737 -300 737 300))
+      (attach off)
+    )
+    (padstack PS_SMD_1250x1750
+      (shape (rect F.Cu -625 -875 625 875))
+      (attach off)
+    )
+    (padstack PS_SMD_600x450
+      (shape (rect F.Cu -300 -225 300 225))
       (attach off)
     )
     (padstack PS_VIA
@@ -191,6 +276,72 @@
     )
   )
   (network
+    (net "N_GND"
+      (pins U2-1 U2-3 J1-2 C8-2 C1-2 U1R-1 U1R-15 J4-3 BK1-2 BK1-4 J5-3 C6-2 A1-1 A1-2 A1-4 A1-11 A1-13 A1-14 C2-2 C3-2 R2-2 C5-2 A2-1 A2-2 A2-4 A2-11 A2-14 C7-2)
+    )
+    (net "N_LEDG"
+      (pins U2-2 U1L-10)
+    )
+    (net "N_LEDDIN5"
+      (pins U2-4 R1-1)
+    )
+    (net "N_5V"
+      (pins U2-5 C1-1 U1R-5 J4-1 BK1-3 A1-3 C2-1 C3-1 R3-2 C5-1 A2-3 A2-13)
+    )
+    (net "N_12VIN"
+      (pins J1-1 F1-1)
+    )
+    (net "N_12V"
+      (pins C8-1 BK1-1 C6-1 A1-16 Q1-2 D1-1 A2-16 C7-1)
+    )
+    (net "N_THSTEP"
+      (pins U1R-6 A1-7)
+    )
+    (net "N_RHSTEP"
+      (pins U1R-7 A2-7)
+    )
+    (net "N_PDN"
+      (pins U1R-8 R4-2 A1-9 A2-9)
+    )
+    (net "N_ENDSTOP"
+      (pins U1R-9 J5-2)
+    )
+    (net "N_LEDDIN"
+      (pins J4-2 R1-2)
+    )
+    (net "N_UART_TX"
+      (pins R4-1 U1L-8)
+    )
+    (net "N_3V3"
+      (pins J5-1 U1L-1)
+    )
+    (net "N_THDIR"
+      (pins A1-5 U1L-6)
+    )
+    (net "THM_A1"
+      (pins A1-6 J2-1)
+    )
+    (net "THM_A2"
+      (pins A1-8 J2-2)
+    )
+    (net "THM_B1"
+      (pins A1-10 J2-3)
+    )
+    (net "THM_B2"
+      (pins A1-12 J2-4)
+    )
+    (net "N_EN"
+      (pins A1-15 U1L-9 R3-1 A2-15)
+    )
+    (net "N_PGATE"
+      (pins Q1-1 R2-1 D1-2)
+    )
+    (net "N_12VF"
+      (pins Q1-3 F1-2)
+    )
+    (net "N_RHDIR"
+      (pins U1L-7 A2-5)
+    )
     (net "RHM_A1"
       (pins J3-1 A2-6)
     )
@@ -203,65 +354,8 @@
     (net "RHM_B2"
       (pins J3-4 A2-12)
     )
-    (net "N_GND"
-      (pins U1R-1 U1R-15 A1-1 A1-2 A1-4 A1-14 J5-3 J4-3 C1-2 BK1-2 BK1-4 C3-2 A2-1 A2-2 A2-4 A2-14 C2-2 J1-2)
-    )
-    (net "N_5V"
-      (pins U1R-5 A1-3 J4-1 C1-1 BK1-3 C3-1 A2-3 C2-1)
-    )
-    (net "N_THSTEP"
-      (pins U1R-6 A1-7)
-    )
-    (net "N_RHSTEP"
-      (pins U1R-7 A2-7)
-    )
-    (net "N_ENDSTOP"
-      (pins U1R-9 J5-2)
-    )
-    (net "N_THDIR"
-      (pins A1-5 U1L-6)
-    )
-    (net "THM_A1"
-      (pins A1-6 J2-1)
-    )
-    (net "THM_A2"
-      (pins A1-8 J2-2)
-    )
-    (net "N_UART"
-      (pins A1-9 U1L-8 A2-9)
-    )
-    (net "THM_B1"
-      (pins A1-10 J2-3)
-    )
-    (net "N_MS2"
-      (pins A1-11 A2-11)
-    )
-    (net "THM_B2"
-      (pins A1-12 J2-4)
-    )
-    (net "N_MS1"
-      (pins A1-13 A2-13)
-    )
-    (net "N_EN"
-      (pins A1-15 U1L-9 A2-15)
-    )
-    (net "N_12V"
-      (pins A1-16 BK1-1 A2-16 J1-1)
-    )
-    (net "N_3V3"
-      (pins J5-1 U1L-1)
-    )
-    (net "N_LEDDIN"
-      (pins J4-2 R1-2)
-    )
-    (net "N_LEDG"
-      (pins R1-1 U1L-10)
-    )
-    (net "N_RHDIR"
-      (pins U1L-7 A2-5)
-    )
     (class default (rule (width 250) (clearance 220))
-      "RHM_A1" "RHM_A2" "RHM_B1" "RHM_B2" "N_GND" "N_5V" "N_THSTEP" "N_RHSTEP" "N_ENDSTOP" "N_THDIR" "THM_A1" "THM_A2" "N_UART" "THM_B1" "N_MS2" "THM_B2" "N_MS1" "N_EN" "N_12V" "N_3V3" "N_LEDDIN" "N_LEDG" "N_RHDIR"
+      "N_GND" "N_LEDG" "N_LEDDIN5" "N_5V" "N_12VIN" "N_12V" "N_THSTEP" "N_RHSTEP" "N_PDN" "N_ENDSTOP" "N_LEDDIN" "N_UART_TX" "N_3V3" "N_THDIR" "THM_A1" "THM_A2" "THM_B1" "THM_B2" "N_EN" "N_PGATE" "N_12VF" "N_RHDIR" "RHM_A1" "RHM_A2" "RHM_B1" "RHM_B2"
     )
   )
   (wiring

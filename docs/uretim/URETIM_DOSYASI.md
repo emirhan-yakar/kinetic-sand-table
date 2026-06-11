@@ -13,7 +13,7 @@ ile "doğrulandı" ve "fiziksel test edildi" karıştırılmaz.
 | Alt sistem | Durum | Açıklama |
 |---|---|---|
 | Mekanik tasarım (Ø600 polar, ayak, mıknatıslı modül) | 🟡 **Tasarlandı** | Parametrik geometri + ölçülü montaj sheet + patlatma çizimi. **Fiziksel prototip yapılmadı.** |
-| Kontrol kartı (PCB) | 🟠 **Tasarlandı, DRC temiz — FİZİKSEL ÜRETİLMEDİ/TEST EDİLMEDİ** | KiCad + Freerouting; auto-route. Elektriksel inceleme **düzeltilmesi gereken bulgular** ortaya çıkardı (bkz. `PCB_inceleme.md`). **Hiç lehimlenmedi, ölçülmedi.** |
+| Kontrol kartı (PCB) | 🟠 **Rev-B tasarlandı (bulgular işlendi), DRC temiz — FİZİKSEL TEST EDİLMEDİ** | İnceleme bulguları (UART adres, LED level-shifter, koruma, bulk cap, EN pull-up) `build_kicad.py`'ye işlendi, yeniden route edildi (0 short). **Hâlâ lehimlenmedi/ölçülmedi.** Bkz. `PCB_inceleme.md`. |
 | Firmware | 🟠 **Yazılmadı — mimari + config taslağı var** | Hazır açık kaynak **FluidNC** (hareket) + **Dune Weaver** (desen/web) kullanılacak. Örnek `firmware/fluidnc_config.yaml` hazırlandı ama **cihaza yüklenip doğrulanmadı.** |
 | Görseller/render/video | 🟢 **Hazır** | Reklam kalitesinde (ön-görselleştirme; satış için fiziksel ürün fotosu gerekir). |
 | BOM / maliyet / tedarik | 🟢 **Hazır** | Gerçek malzeme + TR tedarik + fiyat. |
