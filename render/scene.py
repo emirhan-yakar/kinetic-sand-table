@@ -17,7 +17,11 @@ STUDIO=os.path.join(DIR,"assets","studio.hdr")
 WOOD_DIFF=os.path.join(DIR,"assets","wood_diff.jpg")
 WOOD_ROUGH=os.path.join(DIR,"assets","wood_rough.jpg")
 WOOD_NOR=os.path.join(DIR,"assets","wood_nor.jpg")
-THR =os.path.join(ROOT,"firmware","patterns","spiral_rose.thr")
+SAND_DIFF=os.path.join(DIR,"assets","sand_diff.jpg")
+SAND_ROUGH=os.path.join(DIR,"assets","sand_rough.jpg")
+SAND_NOR=os.path.join(DIR,"assets","sand_nor.jpg")
+THR = os.environ.get("PATTERN_THR") or os.path.join(ROOT,"firmware","patterns","spiral_rose.thr")
+if not os.path.isabs(THR): THR=os.path.join(ROOT,"firmware","patterns",THR)
 
 # ---- olculer (m) ----
 R=0.30; DRUM_H=0.15; LEG_H=0.30
@@ -127,13 +131,14 @@ def load_thr(p):
             try: out.append((float(s[0]),float(s[1])))
             except: pass
     return out
-thr=load_thr(THR)[::3]
+_raw=load_thr(THR); thr=_raw[::(4 if len(_raw)>9000 else 3)]
 sr=WELL_R*0.92
 pts=[(rho*sr*math.cos(th),rho*sr*math.sin(th)) for th,rho in thr]
 cu=bpy.data.curves.new("GrooveC","CURVE"); cu.dimensions='3D'
 sp=cu.splines.new('POLY'); sp.points.add(len(pts)-1)
-for i,(x,y) in enumerate(pts): sp.points[i].co=(x,y,SAND_TOP-0.0003,1)
-cu.bevel_depth=0.0015; cu.bevel_resolution=2
+for i,(x,y) in enumerate(pts): sp.points[i].co=(x,y,SAND_TOP-0.0006,1)
+# yogun portre desenlerinde cizgiler birlesmesin -> ince oluk (hafif geometri)
+cu.bevel_depth=(0.0007 if len(pts)>6000 else 0.0015); cu.bevel_resolution=1
 Groove=bpy.data.objects.new("Groove",cu); link(Groove)
 ball_xy=pts[-1]
 
@@ -174,22 +179,26 @@ wm=wood_textured("Walnut",scale=(2.4,1.4)) if os.path.exists(WOOD_DIFF) else mat
 for o in (body,Legs,Rim): o.data.materials.append(wm)
 gm,_=mat("Glass",(0.92,0.96,1.0),rough=0.03,transmission=1.0); gm.node_tree.nodes["Principled BSDF"].inputs["IOR"].default_value=1.5
 Glass.data.materials.append(gm)
-# kum (ince gren + renk varyasyonu + iki kademeli bump)
-sm,snt=mat("Sand",(0.86,0.74,0.55),rough=0.94)
+# kum: gercek PBR doku haritalari (renk/rough/normal) + sicak ton + ince gren
+sm,snt=mat("Sand",(0.86,0.74,0.55),rough=0.92)
 sn=snt.nodes; sl=snt.links; sb=sn["Principled BSDF"]
-tcs=sn.new("ShaderNodeTexCoord")
-# renk: iki kum tonu noise ile karisir
-cn=sn.new("ShaderNodeTexNoise"); cn.inputs["Scale"].default_value=22
-cmix=sn.new("ShaderNodeMixRGB"); cmix.inputs["Color1"].default_value=(0.88,0.76,0.57,1); cmix.inputs["Color2"].default_value=(0.78,0.65,0.46,1)
-sl.new(tcs.outputs["Object"],cn.inputs["Vector"]); sl.new(cn.outputs["Fac"],cmix.inputs["Fac"]); sl.new(cmix.outputs["Color"],sb.inputs["Base Color"])
-# gren: kaba + ince noise -> iki bump zinciri
-n1=sn.new("ShaderNodeTexNoise"); n1.inputs["Scale"].default_value=120; n1.inputs["Detail"].default_value=4
-n2=sn.new("ShaderNodeTexNoise"); n2.inputs["Scale"].default_value=620; n2.inputs["Detail"].default_value=2
-b1=sn.new("ShaderNodeBump"); b1.inputs["Strength"].default_value=0.10; b1.inputs["Distance"].default_value=0.002
-b2=sn.new("ShaderNodeBump"); b2.inputs["Strength"].default_value=0.06
-sl.new(tcs.outputs["Object"],n1.inputs["Vector"]); sl.new(tcs.outputs["Object"],n2.inputs["Vector"])
-sl.new(n1.outputs["Fac"],b1.inputs["Height"]); sl.new(b1.outputs["Normal"],b2.inputs["Normal"])
-sl.new(n2.outputs["Fac"],b2.inputs["Height"]); sl.new(b2.outputs["Normal"],sb.inputs["Normal"])
+if os.path.exists(SAND_DIFF):
+    tcs=sn.new("ShaderNodeTexCoord"); mps=sn.new("ShaderNodeMapping"); mps.inputs["Scale"].default_value=(7,7,7)
+    sl.new(tcs.outputs["UV"],mps.inputs["Vector"])
+    sd=sn.new("ShaderNodeTexImage"); sd.image=bpy.data.images.load(SAND_DIFF)
+    sr=sn.new("ShaderNodeTexImage"); sr.image=bpy.data.images.load(SAND_ROUGH); sr.image.colorspace_settings.name='Non-Color'
+    sno=sn.new("ShaderNodeTexImage"); sno.image=bpy.data.images.load(SAND_NOR); sno.image.colorspace_settings.name='Non-Color'
+    snm=sn.new("ShaderNodeNormalMap"); snm.inputs["Strength"].default_value=0.8
+    sb.inputs["Specular IOR Level"].default_value=0.0     # tam mat kuru kum -> tepe yansimasi (oval leke) yok
+    tnt=sn.new("ShaderNodeMixRGB"); tnt.blend_type='MULTIPLY'; tnt.inputs["Fac"].default_value=1.0; tnt.inputs["Color2"].default_value=(1.5,1.16,0.74,1)
+    for nd in (sd,sr,sno): sl.new(mps.outputs["Vector"],nd.inputs["Vector"])
+    sl.new(sd.outputs["Color"],tnt.inputs["Color1"]); sl.new(tnt.outputs["Color"],sb.inputs["Base Color"])
+    sl.new(sr.outputs["Color"],sb.inputs["Roughness"])
+    sl.new(sno.outputs["Color"],snm.inputs["Color"]); sl.new(snm.outputs["Normal"],sb.inputs["Normal"])
+else:
+    tcs=sn.new("ShaderNodeTexCoord"); n1=sn.new("ShaderNodeTexNoise"); n1.inputs["Scale"].default_value=300
+    b1=sn.new("ShaderNodeBump"); b1.inputs["Strength"].default_value=0.1
+    sl.new(tcs.outputs["Object"],n1.inputs["Vector"]); sl.new(n1.outputs["Fac"],b1.inputs["Height"]); sl.new(b1.outputs["Normal"],sb.inputs["Normal"])
 Sand.data.materials.append(sm)
 grm,_=mat("Groove",(0.42,0.33,0.21),rough=0.97); Groove.data.materials.append(grm)
 stm,_=mat("Steel",(0.80,0.80,0.82),rough=0.07,metal=1.0); Ball.data.materials.append(stm)
@@ -226,14 +235,15 @@ def area(name,loc,e,sz,col=(1,1,1),spec=0.15):
 if MODE=="dark":
     area("Key",(0.7,-0.6,1.2),45,0.7,spec=0.3); area("Rim",(-0.7,0.5,1.0),35,0.6,(0.6,0.7,1.0))
 else:
-    area("Key",(1.0,-0.9,1.5),90,1.2,spec=0.35); area("Top",(0.1,-0.1,1.7),48,1.4,spec=0.1)
+    area("Key",(1.0,-0.9,1.5),90,1.2,spec=0.35); area("Top",(0.1,-0.1,1.7),52,1.6,spec=0.0)
+    if MODE=="top": area("Graze",(1.5,-1.1,0.52),85,0.8,spec=0.0)  # alcak siyirgan: oluk golgesi belirsin
 
 # ============================ KAMERA ============================
 CAMS={
  "hero":((1.25,-1.25,1.05),(0,0,0.30),50),
  "room":((1.7,-1.5,0.9),(0,0,0.34),38),
  "dark":((1.15,-1.15,1.0),(0,0,0.32),52),
- "top": ((0.35,-0.35,1.35),(0,0,0.42),45),
+ "top": ((0.0,-0.42,1.6),(0,0,0.30),50),
 }
 def setcam(mode):
     loc,tgt,lens=CAMS.get(mode,CAMS["hero"])
@@ -254,7 +264,7 @@ def gpu():
 def add_post():  # LED bloom (glare) + vignette
     scene.use_nodes=True; nt=scene.node_tree; nt.nodes.clear()
     rl=nt.nodes.new("CompositorNodeRLayers")
-    gl=nt.nodes.new("CompositorNodeGlare"); gl.glare_type='FOG_GLOW'; gl.quality='HIGH'; gl.threshold=1.0; gl.size=8
+    gl=nt.nodes.new("CompositorNodeGlare"); gl.glare_type='FOG_GLOW'; gl.quality='HIGH'; gl.threshold=1.7; gl.size=8
     em=nt.nodes.new("CompositorNodeEllipseMask"); em.width=0.82; em.height=0.86
     bl=nt.nodes.new("CompositorNodeBlur"); bl.filter_type='FAST_GAUSS'; bl.use_relative=True; bl.factor_x=0.22; bl.factor_y=0.22
     rp=nt.nodes.new("CompositorNodeValToRGB")
@@ -319,7 +329,7 @@ else:
     # ---- kompozitor post: LED bloom (glare) + vignette ----
     scene.use_nodes=True; nt=scene.node_tree; nt.nodes.clear()
     rl=nt.nodes.new("CompositorNodeRLayers")
-    gl=nt.nodes.new("CompositorNodeGlare"); gl.glare_type='FOG_GLOW'; gl.quality='HIGH'; gl.threshold=1.0; gl.size=8
+    gl=nt.nodes.new("CompositorNodeGlare"); gl.glare_type='FOG_GLOW'; gl.quality='HIGH'; gl.threshold=1.7; gl.size=8
     em=nt.nodes.new("CompositorNodeEllipseMask"); em.width=0.82; em.height=0.86
     bl=nt.nodes.new("CompositorNodeBlur"); bl.filter_type='FAST_GAUSS'; bl.use_relative=True; bl.factor_x=0.22; bl.factor_y=0.22
     rp=nt.nodes.new("CompositorNodeValToRGB")

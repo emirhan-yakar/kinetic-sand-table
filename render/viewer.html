@@ -80,8 +80,8 @@ import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 const canvas=document.getElementById('c'), stat=document.getElementById('stat');
 const renderer=new THREE.WebGLRenderer({canvas,antialias:true});
 renderer.setPixelRatio(Math.min(devicePixelRatio,2));
-renderer.toneMapping=THREE.ACESFilmicToneMapping; renderer.toneMappingExposure=1.05;
-const scene=new THREE.Scene(); scene.background=new THREE.Color(0x0b0e14);
+renderer.toneMapping=THREE.ACESFilmicToneMapping; renderer.toneMappingExposure=1.0;
+const scene=new THREE.Scene(); scene.background=new THREE.Color(0x141a24);
 const camera=new THREE.PerspectiveCamera(38,1,0.01,100);
 const pmrem=new THREE.PMREMGenerator(renderer);
 // gercek studyo HDRI -> net yansimalar (yuklenmezse RoomEnvironment fallback)
@@ -89,12 +89,13 @@ new RGBELoader().load('assets/studio.hdr',(hdr)=>{
   hdr.mapping=THREE.EquirectangularReflectionMapping;
   scene.environment=pmrem.fromEquirectangular(hdr).texture;
 },undefined,()=>{ scene.environment=pmrem.fromScene(new RoomEnvironment(),0.04).texture; });
-scene.add(new THREE.HemisphereLight(0xffffff,0x2a2a34,0.4));
-const key=new THREE.DirectionalLight(0xffffff,2.4); key.position.set(2.5,4,2); key.castShadow=true;
+scene.add(new THREE.HemisphereLight(0xffffff,0x3a3a44,0.9));   // daha aydinlik ortam
+const key=new THREE.DirectionalLight(0xffffff,2.6); key.position.set(2.5,4,2); key.castShadow=true;
 key.shadow.mapSize.set(2048,2048); key.shadow.bias=-0.0005;
 key.shadow.camera.near=0.5; key.shadow.camera.far=12;
 key.shadow.camera.left=key.shadow.camera.bottom=-2; key.shadow.camera.right=key.shadow.camera.top=2; scene.add(key);
-const fill=new THREE.DirectionalLight(0xbcd0ff,0.5); fill.position.set(-3,2,-2); scene.add(fill);
+const fill=new THREE.DirectionalLight(0xdfe8ff,1.1); fill.position.set(-3,2.5,-1); scene.add(fill);
+const front=new THREE.DirectionalLight(0xffffff,0.8); front.position.set(0,1.5,4); scene.add(front);
 const ledLight=new THREE.PointLight(0x3aa0ff,0,1.4,2); scene.add(ledLight);
 renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFSoftShadowMap;
 
@@ -105,7 +106,7 @@ controls.autoRotate=true; controls.autoRotateSpeed=0.6;
 // ---- postprocessing: bloom (LED parildamasi) ----
 const composer=new EffectComposer(renderer);
 composer.addPass(new RenderPass(scene,camera));
-const bloom=new UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),0.55,0.5,0.92);
+const bloom=new UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),0.32,0.4,1.0);
 composer.addPass(bloom);
 composer.addPass(new OutputPass());
 
@@ -127,7 +128,7 @@ const DRAW_SECS=11;
 // ---- LED modlari ----
 const LEDMODES=[{n:'Mavi',c:0x3aa0ff},{n:'Sıcak',c:0xffb060},{n:'Gökkuşağı',c:-1},{n:'Kapalı',c:0}];
 let ledIdx=3, ledOn=false, hue=0;   // kapali basla -> calistirinca acilir
-const PATTERNS=[{n:'Spiral',f:'../firmware/patterns/spiral_rose.thr'},{n:'Klasik',f:'../firmware/patterns/classic.thr'}];
+const PATTERNS=[{n:'Atatürk imza',f:'../firmware/patterns/ataturk_signature.thr'},{n:'Spiral',f:'../firmware/patterns/spiral_rose.thr'},{n:'Klasik',f:'../firmware/patterns/classic.thr'}];
 let patIdx=0;
 
 const loader=new GLTFLoader();
@@ -139,6 +140,18 @@ loader.load('table.glb',(g)=>{
   root.updateMatrixWorld(true);
   root.traverse(o=>{ if(o.isMesh){
     o.castShadow=true; o.receiveShadow=true;
+    // --- malzemeleri gercekciye cek: yansimayi kis, dogru roughness ---
+    const m=o.material, nm=o.name;
+    if(m){
+      m.envMapIntensity=0.5;                                  // asiri HDRI yansimasini kis
+      if(/Body|Legs|Rim/i.test(nm)){ m.roughness=0.6; m.clearcoat=0; m.metalness=0; }
+      else if(/Sand|Groove/i.test(nm)){ m.roughness=0.96; m.metalness=0; }
+      else if(/Ball/i.test(nm)){ m.roughness=0.25; m.metalness=1; }                 // mat celik
+      else if(/Glass/i.test(nm)){ m.roughness=0.06; m.metalness=0; m.transparent=true; m.opacity=0.45; if('transmission' in m) m.transmission=0.9; }
+      else if(/PCB/i.test(nm)){ m.roughness=0.55; m.metalness=0; }
+      else if(/Motor|Arm|Carriage|theta|Magnet|BasePlate/i.test(nm)){ m.roughness=0.45; }
+      m.needsUpdate=true;
+    }
     o.userData.base=o.position.clone(); o.userData.off=new THREE.Vector3(...offFor(o.name));
     if(o.name.startsWith('Ball')){ ball=o; }
     else if(o.name.startsWith('LED_Ring')){ ledMesh=o; parts.push(o); }
@@ -150,12 +163,13 @@ loader.load('table.glb',(g)=>{
     }
   }});
   scene.add(root);
-  // yansitici studyo zemini (premium urun gorunumu)
+  // mat zemin + yumusak temas golgesi (asiri ayna yansimasi yok)
   const floorY=box.min.y-c.y-0.001;
-  const refl=new Reflector(new THREE.CircleGeometry(2.2,64),{clipBias:0.003,textureWidth:1024,textureHeight:1024,color:0x141821});
-  refl.rotation.x=-Math.PI/2; refl.position.y=floorY; scene.add(refl);
-  const shadowCatcher=new THREE.Mesh(new THREE.CircleGeometry(2.2,64),new THREE.ShadowMaterial({opacity:0.35}));
-  shadowCatcher.rotation.x=-Math.PI/2; shadowCatcher.position.y=floorY+0.0005; shadowCatcher.receiveShadow=true; scene.add(shadowCatcher);
+  const floorMat=new THREE.MeshStandardMaterial({color:0x2a2f3a,roughness:0.85,metalness:0.0});
+  const floor=new THREE.Mesh(new THREE.CircleGeometry(3,64),floorMat);
+  floor.rotation.x=-Math.PI/2; floor.position.y=floorY; floor.receiveShadow=true; scene.add(floor);
+  const shadowCatcher=new THREE.Mesh(new THREE.CircleGeometry(3,64),new THREE.ShadowMaterial({opacity:0.4}));
+  shadowCatcher.rotation.x=-Math.PI/2; shadowCatcher.position.y=floorY+0.0006; shadowCatcher.receiveShadow=true; scene.add(shadowCatcher);
   const d=Math.max(s.x,s.y,s.z);
   camera.position.set(d*1.25,d*0.85,d*1.4); controls.target.set(0,0,0); controls.update();
   ledLight.position.set(sandCenter.x,sandTopY+0.02,sandCenter.z);
@@ -165,7 +179,7 @@ loader.load('table.glb',(g)=>{
 async function loadPattern(){
   const txt=await (await fetch(PATTERNS[patIdx].f)).text();
   const raw=txt.trim().split('\n').map(l=>l.split(/\s+/).map(Number)).filter(a=>a.length===2);
-  const step=Math.max(1,Math.floor(raw.length/1400));
+  const step=Math.max(1,Math.floor(raw.length/5000));   // portre detayi icin daha cok nokta
   path=[];
   for(let i=0;i<raw.length;i+=step){
     const [th,rho]=raw[i];
