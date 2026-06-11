@@ -91,7 +91,10 @@
       "Bash(curl -s -o /dev/null -w 'signature.thr served: %{http_code}\\\\n' http://127.0.0.1:__TRACKED_VAR__/firmware/patterns/ataturk_signature.thr)",
       "Bash(awk '{print \"mp4:\",$5\"b\"}')",
       "Bash(awk '{print $9, $5}')",
-      "Bash(git -c user.name=Emirhan -c user.email=emirhanyakarclaude@gmail.com commit -q -m 'Reklam: bilye Atatürk imzasını çiziyor + gerçek kum/malzeme + viewer realizm *)"
+      "Bash(git -c user.name=Emirhan -c user.email=emirhanyakarclaude@gmail.com commit -q -m 'Reklam: bilye Atatürk imzasını çiziyor + gerçek kum/malzeme + viewer realizm *)",
+      "Bash(qlmanage -t -s 1400 -o . montaj_sheet.svg)",
+      "Bash(qlmanage -t -s 1500 -o . montaj_sheet.svg)",
+      "Bash(qlmanage -t -s 1600 -o . montaj_sheet.svg)"
     ]
   }
 }

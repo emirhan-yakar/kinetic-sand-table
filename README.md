@@ -32,6 +32,7 @@ kum tabakasındaki **çelik bilyeyi** sürükleyerek sonsuz desenler çizer. Ken
 | `hardware/pcb/` | Kontrol kartı: `pcb_gen.py` üreteci, **hazır Gerber + Excellon** (`gerbers/`), katman çizimleri (`plots/`), `controller.net` netlist, `board3d.scad` 3D model. Detay: `hardware/pcb/README.md` |
 | `firmware/README.md` | Dune Weaver / FluidNC kurulumu + Sandify ile desen üretimi |
 | `render/` | **Blender fotogerçekçi render** — `render_table.py` (prosedürel sahne, Cycles), `table_hero.png` (aydınlık) + `table_dark.png` (LED parıltılı). Bkz. `render/README.md` |
+| `docs/uretim/` | **Üretim paketi**: gerçek malzemeli BOM (TR tedarik+fiyat), ölçülü montaj sheet (açı/PCD/vida), parametrik geometri |
 | `docs/render-recipe.md` | Render reçetesi (malzeme + ışık), `render/`'ın temeli |
 
 ## Hızlı başlangıç

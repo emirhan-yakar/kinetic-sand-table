@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1760" height="980" viewBox="0 0 1760 980" style="background:#fff">
+<text x="880.0" y="34.0" font-size="20" fill="#111" text-anchor="middle" font-family="Arial">KİNETİK KUM MASASI — MONTAJ SHEET (ölçüler mm)</text>
+<text x="174.0" y="120.0" font-size="15" fill="#06c" text-anchor="start" font-family="Arial">ÖN GÖRÜNÜŞ</text>
+<rect x="174.0" y="160.0" width="372.0" height="93.0" fill="#e8d4b0" stroke="#7a5a2a" stroke-width="0"/>
+<rect x="174.0" y="160.0" width="372.0" height="93.0" fill="none" stroke="#7a5a2a" stroke-width="2"/>
+<rect x="192.6" y="160.0" width="334.8" height="31.0" fill="#efe2c4" stroke="#9a7" stroke-width="1"/>
+<line x1="188.9" y1="161.2" x2="531.1" y2="161.2" stroke="#39f" stroke-width="3" />
+<text x="360.0" y="156.3" font-size="12" fill="#39f" text-anchor="middle" font-family="Arial">temperli cam Ø552</text>
+<line x1="229.8" y1="253.0" x2="202.2" y2="449.5" stroke="#6b4423" stroke-width="6" />
+<line x1="490.2" y1="253.0" x2="517.8" y2="449.5" stroke="#6b4423" stroke-width="6" />
+<line x1="586.0" y1="160.0" x2="586.0" y2="449.5" stroke="#0a6" stroke-width="1" />
+<text x="600.0" y="304.7" font-size="13" fill="#0a6" text-anchor="middle" font-family="Arial">H=466</text>
+<line x1="174.0" y1="146.0" x2="546.0" y2="146.0" stroke="#0a6" stroke-width="1" /><line x1="174.0" y1="142.0" x2="174.0" y2="150.0" stroke="#0a6" stroke-width="1" /><line x1="546.0" y1="142.0" x2="546.0" y2="150.0" stroke="#0a6" stroke-width="1" /><text x="360.0" y="140.0" font-size="13" fill="#0a6" text-anchor="middle" font-family="Arial">Ø600</text>
+<line x1="229.8" y1="479.5" x2="490.2" y2="479.5" stroke="#0a6" stroke-width="1" /><line x1="229.8" y1="475.5" x2="229.8" y2="483.5" stroke="#0a6" stroke-width="1" /><line x1="490.2" y1="475.5" x2="490.2" y2="483.5" stroke="#0a6" stroke-width="1" /><text x="360.0" y="473.5" font-size="13" fill="#0a6" text-anchor="middle" font-family="Arial">ayak PCD Ø420</text>
+<line x1="202.2" y1="509.5" x2="517.8" y2="509.5" stroke="#0a6" stroke-width="1" /><line x1="202.2" y1="505.5" x2="202.2" y2="513.5" stroke="#0a6" stroke-width="1" /><line x1="517.8" y1="505.5" x2="517.8" y2="513.5" stroke="#0a6" stroke-width="1" /><text x="360.0" y="503.5" font-size="13" fill="#0a6" text-anchor="middle" font-family="Arial">ayak ucu Ø509</text>
+<text x="525.8" y="351.2" font-size="12" fill="#c30" text-anchor="start" font-family="Arial">8° splay</text>
+<text x="1300.0" y="316.0" font-size="15" fill="#06c" text-anchor="middle" font-family="Arial">ÜST GÖRÜNÜŞ (delik ve PCD)</text>
+<circle cx="1300.0" cy="470.0" r="138.0" fill="#f3e9d4" stroke="#7a5a2a" stroke-width="2"/>
+<circle cx="1300.0" cy="470.0" r="124.2" fill="#efe2c4" stroke="#9a7" stroke-width="1"/>
+<circle cx="1300.0" cy="470.0" r="118.7" fill="none" stroke="#cbb" stroke-width="1" stroke-dasharray="4 3"/>
+<circle cx="1300.0" cy="470.0" r="96.6" fill="none" stroke="#c30" stroke-width="1" stroke-dasharray="6 4"/>
+<rect x="1359.3065150626205" y="529.3065150626205" width="18" height="18" fill="#fff" stroke="#c30" stroke-width="1.5"/>
+<text x="1368.3" y="541.3" font-size="10" fill="#c30" text-anchor="middle" font-family="Arial">A</text>
+<rect x="1222.6934849373795" y="529.3065150626205" width="18" height="18" fill="#fff" stroke="#c30" stroke-width="1.5"/>
+<text x="1231.7" y="541.3" font-size="10" fill="#c30" text-anchor="middle" font-family="Arial">A</text>
+<rect x="1222.6934849373795" y="392.69348493737954" width="18" height="18" fill="#fff" stroke="#c30" stroke-width="1.5"/>
+<text x="1231.7" y="404.7" font-size="10" fill="#c30" text-anchor="middle" font-family="Arial">A</text>
+<rect x="1359.3065150626205" y="392.6934849373795" width="18" height="18" fill="#fff" stroke="#c30" stroke-width="1.5"/>
+<text x="1368.3" y="404.7" font-size="10" fill="#c30" text-anchor="middle" font-family="Arial">A</text>
+<text x="1300.0" y="530.4" font-size="11" fill="#c30" text-anchor="middle" font-family="Arial">ayak PCD Ø420 (4× @45°,135°,225°,315°)</text>
+<circle cx="1300.0" cy="470.0" r="131.6" fill="none" stroke="#06c" stroke-width="1" stroke-dasharray="3 3"/>
+<circle cx="1431.56" cy="470.0" r="5" fill="#06c"/>
+<circle cx="1393.0269681329023" cy="563.0269681329022" r="5" fill="#06c"/>
+<circle cx="1300.0" cy="601.56" r="5" fill="#06c"/>
+<circle cx="1206.973031867098" cy="563.0269681329022" r="5" fill="#06c"/>
+<circle cx="1168.44" cy="470.0" r="5" fill="#06c"/>
+<circle cx="1206.9730318670977" cy="376.9730318670978" r="5" fill="#06c"/>
+<circle cx="1300.0" cy="338.44" r="5" fill="#06c"/>
+<circle cx="1393.026968132902" cy="376.9730318670978" r="5" fill="#06c"/>
+<text x="1300.0" y="332.4" font-size="11" fill="#06c" text-anchor="middle" font-family="Arial">8× N52 Ø20×3 mıknatıs @ Ø572</text>
+<circle cx="1292.87" cy="462.87" r="3" fill="#111"/>
+<circle cx="1292.87" cy="477.13" r="3" fill="#111"/>
+<circle cx="1307.13" cy="462.87" r="3" fill="#111"/>
+<circle cx="1307.13" cy="477.13" r="3" fill="#111"/>
+<circle cx="1300.0" cy="470.0" r="5.1" fill="none" stroke="#111" stroke-width="1"/>
+<text x="1300.0" y="472.0" font-size="10" fill="#111" text-anchor="middle" font-family="Arial">NEMA17 31×31 M3</text>
+</svg>

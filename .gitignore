@@ -10,3 +10,4 @@ render/assets/ataturk_sig.png
 # desen uretim debug/onizleme ciktilari
 firmware/patterns/*_preview.png
 firmware/patterns/sig_inkmap.png
+docs/uretim/*.svg.png
