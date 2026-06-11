@@ -1,0 +1,58 @@
+# ============================================================================
+#  FluidNC config — Kinetik Kum Masasi (polar / theta-rho)
+#  ESP32 + 2x TMC2209. Pinler kontrol kartiyla (hardware/pcb) ESLESIR.
+#  DURUM: cihaza yuklenip DOGRULANMADI. Ilk EVT'de STANDALONE mod (UART yok)
+#  -> daha az ariza noktasi (bkz. docs/uretim/PCB_inceleme.md).
+#  steps_per_mm degerleri TAHMINI -> donanimda KALIBRE edilecek.
+# ============================================================================
+name: "Kinetik Kum Masasi (polar)"
+board: "ESP32 + 2x TMC2209 (controller.kicad_pcb)"
+
+stepping:
+  engine: RMT
+  idle_ms: 250
+  pulse_us: 4
+  dir_delay_us: 1
+  disable_delay_us: 0
+
+# EN (active-low) her iki surucude ortak  (PCB: GPIO25)
+axes:
+  shared_stepper_disable_pin: gpio.25:low
+
+  # ---- X = RHO (kol uzerinde kayan tasiyici, lineer) ----
+  x:
+    steps_per_mm: 80.0            # GT2 20T(40mm/dev) x 3200 step/dev / 40 = 80  (KALIBRE)
+    max_rate_mm_per_min: 4000
+    acceleration_mm_per_sec2: 300
+    max_travel_mm: 135            # tasiyici menzili (KALIBRE)
+    homing:
+      cycle: 1
+      positive_direction: false
+      mpos_mm: 0
+      feed_mm_per_min: 300
+      seek_mm_per_min: 1000
+      pulloff_mm: 2
+    motor0:
+      limit_neg_pin: gpio.22:low:pu   # rho home (endstop, PCB J5)
+      standard_stepper:
+        step_pin: gpio.21
+        direction_pin: gpio.5         # not: GPIO5 strapping -> bkz inceleme
+
+  # ---- A = THETA (donen kol, surekli donme) ----
+  a:
+    steps_per_mm: 8.889          # 3200 step/dev / 360 = 8.889 step/derece (KALIBRE/dislisi)
+    max_rate_mm_per_min: 9000
+    acceleration_mm_per_sec2: 400
+    max_travel_mm: 1000000       # surekli donme
+    motor0:
+      standard_stepper:
+        step_pin: gpio.19
+        direction_pin: gpio.18
+
+# ---------------------------------------------------------------------------
+# UART surumu (DVT - runtime akim/mikroadim): yukaridaki standard_stepper'lari
+# tmc_2209 ile degistir + her surucuye AYRI adres (PCB_inceleme #1) ver:
+#   uart1: {txd_pin: gpio.17, rxd_pin: gpio.16, baud: 115200, mode: 8N1}
+#   x.motor0.tmc_2209: {uart_num: 1, addr: 0, r_sense_ohms: 0.11, run_amps: 0.8, microsteps: 16}
+#   a.motor0.tmc_2209: {uart_num: 1, addr: 1, run_amps: 0.8, microsteps: 16}
+# ---------------------------------------------------------------------------

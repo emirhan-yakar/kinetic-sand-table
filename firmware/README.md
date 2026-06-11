@@ -1,44 +1,50 @@
-# Firmware & Desen Yazılımı
+# Firmware & Yazılım — gerçek mimari
 
-Yuvarlak (polar) kum masası için iki olgun yol var. **Dune Weaver** yeni başlayan
-için en pratiği — ESP32 üzerinde çalışır, dahili Wi-Fi web arayüzü, `.thr`
-oynatma kuyruğu ve LED kontrolü hazır gelir.
+> **Durum:** Mimari + config **hazır**; cihaza yüklenip **doğrulanmadı** (PCB henüz üretilmedi).
+> Hazır açık kaynak yazılım kullanılır — sıfırdan firmware yazmaya gerek yok.
 
-## Seçenek A — Dune Weaver (ÖNERİLEN)
-Açık kaynak, polar kum masaları için yazılmış. Web arayüzünden desen yükle,
-sıraya al, hız/parlaklık ayarla.
+## Mimari
+Kinetik kum masaları iki katmanlı çalışır:
 
-Repo: https://github.com/tuanchris/dune-weaver
+1. **Hareket: ESP32 + FluidNC** — G-code yorumlar, TMC2209 sürücülerle θ/ρ motorlarını sürer.
+   - Pinler kontrol kartıyla eşleşir: **`fluidnc_config.yaml`** (bu klasörde).
+   - FluidNC'nin kendi **WebUI**'si var; SD karttan G-code oynatabilir.
+2. **Desen/UX: Dune Weaver (opsiyonel, Raspberry Pi)** — `.thr` desen kütüphanesi, canlı
+   önizleme, **LED senkron (WLED)**, zamanlama. `.thr`'yi G-code'a çevirip FluidNC'ye gönderir.
 
-Kurulum (özet):
-1. ESP32'ye firmware'i yükle (PlatformIO veya hazır `.bin`).
-2. `config.h` içinde:
-   - `THETA_STEPS_PER_REV` ve `RHO_STEPS_PER_MM` değerlerini mekaniğine göre kalibre et
-     (pulley diş sayısı, mikro-adım, kayış adımı, MGN12 menzili).
-   - Pinleri `hardware/pcb/README.md`'deki haritaya göre ayarla.
-   - `LED_PIN`, `LED_COUNT` (WS2812B sayısı) gir.
-3. İlk açılışta ESP32 bir Wi-Fi AP açar → bağlan → ev Wi-Fi'ına ekle.
-4. Tarayıcıdan `http://duneweaver.local` → desen kütüphanesi.
+```
+.thr (Sandify/Dune Weaver) --(theta-rho -> G-code)--> FluidNC (ESP32) --> TMC2209 --> motorlar
+                                                          └ WebUI / SD
+LED: WS2812B  <-- WLED veya Dune Weaver LED modulu (idle/playing/scheduled)
+```
 
-Kalibrasyon ipucu: ρ ekseni "home" konumunda merkez (ρ=0), dış kenar ρ=max.
-θ home için bir opto/mikro switch ile sıfır açıyı sabitle.
+**İki seçenek:**
+- **A (sade, EVT):** Sadece FluidNC. Desenler offline `.thr→G-code` çevrilip SD'ye/WebUI'a.
+- **B (tam UX, ürün):** A + Raspberry Pi Zero 2 W'de Dune Weaver app (+~500 ₺).
 
-## Seçenek B — FluidNC (GRBL, ESP32) + polar kinematik
-Daha çok kontrol istersen FluidNC kullan ve `.thr` dosyalarını G-code'a çevir.
-- FluidNC: https://github.com/bdring/FluidNC
-- Polar masada genelde gönderici tarafında theta-rho → XY/G-code dönüşümü yapılır.
-  `sandify` doğrudan polar (.thr) ve G-code çıktısı verebilir.
+## Kurulum
+1. **FluidNC yükle** (ESP32): https://github.com/bdring/FluidNC — web installer (`http://install.fluidnc.com`) veya esptool.
+2. `fluidnc_config.yaml`'i karta yükle (FluidNC WebUI → Files veya SD). Pinler PCB ile eşleşir.
+3. **Kalibrasyon (donanımda, ZORUNLU):**
+   - `steps_per_mm` (X=ρ ve A=θ) gerçek dişli/mikroadıma göre ayarla (config'deki değerler tahmini).
+   - ρ home (endstop) yönü/menzili; θ tam tur = doğru derece.
+   - TMC2209 akımı ~0.6–0.9A (standalone'da pot/UART'da config).
+4. **Desen akışı:** `firmware/patterns/*.thr` (Atatürk imza, spiral, klasik) → Sandify/Dune Weaver
+   ile G-code'a çevir → oynat. (Üretici: `firmware/patterns/*.py`.)
+5. **Dune Weaver (opsiyonel):** Raspberry Pi'ye kur (https://github.com/tuanchris/dune-weaver),
+   FluidNC'yi seri/USB ile bağla, `.thr` kütüphanesi + LED + zamanlama.
 
-## Desen üretimi — Sandify (her iki seçenekte de)
-Tarayıcıda çalışır, kurulum yok: https://sandify.org
-- Şekiller, spiraller, yıldız/çiçek desenleri, kendi yörüngeni çiz.
-- **Export → Theta Rho (.thr)** Dune Weaver için, veya **G-code** FluidNC için.
-- Üretilen `.thr` dosyalarını Dune Weaver web arayüzüne yükle → hazır
-  desen kütüphanen oluşur (ürünün satış değerinin bir kısmı budur).
+## LED (WS2812B)
+- **WLED** (ESP ayrı veya aynı) ya da Dune Weaver LED modülü ile sürülür — idle/playing/scheduled modları.
+- Donanım notu: 3.3V→5V **level shifter** gerekir (bkz. `docs/uretim/PCB_inceleme.md` #2).
 
-## Kalibrasyon checklist
-- [ ] Mikro-adım (TMC2209 örn. 1/16) firmware ile uyumlu
-- [ ] θ tam tur = doğru adım sayısı (görsel: 1 tur dön, kayma yok)
-- [ ] ρ home (merkez) ve ρ max (kenar) sınırları doğru, bilye cama değmiyor
-- [ ] Mıknatıs gücü bilyeyi kaybetmeden sürüklüyor (hız vs. kuvvet dengesi)
-- [ ] LED parlaklığı 5V akım bütçesini aşmıyor (60 LED ≈ 3.6A tepe @ tam beyaz)
+## Önemli — dürüst notlar
+- Bu config **donanımda doğrulanmadı**; ilk bring-up'ta pin/yön/akım testleri gerekir
+  (`docs/uretim/URETIM_DOSYASI.md` §5).
+- İlk prototipte **standalone TMC** (UART yok) önerilir — daha az risk; UART'ı DVT'de ekle.
+- Polar kinematik: θ = sürekli dönme (A ekseni), ρ = lineer (X ekseni). `.thr` (theta rad, rho 0..1)
+  → G-code (A derece, X = rho×max_yarıçap). Çevrim Sandify/Dune Weaver tarafında.
+
+## Dosyalar
+- `fluidnc_config.yaml` — FluidNC pin/eksen config (PCB ile eşleşir)
+- `patterns/` — `.thr` desenleri + üreteçler (imza izi, spiral, görüntü→theta-rho)

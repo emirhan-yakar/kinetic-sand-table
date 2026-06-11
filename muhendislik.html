@@ -19,8 +19,32 @@
 
 <div class="wrap">
 
-  <!-- PCB -->
+  <!-- GERCEKLEME DURUMU -->
   <section class="block" style="border-top:0">
+    <h2 class="kicker">Üretim Gerçekleme</h2>
+    <h3>Gerçek ürün durumu — dürüst değerlendirme</h3>
+    <p class="sub">Bu bir deneme değil; profesyonel donanım geliştirme (NPI) disiplinine göre.
+       Her alt sistemin gerçek olgunluğu açıkça belirtilir.</p>
+    <div class="card pad"><div style="overflow:auto"><table>
+      <tr><th>Alt sistem</th><th>Durum</th><th>Not</th></tr>
+      <tr><td>Mekanik tasarım</td><td>🟡 Tasarlandı</td><td>Geometri + montaj sheet + patlatma; fiziksel prototip yapılmadı</td></tr>
+      <tr><td><b>Kontrol kartı (PCB)</b></td><td>🟠 Tasarlandı, DRC temiz — <b>test EDİLMEDİ</b></td><td>Elektriksel inceleme düzeltme gerektiren bulgular buldu (UART adres, LED level-shift…)</td></tr>
+      <tr><td>Firmware</td><td>🟠 Yazılmadı — mimari+config var</td><td>FluidNC + Dune Weaver; örnek config hazır, cihazda doğrulanmadı</td></tr>
+      <tr><td>BOM / maliyet / tedarik</td><td>🟢 Hazır</td><td>Gerçek malzeme + TR fiyat</td></tr>
+      <tr><td>Görseller</td><td>🟢 Hazır</td><td>Ön-görselleştirme (satış için fiziksel ürün fotosu gerekir)</td></tr>
+    </table></div>
+    <p style="margin:14px 0 0"><b>PCB test edildi mi?</b> Hayır — yazılımda tasarlandı, DRC geçti,
+      ama <b>fiziksel üretilip ölçülmedi.</b> Üretim öncesi yol: inceleme düzeltmeleri → prototip → bring-up testi.</p>
+    </div>
+    <div class="cta" style="margin-top:16px">
+      <a class="lnk" href="docs/uretim/URETIM_DOSYASI.md"><span>📐</span><span>Üretim gerçekleme dosyası<br><span class="t">mimari · NPI · test · COGS · fiyat · risk</span></span></a>
+      <a class="lnk" href="docs/uretim/PCB_inceleme.md"><span>🔎</span><span>PCB elektriksel inceleme<br><span class="t">bulgular + üretim öncesi düzeltmeler</span></span></a>
+      <a class="lnk" href="firmware/fluidnc_config.yaml"><span>⚙️</span><span>FluidNC config<br><span class="t">PCB pinmap ile eşleşir</span></span></a>
+    </div>
+  </section>
+
+  <!-- PCB -->
+  <section class="block">
     <h2 class="kicker">Kontrol Kartı · KiCad 9</h2>
     <h3>Tam routing'li PCB</h3>
     <p class="sub">Freerouting ile tam yönlendirildi — DRC:
@@ -101,7 +125,9 @@
           <li><b>PCB:</b> JLCPCB/PCBWay veya yurtiçi PCB</li>
         </ul>
         <p style="margin:10px 0 0"><a href="docs/realizm_yol_haritasi.md">📈 Gerçeklik yol haritası — sonraki aşamalar</a></p>
-        <p style="margin:10px 0 0;color:var(--mut)">Yazılım: <b>0 ₺</b> (açık kaynak). Karşılaştırma: benzer ürün <b>$699 ≈ 23.000 ₺</b>.</p>
+        <p style="margin:10px 0 0"><b>Hedef satış fiyatı:</b> seri COGS ~7.800 ₺ → <b>MSRP ≈ 21.900 ₺ (~$650)</b>
+          (≈%64 brüt marj; benzer ürün $699). Lansman: 17.900 ₺.</p>
+        <p style="margin:10px 0 0;color:var(--mut)">Yazılım: <b>0 ₺</b> (açık kaynak FluidNC + Dune Weaver). Tam analiz: <a href="docs/uretim/URETIM_DOSYASI.md">üretim dosyası</a>.</p>
       </div>
     </div>
   </section>
