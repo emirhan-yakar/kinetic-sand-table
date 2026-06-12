@@ -12,7 +12,7 @@ PAGES=[
  ("docs/uretim/mekanizma_tasarim.md","mekanizma.html","Mekanizma Tasarımı",None),
  ("docs/uretim/elektrik_montaj.md","elektrik.html","Elektrik Montaj",[("Elektrik talimatı (PDF)","docs/uretim/ELEKTRIK_TALIMATI.pdf")]),
  ("docs/uretim/QA_kontrol_listesi.md","qa.html","QA / FCT Test Fişi",[("Elektrik+QA (PDF)","docs/uretim/ELEKTRIK_TALIMATI.pdf")]),
- ("docs/uretim/montaj.md","montaj.html","Materyal / Mekanik Montaj",[("Montaj kılavuzu (PDF)","docs/uretim/MONTAJ_KILAVUZU.pdf")]),
+ ("docs/uretim/montaj.md","montaj.html","Materyal / Mekanik Montaj",[("Teknik çizim montaj (PDF)","docs/uretim/MONTAJ_CIZIM.pdf"),("3D adım kılavuzu (PDF)","docs/uretim/MONTAJ_KILAVUZU.pdf")]),
  ("docs/uretim/BOM_uretim.md","bom.html","BOM & Maliyet",None),
  ("docs/realizm_yol_haritasi.md","realizm.html","Gerçeklik Yol Haritası",None),
  ("docs/uretim/dxf/README.md","dxf.html","CNC / Lazer DXF + STEP",None),
