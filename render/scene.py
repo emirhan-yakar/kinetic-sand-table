@@ -188,8 +188,14 @@ bpy.ops.mesh.primitive_plane_add(size=14,location=(0,0,0))
 Floor=bpy.context.active_object; Floor.name="Floor"
 
 # ============================ MALZEMELER ============================
-wm=wood_textured("Walnut",scale=(2.4,1.4)) if os.path.exists(WOOD_DIFF) else mat("Walnut",(0.12,0.07,0.04),0.42,clear=0.15)[0]
-for o in (body,Legs,Rim): o.data.materials.append(wm)
+FINISH=os.environ.get("FINISH","walnut")  # endustriyel tasarim varyantlari
+_TINT={"walnut":(0.55,0.42,0.28),"noir":(0.14,0.12,0.13),"ash":(2.0,1.85,1.45)}  # ash: multiply>1 -> acik mese
+wm=wood_textured(FINISH.title(),scale=(2.4,1.4),tint=_TINT.get(FINISH,_TINT["walnut"])) if os.path.exists(WOOD_DIFF) else mat("Walnut",(0.12,0.07,0.04),0.42,clear=0.15)[0]
+for o in (body,Legs): o.data.materials.append(wm)
+if FINISH=="noir":  # fircali celik rim (kontrast)
+    _rs,_=mat("RimSteel",(0.62,0.63,0.66),rough=0.34,metal=1.0); Rim.data.materials.append(_rs)
+else:
+    Rim.data.materials.append(wm)
 gm,_=mat("Glass",(0.92,0.96,1.0),rough=0.03,transmission=1.0); gm.node_tree.nodes["Principled BSDF"].inputs["IOR"].default_value=1.5
 Glass.data.materials.append(gm)
 # kum: gercek PBR doku haritalari (renk/rough/normal) + sicak ton + ince gren
@@ -362,7 +368,7 @@ else:
         scene.view_settings.exposure=0.15
     scene.render.resolution_x=2000; scene.render.resolution_y=1375
     scene.render.image_settings.file_format='PNG'
-    scene.render.filepath=os.path.join(DIR,f"room_{MODE}.png")
+    scene.render.filepath=os.path.join(DIR,(f"variant_{FINISH}.png" if FINISH!="walnut" else f"room_{MODE}.png"))
     # ---- kompozitor post: LED bloom (glare) + vignette ----
     scene.use_nodes=True; nt=scene.node_tree; nt.nodes.clear()
     rl=nt.nodes.new("CompositorNodeRLayers")
