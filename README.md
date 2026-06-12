@@ -1,49 +1,94 @@
-# Kinetik Kum Sanatı Masası — Üretim Projesi (Polar / Theta-Rho, Ø60+ cm)
+<div align="center">
 
-Nikolatoy "Home Art Sand Painting Coffee Table" benzeri bir ürünün Türkiye'de
-üretilebilir, açık tasarımlı versiyonu. Yuvarlak büyük masa için **polar
-(theta-rho)** mekanik mimari kullanılır — gerçek Sisyphus masalarının çalışma
-prensibi budur.
+<img src="assets/logo.svg" alt="DEVRAN" width="320">
 
-## Nasıl çalışır?
-Cam yüzeyin altında dönen bir kol (θ ekseni) ve kol üzerinde içeri/dışarı kayan
-bir taşıyıcı (ρ ekseni) bir **neodyum mıknatısı** taşır. Mıknatıs, üstteki ince
-kum tabakasındaki **çelik bilyeyi** sürükleyerek sonsuz desenler çizer. Kenardaki
-**WS2812B RGB LED halka** sahneyi aydınlatır. Beyin bir **ESP32**'dir ve
-`.thr` (theta-rho) desen dosyalarını oynatır.
+### Kinetik Kum Sanatı Masası · Polar (θ-ρ) · Ø60 cm
 
-```
-        ┌──────────────────────────────┐  ← Temperli cam + ince kum + çelik bilye
-        │   ●  ←bilye                    │
-        ├──────────────────────────────┤
-        │  [mıknatıs]→ taşıyıcı (ρ)      │  ← dönen kol (θ)
-        │  ════════ GT2 kayış ═══════    │
-        │      ◎ lazy-susan rulman       │
-        │  θ motor   ρ motor + slip ring │  ← taban (sabit)
-        └──────────────────────────────┘
-   Kenarda: WS2812B LED halka  |  Beyin: ESP32 (Dune Weaver firmware)
-```
+Çelik bir bilyeyi kumun altından mıknatısla sürükleyerek sonsuz desen çizen,
+**Türkiye'de üretilebilir**, açık tasarımlı premium kinetik sanat masası.
 
-## Proje içeriği
-| Dosya | İçerik |
+![durum](https://img.shields.io/badge/durum-üretim_paketi_hazır-e3a55b)
+![pcb](https://img.shields.io/badge/PCB-Rev--B_·_DRC_temiz-5fcf86)
+![lisans](https://img.shields.io/badge/lisans-açık_kaynak-5b9dff)
+![yapım](https://img.shields.io/badge/yapım-Türkiye-c33)
+
+<img src="render/room_hero.png" alt="DEVRAN render" width="640">
+
+</div>
+
+---
+
+## Bu nedir?
+
+DEVRAN, cam yüzeyin altında dönen bir kol (**θ** ekseni) ve kol üzerinde kayan bir taşıyıcının
+(**ρ** ekseni) bir **N52 mıknatısı** taşıdığı, bu mıknatısın üstteki kumda bir **çelik bilyeyi**
+sürükleyerek desen kazıdığı bir Sisyphus tipi kinetik masadır. Kenardaki **WS2812B LED halka**
+ambiyans ışığı verir. Beyin bir **ESP32 + FluidNC**'dir; `.thr` (theta-rho) desenlerini oynatır.
+
+Bu repo **fikirden satılabilir ürüne** giden tüm mühendislik + üretim dosyalarını içerir.
+
+## Öne çıkanlar
+
+- 🌀 Sonsuz, tekrarsız kinetik kum deseni (Atatürk imzası, spiral, özel)
+- 🔇 Sessiz çalışma (TMC2209) · 💡 adreslenebilir LED ambiyans
+- 📶 Wi-Fi / WebUI kontrol · SD desen kütüphanesi
+- 🪵 Premium ceviz gövde + temperli cam · 🇹🇷 yerli üretilebilir
+- 🔓 Açık kaynak yazılım (FluidNC + Dune Weaver)
+
+## Üretim paketi
+
+| Alan | Dosyalar |
 |---|---|
-| `BOM.md` | Tam malzeme listesi + Türkiye tedarik linkleri + maliyet (prototip & seri) |
-| `hardware/sand_table.scad` | Parametrik 3D model (OpenSCAD) — gövde, kol, cam, LED halka |
-| `hardware/pcb/` | Kontrol kartı: `pcb_gen.py` üreteci, **hazır Gerber + Excellon** (`gerbers/`), katman çizimleri (`plots/`), `controller.net` netlist, `board3d.scad` 3D model. Detay: `hardware/pcb/README.md` |
-| `firmware/README.md` | Dune Weaver / FluidNC kurulumu + Sandify ile desen üretimi |
-| `render/` | **Blender fotogerçekçi render** — `render_table.py` (prosedürel sahne, Cycles), `table_hero.png` (aydınlık) + `table_dark.png` (LED parıltılı). Bkz. `render/README.md` |
-| `docs/uretim/` | **Üretim paketi**: gerçek malzemeli BOM (TR tedarik+fiyat), ölçülü montaj sheet (açı/PCD/vida), parametrik geometri |
-| `docs/render-recipe.md` | Render reçetesi (malzeme + ışık), `render/`'ın temeli |
+| **Kontrol kartı** | KiCad Rev-B · Gerber · STEP · [JLCPCB paketi](hardware/pcb/jlcpcb/) (BOM+CPL) · [inceleme](docs/uretim/PCB_inceleme.md) |
+| **Mekanizma** | [θ/ρ kinematik + kesit + hesap](docs/uretim/mekanizma_tasarim.md) |
+| **Mekanik üretim** | [DXF + STEP](docs/uretim/dxf/) (şasi/ayak/kol) · [teknik çizim](docs/uretim/MONTAJ_CIZIM.pdf) · [montaj](docs/uretim/montaj.md) |
+| **Elektrik** | [harness + pinout](docs/uretim/elektrik_montaj.md) · [talimat PDF](docs/uretim/ELEKTRIK_TALIMATI.pdf) · [QA/FCT](docs/uretim/QA_kontrol_listesi.md) |
+| **Firmware** | [FluidNC config](firmware/fluidnc_config.yaml) · [mimari](firmware/README.md) |
+| **İş** | [üretim dosyası (NPI)](docs/uretim/URETIM_DOSYASI.md) · [datasheet](docs/DEVRAN_datasheet.pdf) · [pitch](docs/DEVRAN_pitch.pdf) · [BOM/maliyet](docs/uretim/BOM_uretim.md) |
+| **Görsel** | render + reklam videosu (`render/`) · interaktif 3D sim (`render/viewer.html`) |
 
-## Hızlı başlangıç
-1. `BOM.md` → parçaları sipariş et.
-2. `hardware/sand_table.scad` → OpenSCAD'de aç, `TABLE_DIAMETER` vb. ayarla, STL al → 3D bas / lazer kestir.
-3. `hardware/pcb/` → prototipte hazır kontrol kartı; seride özel PCB bastır.
-4. `firmware/` → ESP32'ye Dune Weaver yükle, Wi-Fi web arayüzünden desen oynat.
-5. `docs/render-recipe.md` → fotogerçekçi tanıtım görselleri.
+> 🌐 **Web sitesi:** kök `index.html` (yerel: `python3 -m http.server`) — GitHub Pages açılırsa canlı.
 
-## Referans açık kaynak projeler
-- Dune Weaver (polar sand table, ESP32, web UI): https://github.com/tuanchris/dune-weaver
-- Sandify (desen/theta-rho üreteci): https://sandify.org
-- ZenXY / rdudhagra Sand-Table: https://github.com/rdudhagra/Sand-Table
-- DIY Machines kinetik kum masası: https://www.diymachines.co.uk/kinetic-sand-art-coffee-table-self-drawing
+## Durum (dürüst)
+
+| Alt sistem | Durum |
+|---|---|
+| Mekanik tasarım | 🟡 Tasarlandı (kinematik + çizim + DXF/STEP) — fiziksel prototip yok |
+| Kontrol kartı (PCB) | 🟠 Rev-B, DRC temiz — **fiziksel üretilmedi/test edilmedi** |
+| Firmware | 🟠 Mimari + config hazır — cihazda doğrulanmadı |
+| BOM / maliyet / görsel | 🟢 Hazır |
+
+**Sıradaki:** Fusion'da COTS fit doğrulama → PCB sipariş → bring-up → kalibrasyon → EVT/DVT.
+
+## Maliyet & fiyat
+
+Seri COGS ≈ **7.800 TL** (~$230) → hedef **MSRP ≈ 21.900 TL** (~$650, ~%64 brüt marj).
+Benzer ürün $699. Yazılım açık kaynak (0 TL). Detay: [BOM/maliyet](docs/uretim/BOM_uretim.md).
+
+## Repo yapısı
+
+```
+hardware/pcb/   KiCad tasarım, Gerber, STEP, JLCPCB paketi (üretim scriptleri)
+firmware/       FluidNC config + desen üreteçleri (.thr)
+render/         Blender sahne (scene.py), render'lar, reklam videosu, 3D sim (viewer.html)
+docs/uretim/    mekanizma, montaj, elektrik, QA, BOM, DXF+STEP, teknik çizim/PDF'ler
+docs/           datasheet, pitch, gerçeklik yol haritası
+*.html          web sitesi (build_site.py ile MD'den üretilen sayfalar dahil)
+```
+
+## Yeniden üretmek
+
+```bash
+# Site (MD -> HTML sayfalar)        : python3 build_site.py
+# Render/video (Blender 4.5)        : Blender --background --python render/scene.py -- hero|video
+# PCB (KiCad 9 + Freerouting)       : hardware/pcb/freeroute.sh
+# DXF/STEP                          : python3 docs/uretim/dxf/make_dxf.py && make_step.py
+# Datasheet/pitch                   : python3 docs/marka_pdf.py
+```
+
+## Lisans & katkı
+
+Açık kaynak tasarım. Ticari üretim için: PCB **fiziksel doğrulama** + **CE/elektrik güvenlik**
+belgesi gereklidir. Katkı/issue/PR memnuniyetle. Tüm değişiklikler: [CHANGELOG.md](CHANGELOG.md).
+
+<div align="center"><sub>DEVRAN · kinetik kum sanatı masası · github.com/emirhan-yakar/kinetic-sand-table</sub></div>
