@@ -24,7 +24,7 @@ axes:
     steps_per_mm: 80.0            # GT2 20T(40mm/dev) x 3200 step/dev / 40 = 80  (KALIBRE)
     max_rate_mm_per_min: 4000
     acceleration_mm_per_sec2: 300
-    max_travel_mm: 135            # tasiyici menzili (KALIBRE)
+    max_travel_mm: 250            # rho strok 0..R_max (mekanizma_tasarim.md); KALIBRE
     homing:
       cycle: 1
       positive_direction: false
@@ -40,7 +40,7 @@ axes:
 
   # ---- A = THETA (donen kol, surekli donme) ----
   a:
-    steps_per_mm: 8.889          # 3200 step/dev / 360 = 8.889 step/derece (KALIBRE/dislisi)
+    steps_per_mm: 26.667         # 3:1 reduksiyon (GT2 20T->60T): 3200x3/360 = 26.667 step/derece (KALIBRE)
     max_rate_mm_per_min: 9000
     acceleration_mm_per_sec2: 400
     max_travel_mm: 1000000       # surekli donme
