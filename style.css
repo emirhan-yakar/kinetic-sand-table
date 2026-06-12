@@ -23,8 +23,11 @@ img{max-width:100%;display:block}
   backdrop-filter:saturate(160%) blur(14px);-webkit-backdrop-filter:saturate(160%) blur(14px);
   border-bottom:1px solid var(--line)}
 .nav .wrap{display:flex;align-items:center;gap:6px;height:62px}
-.brand{font-weight:700;color:var(--ink);margin-right:auto;font-size:17px;letter-spacing:.2px}
-.brand small{color:var(--mut);font-weight:500}
+.brand{display:flex;align-items:center;gap:9px;font-weight:700;color:var(--ink);margin-right:auto;
+  font-size:18px;letter-spacing:1.2px}
+.brand .mark{width:27px;height:27px;flex:none}
+.brand small{color:var(--mut);font-weight:500;letter-spacing:.2px;font-size:12.5px}
+@media(max-width:560px){.brand small{display:none}}
 .nav .link{color:var(--mut);padding:8px 13px;border-radius:9px;font-size:14.5px;font-weight:500;transition:.15s}
 .nav .link:hover{color:var(--ink);background:var(--card)}
 .nav .link.active{color:var(--acc2);background:rgba(227,165,91,.1)}

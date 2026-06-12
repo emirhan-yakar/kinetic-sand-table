@@ -25,10 +25,16 @@ def nav(active=""):
        ("simulasyon.html","Simülasyon","sim"),("muhendislik.html","Mühendislik","muh")]
     items="".join(f'<a class="link{" active" if k==active else ""}" href="{u}">{t}</a>' for u,t,k in L)
     return (f'<nav class="nav"><div class="wrap">'
-            f'<a class="brand" href="index.html">Kinetik Kum Masası <small>· üretim paketi</small></a>'
+            f'<a class="brand" href="index.html"><img class="mark" src="assets/mark.svg" alt="">DEVRAN <small>· kinetik kum sanatı</small></a>'
             f'{items}<a class="link" href="{GH}" target="_blank">GitHub ↗</a></div></nav>')
-FOOT=(f'<footer><div class="wrap"><span>Kinetik Kum Sanatı Masası · üretim paketi</span>'
+FOOT=(f'<footer><div class="wrap"><span>DEVRAN · kinetik kum sanatı masası · açık kaynak üretim paketi</span>'
       f'<a href="{GH}">github.com/emirhan-yakar/kinetic-sand-table ↗</a></div></footer>')
+HEAD_META=('<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">'
+           '<meta name="theme-color" content="#0d0f13">'
+           '<meta property="og:type" content="website">'
+           '<meta property="og:title" content="DEVRAN — Kinetik Kum Sanatı Masası">'
+           '<meta property="og:description" content="Ø60cm polar kinetik kum sanatı masası. Üretime hazır mühendislik paketi.">'
+           '<meta property="og:image" content="render/room_hero.png">')
 
 def rewrite(html, md_dir):
     # rel src/href'leri koke gore duzelt; .md -> .html
@@ -54,7 +60,8 @@ for mdpath,out,title,dls in PAGES:
         dlrow=f'<div class="dlrow">{btns}</div>'
     page=f'''<!DOCTYPE html><html lang="tr"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>{title} — Kinetik Kum Masası</title>
+<title>{title} — DEVRAN</title>
+{HEAD_META}
 <link rel="stylesheet" href="style.css"></head><body>
 {nav("muh")}
 <div class="wrap">
