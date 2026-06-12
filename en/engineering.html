@@ -1,0 +1,81 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Engineering & Production — DEVRAN</title>
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml"><meta name="theme-color" content="#0d0f13">
+<link rel="stylesheet" href="../style.css"></head><body>
+
+<nav class="nav"><div class="wrap">
+  <a class="brand" href="index.html"><img class="mark" src="../assets/mark.svg" alt="">DEVRAN <small>· kinetic sand art</small></a>
+  <a class="link" href="index.html">Overview</a>
+  <a class="link" href="visuals.html">Visuals</a>
+  <a class="link" href="simulation.html">Simulation</a>
+  <a class="link active" href="engineering.html">Engineering</a>
+  <a class="link" href="../muhendislik.html">TR</a>
+  <a class="link" href="https://github.com/emirhan-yakar/kinetic-sand-table" target="_blank">GitHub ↗</a>
+</div></nav>
+
+<section class="section" style="border-top:0"><div class="wrap">
+  <p class="kicker">Production readiness</p>
+  <h2>From idea to real product — honest status</h2>
+  <p class="sub">Not a toy project; structured per professional hardware NPI. Each subsystem's real maturity
+    is stated openly.</p>
+  <div class="card pad" style="overflow-x:auto"><table>
+    <tr><th>Subsystem</th><th>Status</th><th>Note</th></tr>
+    <tr><td>Mechanical design</td><td class="st-wip">🟡 Designed</td><td>Kinematics + section + assembly + DXF/STEP; no physical prototype</td></tr>
+    <tr><td><b>Control board (PCB)</b></td><td class="st-wip">🟠 Rev-B — NOT physically tested</td><td>Findings applied, re-routed (0 short); next: prototype + bring-up</td></tr>
+    <tr><td>Firmware</td><td class="st-wip">🟠 Architecture + config</td><td>FluidNC + Dune Weaver; not validated on hardware</td></tr>
+    <tr><td>BOM / cost / visuals</td><td class="st-ok">🟢 Ready</td><td>Real materials + TR pricing + MSRP</td></tr>
+  </table>
+  <div class="note"><b>Is the PCB tested?</b> No — designed in software, passes DRC, but not physically
+    built or measured. Path: review → prototype → bring-up test.</div>
+  </div>
+</div></section>
+
+<section class="section"><div class="wrap">
+  <p class="kicker">Documents</p>
+  <h2>Each document on its own page</h2>
+  <p class="sub">Deep engineering documents are written in Turkish; below are direct links.</p>
+  <div class="grid g3">
+    <a class="doc" href="../uretim-dosyasi.html"><span class="ic">📐</span><div><h4>Production dossier</h4><p>architecture · NPI · test · COGS</p></div></a>
+    <a class="doc" href="../pcb-inceleme.html"><span class="ic">🔎</span><div><h4>PCB review</h4><p>Rev-B findings + fixes</p></div></a>
+    <a class="doc" href="../mekanizma.html"><span class="ic">⚙️</span><div><h4>Mechanism design</h4><p>θ/ρ kinematics · section</p></div></a>
+    <a class="doc" href="../elektrik.html"><span class="ic">🔌</span><div><h4>Electrical assembly</h4><p>harness · pinout · slip ring</p></div></a>
+    <a class="doc" href="../qa.html"><span class="ic">✅</span><div><h4>QA / FCT sheet</h4><p>with measured values</p></div></a>
+    <a class="doc" href="../montaj.html"><span class="ic">🪛</span><div><h4>Mechanical assembly</h4><p>screws · tolerances · order</p></div></a>
+    <a class="doc" href="../bom.html"><span class="ic">💰</span><div><h4>BOM & cost</h4><p>real price · MSRP</p></div></a>
+    <a class="doc" href="../dxf.html"><span class="ic">✂️</span><div><h4>CNC / laser DXF + STEP</h4><p>chassis · leg · arm</p></div></a>
+    <a class="doc" href="../firmware.html"><span class="ic">💻</span><div><h4>Firmware</h4><p>FluidNC + Dune Weaver</p></div></a>
+  </div>
+</div></section>
+
+<section class="section"><div class="wrap">
+  <p class="kicker">Downloads</p>
+  <h2>Fab & shop ready</h2>
+  <div class="btns">
+    <a class="btn primary" href="../hardware/pcb/jlcpcb/">🏭 JLCPCB package (Gerber+BOM+CPL)</a>
+    <a class="btn" href="../hardware/pcb/final/controller.step">📦 PCB STEP 3D</a>
+    <a class="btn" href="../docs/uretim/dxf/">✂️ DXF + STEP (mechanical)</a>
+    <a class="btn" href="../docs/uretim/MONTAJ_CIZIM.pdf">📐 Technical drawing (PDF)</a>
+    <a class="btn" href="../docs/DEVRAN_datasheet.pdf">📄 Datasheet</a>
+    <a class="btn" href="../docs/DEVRAN_pitch.pdf">📈 Investor brief</a>
+  </div>
+</div></section>
+
+<section class="section"><div class="wrap">
+  <p class="kicker">Cost & price</p>
+  <h2>Series COGS ~$230 → MSRP ~$650</h2>
+  <div class="grid g2" style="margin-top:20px">
+    <div class="card pad"><h3>Summary</h3><ul style="color:var(--mut);font-size:15px">
+      <li>Prototype cost: <b style="color:var(--ink)">~$400–450</b></li>
+      <li>Series (50+) COGS: <b style="color:var(--ink)">~$230</b></li>
+      <li>Target <b style="color:var(--acc2)">MSRP ≈ $650</b> · ~64% gross margin</li>
+      <li>Comparable product: $699</li></ul></div>
+    <div class="card pad"><h3>Software</h3><ul style="color:var(--mut);font-size:15px">
+      <li><b style="color:var(--ink)">$0</b> — open source FluidNC + Dune Weaver</li>
+      <li>Next: Fusion fit check → PCB order → bring-up → EVT/DVT</li></ul></div>
+  </div>
+</div></section>
+
+<footer><div class="wrap"><span>DEVRAN · kinetic sand art table · open source</span>
+  <a href="https://github.com/emirhan-yakar/kinetic-sand-table">github.com/emirhan-yakar/kinetic-sand-table ↗</a></div></footer>
+</body></html>

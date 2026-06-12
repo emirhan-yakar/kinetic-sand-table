@@ -26,7 +26,7 @@ def nav(active=""):
     items="".join(f'<a class="link{" active" if k==active else ""}" href="{u}">{t}</a>' for u,t,k in L)
     return (f'<nav class="nav"><div class="wrap">'
             f'<a class="brand" href="index.html"><img class="mark" src="assets/mark.svg" alt="">DEVRAN <small>· kinetik kum sanatı</small></a>'
-            f'{items}<a class="link" href="{GH}" target="_blank">GitHub ↗</a></div></nav>')
+            f'{items}<a class="link" href="en/index.html">EN</a><a class="link" href="{GH}" target="_blank">GitHub ↗</a></div></nav>')
 FOOT=(f'<footer><div class="wrap"><span>DEVRAN · kinetik kum sanatı masası · açık kaynak üretim paketi</span>'
       f'<a href="{GH}">github.com/emirhan-yakar/kinetic-sand-table ↗</a></div></footer>')
 HEAD_META=('<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">'
