@@ -17,6 +17,7 @@ PAGES=[
  ("docs/uretim/sertifikasyon.md","sertifikasyon.html","Sertifikasyon & Uyumluluk",None),
  ("docs/uretim/fmea.md","fmea.html","FMEA & Gereksinim İzlenebilirlik",None),
  ("docs/uretim/pazara_cikis.md","pazara-cikis.html","Pazara Çıkış & Uygulama UX",[("İş / yatırım özeti (PDF)","docs/DEVRAN_pitch.pdf")]),
+ ("docs/uretim/satin_alma.md","satin-alma.html","Prototip Satın-Alma Listesi",[("Sipariş CSV","docs/uretim/satin_alma.csv")]),
  ("docs/realizm_yol_haritasi.md","realizm.html","Gerçeklik Yol Haritası",None),
  ("docs/uretim/dxf/README.md","dxf.html","CNC / Lazer DXF + STEP",None),
  ("firmware/README.md","firmware.html","Firmware & Yazılım",[("FluidNC config","firmware/fluidnc_config.yaml")]),

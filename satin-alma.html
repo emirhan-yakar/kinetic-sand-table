@@ -1,0 +1,358 @@
+<!DOCTYPE html><html lang="tr"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Prototip Satın-Alma Listesi — DEVRAN</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml"><meta name="theme-color" content="#0d0f13"><meta property="og:type" content="website"><meta property="og:title" content="DEVRAN — Kinetik Kum Sanatı Masası"><meta property="og:description" content="Ø60cm polar kinetik kum sanatı masası. Üretime hazır mühendislik paketi."><meta property="og:image" content="render/room_hero.png">
+<link rel="stylesheet" href="style.css"></head><body>
+<nav class="nav"><div class="wrap"><a class="brand" href="index.html"><img class="mark" src="assets/mark.svg" alt="">DEVRAN <small>· kinetik kum sanatı</small></a><a class="link" href="index.html">Genel Bakış</a><a class="link" href="gorseller.html">Görseller</a><a class="link" href="simulasyon.html">Simülasyon</a><a class="link active" href="muhendislik.html">Mühendislik</a><a class="link" href="en/index.html">EN</a><a class="link" href="https://github.com/emirhan-yakar/kinetic-sand-table" target="_blank">GitHub ↗</a></div></nav>
+<div class="wrap">
+  <div class="dochead"><a class="back" href="muhendislik.html">← Mühendislik &amp; Üretim</a><div class="dlrow"><a class="btn" href="docs/uretim/satin_alma.csv">⬇ Sipariş CSV</a></div></div>
+  <article class="prose"><h1>Prototip Satın-Alma &amp; Tedarikçi Listesi</h1>
+<p><strong>Bir adet çalışan prototip</strong> için somut alışveriş listesi. Para harcama anına en yakın doküman.</p>
+<ul>
+<li>💰 <strong>Malzeme toplamı ≈ 11.400 TL</strong> (+ kargo + ~%10 yedek pay → bütçe <strong>~13–14k TL</strong>)</li>
+<li>📋 Sipariş/takip için tablo: <a href="docs/uretim/satin_alma.csv"><code>satin_alma.csv</code></a> (üreteç: <code>satin_alma.py</code>)</li>
+<li>⚠️ Fiyat/stok <strong>2026 TR tahmini</strong> — sipariş anında doğrula. Tedarikçi adları + arama terimi verildi
+  (canlı link/fiyat değişir).</li>
+</ul>
+<h2>Sipariş stratejisi (önce uzun-terminliler!)</h2>
+<table>
+<thead>
+<tr>
+<th>Öncelik</th>
+<th>Kalem</th>
+<th>Termin</th>
+<th>Neden</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>PCB+SMT (JLCPCB)</strong> · <strong>slip ring</strong> · <strong>CNC ahşap gövde</strong></td>
+<td>1–2 hafta+</td>
+<td>en uzun termin → ilk sipariş et</td>
+</tr>
+<tr>
+<td>2</td>
+<td>MGN12 ray · lazy-susan · GT2 set · cam · Al lazer</td>
+<td>3–7 gün</td>
+<td>orta termin</td>
+</tr>
+<tr>
+<td>3</td>
+<td>ESP32/TMC2209/buck/motor/LED/mıknatıs/sarf</td>
+<td>2–5 gün</td>
+<td>hızlı, son sipariş</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>PCB: hazır <a href="hardware/pcb/jlcpcb">JLCPCB paketi</a> (Gerber+BOM+CPL) yükle.
+Alüminyum/ayak plakaları: <a href="docs/uretim/dxf">DXF + STEP</a> atölyeye gönder. Cam: <a href="docs/uretim/montaj_sheet.svg">montaj_sheet</a> ölçüsü.</p>
+</blockquote>
+<h2>1) Elektronik / kontrol — ~2.270 TL</h2>
+<table>
+<thead>
+<tr>
+<th>Parça</th>
+<th>Spec</th>
+<th style="text-align: right;">Ad</th>
+<th>Tedarikçi</th>
+<th style="text-align: right;">Birim</th>
+<th style="text-align: right;">Toplam</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Kontrol kartı PCB+SMT</td>
+<td>Rev-B, 5 adet</td>
+<td style="text-align: right;">1</td>
+<td>JLCPCB/PCBWay</td>
+<td style="text-align: right;">1.600</td>
+<td style="text-align: right;">1.600</td>
+</tr>
+<tr>
+<td>ESP32-DevKitC</td>
+<td>WROOM-32 (ön-sertifikalı)</td>
+<td style="text-align: right;">1</td>
+<td>Robotistan/Motorobit</td>
+<td style="text-align: right;">170</td>
+<td style="text-align: right;">170</td>
+</tr>
+<tr>
+<td>TMC2209 sürücü</td>
+<td>StepStick, UART</td>
+<td style="text-align: right;">2</td>
+<td>Robotistan/Motorobit</td>
+<td style="text-align: right;">125</td>
+<td style="text-align: right;">250</td>
+</tr>
+<tr>
+<td>Buck 12→5V</td>
+<td>≥5A</td>
+<td style="text-align: right;">1</td>
+<td>Robotistan</td>
+<td style="text-align: right;">90</td>
+<td style="text-align: right;">90</td>
+</tr>
+<tr>
+<td>Klemens/header/sarf</td>
+<td>2.54mm + 5mm</td>
+<td style="text-align: right;">1</td>
+<td>Direnç.net</td>
+<td style="text-align: right;">160</td>
+<td style="text-align: right;">160</td>
+</tr>
+</tbody>
+</table>
+<h2>2) Motor &amp; hareket — ~1.805 TL</h2>
+<table>
+<thead>
+<tr>
+<th>Parça</th>
+<th>Spec</th>
+<th style="text-align: right;">Ad</th>
+<th>Tedarikçi</th>
+<th style="text-align: right;">Birim</th>
+<th style="text-align: right;">Toplam</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NEMA17 step motor</td>
+<td>1.8°, ~0.4 N·m</td>
+<td style="text-align: right;">2</td>
+<td>Robotistan</td>
+<td style="text-align: right;">260</td>
+<td style="text-align: right;">520</td>
+</tr>
+<tr>
+<td>MGN12 ray + araba</td>
+<td>~300mm + MGN12H</td>
+<td style="text-align: right;">1</td>
+<td>lineer hareket satıcı</td>
+<td style="text-align: right;">470</td>
+<td style="text-align: right;">470</td>
+</tr>
+<tr>
+<td>Lazy-susan rulman</td>
+<td>Ø100–150</td>
+<td style="text-align: right;">1</td>
+<td>yatak/robotik</td>
+<td style="text-align: right;">160</td>
+<td style="text-align: right;">160</td>
+</tr>
+<tr>
+<td>GT2 kayış+kasnak seti</td>
+<td>6mm 2m + 20T×2 + 60T + idler</td>
+<td style="text-align: right;">1</td>
+<td>Robotistan</td>
+<td style="text-align: right;">260</td>
+<td style="text-align: right;">260</td>
+</tr>
+<tr>
+<td><strong>Kapsül slip ring</strong></td>
+<td>Ø12.5 · 8–12 yol · ≥2A</td>
+<td style="text-align: right;">1</td>
+<td>otomasyon/Aliexpress</td>
+<td style="text-align: right;">360</td>
+<td style="text-align: right;">360</td>
+</tr>
+<tr>
+<td>Endstop</td>
+<td>mekanik/opto</td>
+<td style="text-align: right;">1</td>
+<td>Robotistan</td>
+<td style="text-align: right;">35</td>
+<td style="text-align: right;">35</td>
+</tr>
+</tbody>
+</table>
+<h2>3) Mıknatıs &amp; bilye — ~403 TL</h2>
+<table>
+<thead>
+<tr>
+<th>Parça</th>
+<th>Spec</th>
+<th style="text-align: right;">Ad</th>
+<th>Tedarikçi</th>
+<th style="text-align: right;">Birim</th>
+<th style="text-align: right;">Toplam</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>N52 taşıyıcı mıknatıs</td>
+<td>Ø20×10</td>
+<td style="text-align: right;">3</td>
+<td>yurtiçi neodyum</td>
+<td style="text-align: right;">45</td>
+<td style="text-align: right;">135</td>
+</tr>
+<tr>
+<td>N52 üst modül mıknatıs</td>
+<td>Ø20×3</td>
+<td style="text-align: right;">8</td>
+<td>yurtiçi neodyum</td>
+<td style="text-align: right;">26</td>
+<td style="text-align: right;">208</td>
+</tr>
+<tr>
+<td>Krom çelik bilye</td>
+<td>Ø12</td>
+<td style="text-align: right;">5</td>
+<td>rulman/bilye satıcı</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">60</td>
+</tr>
+</tbody>
+</table>
+<h2>4) Güç + LED — ~590 TL</h2>
+<table>
+<thead>
+<tr>
+<th>Parça</th>
+<th>Spec</th>
+<th style="text-align: right;">Ad</th>
+<th>Tedarikçi</th>
+<th style="text-align: right;">Birim</th>
+<th style="text-align: right;">Toplam</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>12V SMPS (CE'li)</td>
+<td>≥6A kapalı kasa</td>
+<td style="text-align: right;">1</td>
+<td>Samm/Robotistan</td>
+<td style="text-align: right;">320</td>
+<td style="text-align: right;">320</td>
+</tr>
+<tr>
+<td>Güç kablosu + fiş</td>
+<td>topraklı IEC</td>
+<td style="text-align: right;">1</td>
+<td>elektrik malz.</td>
+<td style="text-align: right;">60</td>
+<td style="text-align: right;">60</td>
+</tr>
+<tr>
+<td>WS2812B LED</td>
+<td>60 LED halka/şerit</td>
+<td style="text-align: right;">1</td>
+<td>Samm/LED Pazarı</td>
+<td style="text-align: right;">210</td>
+<td style="text-align: right;">210</td>
+</tr>
+</tbody>
+</table>
+<h2>5) Gövde &amp; yapı — ~5.850 TL</h2>
+<table>
+<thead>
+<tr>
+<th>Parça</th>
+<th>Spec</th>
+<th style="text-align: right;">Ad</th>
+<th>Tedarikçi</th>
+<th style="text-align: right;">Birim</th>
+<th style="text-align: right;">Toplam</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ceviz kaplama gövde (CNC)</td>
+<td>drum Ø600 (prototip tek)</td>
+<td style="text-align: right;">1</td>
+<td>yerel CNC ahşap atölyesi</td>
+<td style="text-align: right;">3.200</td>
+<td style="text-align: right;">3.200</td>
+</tr>
+<tr>
+<td>Masif ceviz ayak (torna)</td>
+<td>8°, L320</td>
+<td style="text-align: right;">4</td>
+<td>ahşap torna/mobilya</td>
+<td style="text-align: right;">200</td>
+<td style="text-align: right;">800</td>
+</tr>
+<tr>
+<td>Lake/finiş</td>
+<td>mat koruyucu</td>
+<td style="text-align: right;">1</td>
+<td>boya malz.</td>
+<td style="text-align: right;">300</td>
+<td style="text-align: right;">300</td>
+</tr>
+<tr>
+<td>Temperli cam Ø552×6</td>
+<td>low-iron, rodajlı</td>
+<td style="text-align: right;">1</td>
+<td>yerel temperli cam</td>
+<td style="text-align: right;">800</td>
+<td style="text-align: right;">800</td>
+</tr>
+<tr>
+<td>Al lazer kesim (DXF)</td>
+<td>şasi + kol + 4 ayak plakası</td>
+<td style="text-align: right;">1</td>
+<td>sac/Al lazer atölyesi</td>
+<td style="text-align: right;">750</td>
+<td style="text-align: right;">750</td>
+</tr>
+</tbody>
+</table>
+<h2>6) Bağlantı / sarf — ~640 TL</h2>
+<table>
+<thead>
+<tr>
+<th>Parça</th>
+<th>Spec</th>
+<th style="text-align: right;">Ad</th>
+<th>Tedarikçi</th>
+<th style="text-align: right;">Birim</th>
+<th style="text-align: right;">Toplam</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Vida/somun/standoff/insert</td>
+<td>M3/M4/M5/M6 + gömme dişli</td>
+<td style="text-align: right;">1</td>
+<td>hırdavat/Robotistan</td>
+<td style="text-align: right;">260</td>
+<td style="text-align: right;">260</td>
+</tr>
+<tr>
+<td>Kablo yönetimi</td>
+<td>kanal/spiral/ferrül/etiket</td>
+<td style="text-align: right;">1</td>
+<td>elektrik malz.</td>
+<td style="text-align: right;">150</td>
+<td style="text-align: right;">150</td>
+</tr>
+<tr>
+<td>İnce kuvars kum</td>
+<td>~1.5 kg</td>
+<td style="text-align: right;">1</td>
+<td>hobi/akvaryum</td>
+<td style="text-align: right;">80</td>
+<td style="text-align: right;">80</td>
+</tr>
+</tbody>
+</table>
+<h2>Tedarikçi rehberi (TR)</h2>
+<ul>
+<li><strong>Elektronik/motor/ray/GT2/endstop:</strong> Robotistan, Motorobit, Direnç.net</li>
+<li><strong>LED / güç:</strong> Samm Teknoloji, LED Pazarı · toplu: LCSC / AliExpress</li>
+<li><strong>N52 mıknatıs:</strong> yurtiçi neodyum satıcıları (arama: "N52 Ø20")</li>
+<li><strong>Slip ring:</strong> otomasyon/robotik (arama: "kapsül slip ring 12mm 12 yol")</li>
+<li><strong>Ahşap gövde/ayak:</strong> yerel CNC ahşap / mobilya atölyesi (DXF + ölçü ver)</li>
+<li><strong>Temperli cam:</strong> yerel temperli cam imalatçısı (Ø552×6, rodaj iste)</li>
+<li><strong>Alüminyum lazer:</strong> sac/Al lazer atölyesi (<a href="docs/uretim/dxf">DXF</a> gönder)</li>
+<li><strong>PCB:</strong> JLCPCB / PCBWay (<a href="hardware/pcb/jlcpcb">paket</a>) veya yurtiçi PCB</li>
+</ul>
+<h2>Sonraki adım</h2>
+<p>Sipariş → gelince <a href="qa.html">bring-up testi</a> (önce motorsuz güç) → <a href="montaj.html">montaj</a> →
+<a href="firmware/README.md">FluidNC kalibrasyon</a>. Risk kontrolü: <a href="fmea.html">FMEA</a>.</p></article>
+</div>
+<footer><div class="wrap"><span>DEVRAN · kinetik kum sanatı masası · açık kaynak üretim paketi</span><a href="https://github.com/emirhan-yakar/kinetic-sand-table">github.com/emirhan-yakar/kinetic-sand-table ↗</a></div></footer>
+</body></html>
