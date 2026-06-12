@@ -1,0 +1,346 @@
+<!DOCTYPE html><html lang="tr"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Üretim Gerçekleme Dosyası — Kinetik Kum Masası</title>
+<link rel="stylesheet" href="style.css"></head><body>
+<nav class="nav"><div class="wrap"><a class="brand" href="index.html">Kinetik Kum Masası <small>· üretim paketi</small></a><a class="link" href="index.html">Genel Bakış</a><a class="link" href="gorseller.html">Görseller</a><a class="link" href="simulasyon.html">Simülasyon</a><a class="link active" href="muhendislik.html">Mühendislik</a><a class="link" href="https://github.com/emirhan-yakar/kinetic-sand-table" target="_blank">GitHub ↗</a></div></nav>
+<div class="wrap">
+  <div class="dochead"><a class="back" href="muhendislik.html">← Mühendislik &amp; Üretim</a></div>
+  <article class="prose"><h1>Üretim Gerçekleme Dosyası — Kinetik Kum Masası</h1>
+<h3>(Manufacturing Readiness / Product Realization Dossier)</h3>
+<p>Bu belge ürünü <strong>gerçek, satılabilir bir ürüne</strong> dönüştürmek için yol haritasıdır.
+Bir deneme değil; profesyonel donanım ürün geliştirme (NPI) disiplinine göre yazılmıştır.
+<strong>Dürüstlük ilkesi:</strong> her alt sistemin gerçek olgunluk durumu açıkça belirtilir — "tasarlandı"
+ile "doğrulandı" ve "fiziksel test edildi" karıştırılmaz.</p>
+<hr />
+<h2>0) DÜRÜST DURUM ÖZETİ (en kritik kısım)</h2>
+<table>
+<thead>
+<tr>
+<th>Alt sistem</th>
+<th>Durum</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mekanik tasarım (Ø600 polar, ayak, mıknatıslı modül)</td>
+<td>🟡 <strong>Tasarlandı</strong></td>
+<td>Parametrik geometri + ölçülü montaj sheet + patlatma çizimi. <strong>Fiziksel prototip yapılmadı.</strong></td>
+</tr>
+<tr>
+<td>Kontrol kartı (PCB)</td>
+<td>🟠 <strong>Rev-B tasarlandı (bulgular işlendi), DRC temiz — FİZİKSEL TEST EDİLMEDİ</strong></td>
+<td>İnceleme bulguları (UART adres, LED level-shifter, koruma, bulk cap, EN pull-up) <code>build_kicad.py</code>'ye işlendi, yeniden route edildi (0 short). <strong>Hâlâ lehimlenmedi/ölçülmedi.</strong> Bkz. <code>PCB_inceleme.md</code>.</td>
+</tr>
+<tr>
+<td>Firmware</td>
+<td>🟠 <strong>Yazılmadı — mimari + config taslağı var</strong></td>
+<td>Hazır açık kaynak <strong>FluidNC</strong> (hareket) + <strong>Dune Weaver</strong> (desen/web) kullanılacak. Örnek <code>firmware/fluidnc_config.yaml</code> hazırlandı ama <strong>cihaza yüklenip doğrulanmadı.</strong></td>
+</tr>
+<tr>
+<td>Görseller/render/video</td>
+<td>🟢 <strong>Hazır</strong></td>
+<td>Reklam kalitesinde (ön-görselleştirme; satış için fiziksel ürün fotosu gerekir).</td>
+</tr>
+<tr>
+<td>BOM / maliyet / tedarik</td>
+<td>🟢 <strong>Hazır</strong></td>
+<td>Gerçek malzeme + TR tedarik + fiyat.</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Net cevap (PCB test edildi mi?):</strong> <strong>Hayır.</strong> Kart yazılımda tasarlandı ve tasarım kuralı
+kontrolünü (DRC) geçti, ancak <strong>fiziksel olarak üretilmedi ve test edilmedi.</strong> Gerçek ürün için
+önce tasarım inceleme bulguları düzeltilmeli, prototip bastırılmalı ve <strong>bring-up testi</strong> yapılmalı.
+Bu dosya tam olarak bu yolu tanımlar.</p>
+</blockquote>
+<hr />
+<h2>1) Sistem mimarisi (gerçek ürün)</h2>
+<pre><code> [Patternler .thr]  → (Sandify/Dune Weaver: .thr→G-code) →  ┌────────────────────┐
+                                                            │ ESP32 + FluidNC    │→ TMC2209 ×2 → NEMA17 θ, ρ
+ Web/uygulama (opsiyonel Raspberry Pi Zero 2 W,             │ (hareket, WebUI,   │→ WS2812B LED (WLED/DW)
+ Dune Weaver app: desen kütüphanesi, LED senk, zamanlama)   │  SD'den G-code)    │→ endstop (θ home)
+                                                            └────────────────────┘
+                                                                 12V güç + buck 5V
+</code></pre>
+<p><strong>Mimari kararlar (2 seçenek):</strong>
+- <strong>A — Sade (önerilen başlangıç):</strong> ESP32 + <strong>FluidNC</strong> tek başına. Desenler offline <code>.thr→G-code</code>
+  çevrilir, <strong>SD karta</strong> konur veya WebUI'dan gönderilir. Pi yok → daha ucuz, daha az parça.
+- <strong>B — Tam deneyim:</strong> A + <strong>Raspberry Pi Zero 2 W</strong> üzerinde <strong>Dune Weaver</strong> uygulaması
+  (.thr kütüphanesi, canlı önizleme, LED modları, zamanlama). +~500 ₺, daha iyi kullanıcı deneyimi.</p>
+<blockquote>
+<p>Önerimiz: <strong>EVT/DVT'de A</strong> (riski azalt), satışa hazır üründe <strong>B</strong> (UX için).</p>
+</blockquote>
+<hr />
+<h2>2) Entegrasyon haritası — ne nereye, nasıl bağlanır</h2>
+<table>
+<thead>
+<tr>
+<th>Kart konnektörü</th>
+<th>Bağlanır</th>
+<th>Kablo / not</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>J1 (12V giriş)</strong></td>
+<td>12V SMPS</td>
+<td>Sigorta + ters polarite koruması (bkz. PCB inceleme)</td>
+</tr>
+<tr>
+<td><strong>J2 (θ motor, 4p)</strong></td>
+<td>NEMA17 θ (dönen kol tahriki)</td>
+<td>gövde içi sabit</td>
+</tr>
+<tr>
+<td><strong>J3 (ρ motor, 4p)</strong></td>
+<td>NEMA17 ρ → <strong>slip ring</strong> → dönen koldaki motor</td>
+<td>4 bobin kablosu kapsül slip ring'den</td>
+</tr>
+<tr>
+<td><strong>J4 (LED, 3p: 5V/DIN/GND)</strong></td>
+<td>WS2812B halka</td>
+<td>DIN'e <strong>level shifter</strong> (3.3→5V) gerekir (inceleme)</td>
+</tr>
+<tr>
+<td><strong>J5 (endstop, 3p)</strong></td>
+<td>θ home opto/mikro switch</td>
+<td>dönen tablada referans</td>
+</tr>
+<tr>
+<td>BK1 buck</td>
+<td>12V→5V</td>
+<td>ESP32 + LED + sürücü VIO</td>
+</tr>
+<tr>
+<td>θ motor şasiye, ρ motor kol ucuna</td>
+<td>mekanizma (<code>montaj.md</code> §4)</td>
+<td>M3, slip ring kablolama</td>
+</tr>
+</tbody>
+</table>
+<p>Fiziksel yerleşim: kontrol kartı <strong>drum içi alüminyum şasiye</strong> (4× M3 standoff), 12V SMPS şasi altına,
+slip ring şasi merkezine, LED halka rim iç kenarına. (Detay: <code>montaj.md</code>, <code>montaj_patlatma.png</code>.)</p>
+<hr />
+<h2>3) Üretim akışı — kim, neyi, nasıl üretir</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Parça</th>
+<th>Proses</th>
+<th>Üretici (TR)</th>
+<th>DFM notu</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Drum gövde + rim</td>
+<td>CNC kesim + ceviz kaplama + lake</td>
+<td>yerel CNC ahşap/mobilya atölyesi</td>
+<td>bükme kontrplak veya istif halka; toleranslar montaj sheet'te</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Ayaklar (4)</td>
+<td>torna + 8° eğimli plaka</td>
+<td>ahşap torna / hazır mobilya ayağı</td>
+<td>açı plakadan gelir, elde verilmez</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Temperli cam Ø552×6</td>
+<td>kesim + temper + rodaj</td>
+<td>yerel temperli cam imalatçısı</td>
+<td>low-iron opsiyon</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Alüminyum şasi + kol</td>
+<td>lazer kesim 6082</td>
+<td>sac/alüminyum lazer atölyesi</td>
+<td>DXF kesim dosyaları hazırlanmalı (yapılacak)</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>Kontrol kartı (PCB)</strong></td>
+<td>PCB üretim + <strong>SMT dizgi</strong></td>
+<td><strong>JLCPCB/PCBWay</strong> (dizgi dahil) veya yurtiçi</td>
+<td>Gerber+BOM+CPL hazır; <strong>önce inceleme düzeltmeleri</strong></td>
+</tr>
+<tr>
+<td>6</td>
+<td>Final montaj + kablolama + kalibrasyon + QA</td>
+<td>manuel</td>
+<td>kendi montaj hattın</td>
+<td>test planı §6</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>4) NPI aşamaları — ilk satılabilir üniteye yol</h2>
+<table>
+<thead>
+<tr>
+<th>Aşama</th>
+<th>Amaç</th>
+<th>Çıktı</th>
+<th>Süre (tahmini)</th>
+<th>Maliyet</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>0 · Tasarım dondurma</strong></td>
+<td>İnceleme bulgularını düzelt (PCB, mekanik)</td>
+<td>Rev-B Gerber, DXF, BOM</td>
+<td>1–2 hafta</td>
+<td>düşük (mühendislik)</td>
+</tr>
+<tr>
+<td><strong>1 · EVT</strong> (Engineering)</td>
+<td>İlk fonksiyon: 1 PCB bastır+dizgi, bread-board mekanizma, FluidNC bring-up</td>
+<td>Çalışan 1 ünite (estetik değil)</td>
+<td>3–4 hafta</td>
+<td>~PCB 5'li + parçalar ~15k ₺</td>
+</tr>
+<tr>
+<td><strong>2 · DVT</strong> (Design Verif.)</td>
+<td>Estetik gövde + kalibrasyon + 24h burn-in + desen testi</td>
+<td>Sunulabilir prototip</td>
+<td>3–4 hafta</td>
+<td>~1 ünite tam BOM</td>
+</tr>
+<tr>
+<td><strong>3 · PVT</strong> (Production)</td>
+<td>Küçük seri (10–20), montaj talimatı, QA prosedürü</td>
+<td>Satılabilir ürün + süreç</td>
+<td>4–6 hafta</td>
+<td>seri BOM × adet</td>
+</tr>
+<tr>
+<td><strong>4 · Üretim</strong></td>
+<td>Sürekli üretim</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>5) Test ve doğrulama planı</h2>
+<p><strong>5.1 PCB bring-up (kart geldiğinde, motor BAĞLAMADAN):</strong>
+1. Görsel + kısa devre kontrolü (multimetre: 12V–GND, 5V–GND direnç).
+2. Güç ver, <strong>5V rayını ölç</strong> (4.9–5.1V), ESP32 ısınma yok.
+3. ESP32 flash (FluidNC), seri konsol açılıyor mu.
+4. TMC2209 UART <strong>adres okuma</strong> (FluidNC <code>$Stepper/...</code> — her iki sürücü ayrı adres yanıt vermeli).
+5. WS2812: tek LED test (level shifter doğrulaması).</p>
+<p><strong>5.2 Hareket:</strong>
+6. Motorları bağla, akım ayarı (TMC2209 ~0.6–0.9A), θ tam tur (kayma yok), ρ menzil/endstop.
+7. Bilye sürükleme: mıknatıs gücü vs hız (kostik/kayıp testi).</p>
+<p><strong>5.3 Sistem:</strong>
+8. Tam desen çiz (Atatürk imza + spiral), 24h <strong>burn-in</strong> (ısınma, gürültü, kaçırma).
+9. <strong>Güvenlik:</strong> 12V SMPS CE'li, sigorta, topraklama, sıcaklık &lt; sınır; cam kenar emniyeti.</p>
+<hr />
+<h2>6) Maliyet (COGS) ve hedef satış fiyatı</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Prototip (1 ad)</th>
+<th>Seri (50+, parça başı)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Malzeme (BOM)</td>
+<td>~10.800 ₺</td>
+<td>~6.100 ₺</td>
+</tr>
+<tr>
+<td>İşçilik/montaj</td>
+<td>+2.500–4.000</td>
+<td>+1.200</td>
+</tr>
+<tr>
+<td>(Tam deneyim) + Raspberry Pi Zero 2 W</td>
+<td>—</td>
+<td>+500</td>
+</tr>
+<tr>
+<td><strong>COGS</strong></td>
+<td><strong>~13.500–15.000 ₺</strong></td>
+<td><strong>~7.800 ₺ (~$230)</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Fiyatlandırma (profesyonel marj analizi):</strong>
+- Sağlıklı donanım perakende marjı: satış ≈ <strong>2.5–3× COGS</strong> (garanti, iade, pazarlama, kanal payı dahil).
+- Seri COGS ~7.800 ₺ → <strong>hedef MSRP ≈ 19.900–23.900 ₺ ($590–700)</strong>.
+- <strong>Önerilen liste fiyatı: 21.900 ₺ (~$650)</strong> — benzer ürün ($699) ile rekabetçi, ~%64 brüt marj.
+- Lansman/erken kuş: 17.900 ₺; bayi/kanal: liste − %30.</p>
+<blockquote>
+<p>Not: işçilik + overhead + garanti rezervi (ünite başı ~%8) + iade (~%3) fiyata içkindir.
+Marj, montaj kalitesi/marka/hazır desen kütüphanesinde korunur (donanım kolay kopyalanır).</p>
+</blockquote>
+<hr />
+<h2>7) Risk kaydı (öne çıkanlar)</h2>
+<table>
+<thead>
+<tr>
+<th>Risk</th>
+<th>Etki</th>
+<th>Önlem</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>PCB ilk dönüşte çalışmaz</strong></td>
+<td>yüksek</td>
+<td>inceleme düzeltmeleri + 5'li bastır (yedek), bring-up planı</td>
+</tr>
+<tr>
+<td>WS2812 3.3V data güvenilmez</td>
+<td>orta</td>
+<td>level shifter (74AHCT125) — Rev-B</td>
+</tr>
+<tr>
+<td>TMC2209 UART adres çakışması</td>
+<td>orta</td>
+<td>MS1/MS2 ayrı adres — Rev-B</td>
+</tr>
+<tr>
+<td>Slip ring kontak/gürültü</td>
+<td>orta</td>
+<td>kaliteli kapsül slip ring, ρ akımı düşük tut</td>
+</tr>
+<tr>
+<td>Mıknatıs bilyeyi kaçırır (hız)</td>
+<td>orta</td>
+<td>hız limiti + mıknatıs/hava aralığı testi</td>
+</tr>
+<tr>
+<td>Cam ağırlığı/emniyet</td>
+<td>orta</td>
+<td>temperli + rodaj + mıknatıslı modül SF 5.2×</td>
+</tr>
+<tr>
+<td>Tedarik/kur dalgalanması</td>
+<td>orta</td>
+<td>döviz endeksli kalemler için stok/sözleşme</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>8) İlgili dosyalar</h2>
+<ul>
+<li><code>PCB_inceleme.md</code> — dürüst elektriksel inceleme + üretim öncesi düzeltmeler</li>
+<li><code>../../firmware/fluidnc_config.yaml</code> + <code>../../firmware/README.md</code> — firmware mimarisi/config</li>
+<li><code>BOM_uretim.md</code> · <code>montaj.md</code> · <code>montaj_sheet.svg</code> · <code>montaj_patlatma.png</code></li>
+<li><code>../../hardware/pcb/</code> — KiCad tasarımı, Gerber, STEP</li>
+</ul></article>
+</div>
+<footer><div class="wrap"><span>Kinetik Kum Sanatı Masası · üretim paketi</span><a href="https://github.com/emirhan-yakar/kinetic-sand-table">github.com/emirhan-yakar/kinetic-sand-table ↗</a></div></footer>
+</body></html>

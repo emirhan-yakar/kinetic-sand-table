@@ -1,0 +1,220 @@
+<!DOCTYPE html><html lang="tr"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Materyal / Mekanik Montaj — Kinetik Kum Masası</title>
+<link rel="stylesheet" href="style.css"></head><body>
+<nav class="nav"><div class="wrap"><a class="brand" href="index.html">Kinetik Kum Masası <small>· üretim paketi</small></a><a class="link" href="index.html">Genel Bakış</a><a class="link" href="gorseller.html">Görseller</a><a class="link" href="simulasyon.html">Simülasyon</a><a class="link active" href="muhendislik.html">Mühendislik</a><a class="link" href="https://github.com/emirhan-yakar/kinetic-sand-table" target="_blank">GitHub ↗</a></div></nav>
+<div class="wrap">
+  <div class="dochead"><a class="back" href="muhendislik.html">← Mühendislik &amp; Üretim</a><div class="dlrow"><a class="btn" href="docs/uretim/MONTAJ_KILAVUZU.pdf">⬇ Montaj kılavuzu (PDF)</a></div></div>
+  <article class="prose"><h1>Montaj Sheet — Kinetik Kum Masası (Ø600, ayaklı sehpa)</h1>
+<p>Hesaplanmış geometri, açılar, delik konumları, bağlantı çizelgesi ve <strong>mıknatıslı modüler</strong> yapı.
+Çizim: <strong><code>montaj_sheet.svg</code></strong> (ön + üst görünüş, ölçülü). Geometri üreteci: <code>montaj_hesap.py</code>.</p>
+<blockquote>
+<p>Yapı felsefesi: <strong>birbirine geçen + vidalanan</strong> ana gövde; <strong>güçlü mıknatıslarla</strong> ayrılıp
+birleşen <strong>üst modül</strong> (cam + kum yatağı) → bakım için mekanizmaya kolay erişim.</p>
+</blockquote>
+<hr />
+<h2>1) Hesaplanmış ana ölçüler (mm)</h2>
+<table>
+<thead>
+<tr>
+<th>Büyüklük</th>
+<th>Değer</th>
+<th>Not</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Drum dış çap</td>
+<td><strong>Ø600</strong></td>
+<td>et 18 (ceviz kaplama)</td>
+</tr>
+<tr>
+<td>Kum havuzu</td>
+<td><strong>Ø540 × derinlik 50</strong></td>
+<td>cidardan 24 içerde</td>
+</tr>
+<tr>
+<td>Kum yatağı</td>
+<td><strong>Ø516</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>Temperli cam</td>
+<td><strong>Ø552 × 6</strong></td>
+<td>rabbet'e oturur</td>
+</tr>
+<tr>
+<td>Ayak</td>
+<td><strong>4 × 320 mm, 8° splay</strong></td>
+<td>masif ceviz koni</td>
+</tr>
+<tr>
+<td>Ayak bağlantı dairesi (PCD)</td>
+<td><strong>Ø420</strong></td>
+<td>açılar 45° / 135° / 225° / 315°</td>
+</tr>
+<tr>
+<td>Ayak ucu temas dairesi</td>
+<td><strong>Ø509</strong></td>
+<td>dışa kaçış 44.5 mm/ayak</td>
+</tr>
+<tr>
+<td>Ayak dikey izdüşümü</td>
+<td><strong>316.9 mm</strong></td>
+<td>= 320·cos8°</td>
+</tr>
+<tr>
+<td><strong>Toplam masa yüksekliği</strong></td>
+<td><strong>≈ 467 mm</strong></td>
+<td>drum 150 + ayak 316.9</td>
+</tr>
+</tbody>
+</table>
+<h2>2) Ayak montajı (açı kritik)</h2>
+<ul>
+<li>4 ayak, <strong>Ø420 PCD</strong> üzerinde 90°'de, her biri <strong>radyal yönde 8° dışa</strong> eğimli.</li>
+<li>Drum alt tablasına <strong>8° eğimli ayak bağlantı plakası</strong> (hazır mobilya plakası ya da CNC freze cep)
+  ile vidalanır. Plaka deliği: <strong>4× M5</strong>, 30×30 desen.</li>
+<li>Ahşaba <strong>M6 gömme dişli (threaded insert)</strong> + <strong>M6×30 paslanmaz civata</strong> (plaka üzerinden).</li>
+<li>Ayak ucu yere temas çapı Ø509 → devrilme stabilitesi yüksek (taban/yükseklik ≈ 1.09).</li>
+</ul>
+<h2>3) Mıknatıslı üst modül (bakım erişimi)</h2>
+<p>Üst modül = <strong>temperli cam + kum yatağı çerçevesi</strong> tek parça; drum rim'ine <strong>mıknatısla</strong> oturur, elle kaldırılır.
+| Parametre | Değer |
+|---|---|
+| Tutucu mıknatıs | <strong>8 × N52 Ø20×3 mm</strong> @ <strong>Ø572 PCD</strong> (45°) |
+| Karşı eleman | rim cebinde mıknatıs / modül çerçevesinde <strong>Ø22 × 1.5 DKP saç</strong> karşı plaka |
+| Üst modül ağırlığı | <strong>≈ 4.2 kg</strong> (cam 3.6 + çerçeve 0.6) |
+| Toplam tutma kuvveti | <strong>≈ 21.6 kgf</strong> |
+| <strong>Güvenlik katsayısı</strong> | <strong>≈ 5.2×</strong> (kaldırmaya karşı; yanal kayma için merkezleme pimleri) |
+- 2 adet <strong>Ø6 merkezleme pimi</strong> (çelik) modülün yanal kaymasını engeller; mıknatıslar sadece düşey tutar.</p>
+<h2>4) Mekanizma (drum içi, kum yatağının altında)</h2>
+<table>
+<thead>
+<tr>
+<th>Bileşen</th>
+<th>Bağlantı / delik</th>
+<th>Eleman</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Şasi plakası</strong> (Al 4mm Ø520)</td>
+<td>drum alt tablasına 4× <strong>M4 standoff</strong> @ Ø500 PCD</td>
+<td>M4×... + standoff</td>
+</tr>
+<tr>
+<td><strong>θ motoru</strong> (NEMA17, merkez)</td>
+<td><strong>31×31 mm kare M3</strong> delik deseni, merkez Ø22 boşluk</td>
+<td>4× M3×8</td>
+</tr>
+<tr>
+<td><strong>Turntable</strong> (lazy-susan Ø150)</td>
+<td>şasiye 4× M4; üstüne dönen kol</td>
+<td>4× M4×10</td>
+</tr>
+<tr>
+<td><strong>Dönen kol</strong> (Al 5mm)</td>
+<td>turntable'a 4× M3; ucunda ρ motoru + MGN12 ray</td>
+<td>M3</td>
+</tr>
+<tr>
+<td><strong>ρ motoru</strong> (NEMA17, kol ucu)</td>
+<td>31×31 M3; kabloları <strong>slip ring</strong> üzerinden</td>
+<td>4× M3×8</td>
+</tr>
+<tr>
+<td><strong>Taşıyıcı + mıknatıs</strong></td>
+<td>MGN12 araba üzerine; N52 Ø20×10 cebe</td>
+<td>2× M3</td>
+</tr>
+<tr>
+<td><strong>Slip ring</strong></td>
+<td>şasi merkezine bilezik; dönen tarafa kelepçe</td>
+<td>M3</td>
+</tr>
+<tr>
+<td><strong>Kontrol kartı (PCB)</strong></td>
+<td>şasiye 4× M3 standoff, yan duvara klemensler</td>
+<td>4× M3×6</td>
+</tr>
+<tr>
+<td><strong>LED halka (WS2812B)</strong></td>
+<td>rim iç kenarına yapışkan + 330Ω + 1000µF</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<h2>5) Bağlantı (vida) çizelgesi</h2>
+<table>
+<thead>
+<tr>
+<th>Yer</th>
+<th>Eleman</th>
+<th>Adet</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ayak → drum (eğimli plaka)</td>
+<td>M6×30 civata + M6 insert</td>
+<td>16 (4/ayak)</td>
+</tr>
+<tr>
+<td>Şasi → drum tablası</td>
+<td>M4×16 + standoff</td>
+<td>4</td>
+</tr>
+<tr>
+<td>θ / ρ motor → şasi/kol</td>
+<td>M3×8</td>
+<td>8</td>
+</tr>
+<tr>
+<td>Turntable / kol / taşıyıcı</td>
+<td>M3–M4</td>
+<td>~14</td>
+</tr>
+<tr>
+<td>PCB standoff</td>
+<td>M3×6</td>
+<td>4</td>
+</tr>
+<tr>
+<td>Rim → gövde</td>
+<td>M4×16 (gizli) veya ahşap tutkalı + biskü</td>
+<td>8</td>
+</tr>
+<tr>
+<td>Üst modül merkezleme</td>
+<td>Ø6 çelik pim</td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+<h2>6) Toleranslar &amp; notlar</h2>
+<ul>
+<li>Cam–havuz rabbet boşluğu: <strong>+0.5 mm</strong> çevresel (termal/montaj).</li>
+<li>Mıknatıs–çelik hava aralığı (cam altı, kum üstü): bilye sürücü için <strong>toplam ≤ 12 mm</strong>
+  (cam 6 + kum 5) → N52 Ø20×10 ~7g bilyeyi rahat sürükler.</li>
+<li>MGN12 ray paralelliği: kol ekseninde <strong>±0.2 mm</strong>.</li>
+<li>Tüm ahşap kesimler CNC; ayak açısı plakadan gelir (elde açı verilmez).</li>
+<li>Topraklama: alüminyum şasi → güç toprağına; LED 5V hattı ayrı buck.</li>
+</ul>
+<h2>7) Montaj sırası</h2>
+<ol>
+<li>Ahşap gövde + rim + kaplama/cila (atölye çıkışı).</li>
+<li>Ayakları 8° plakalarla drum altına civatala (PCD Ø420).</li>
+<li>Şasi plakasını drum tablasına standoff'la monte et; θ motoru + turntable + kol + ρ motor + ray + taşıyıcı/mıknatıs + slip ring.</li>
+<li>Kontrol kartı + kablolama + LED halka + güç.</li>
+<li>Firmware (Dune Weaver) yükle, <strong>kalibrasyon</strong> (<code>firmware/README.md</code>): θ tam tur, ρ menzil, bilye sürükleme.</li>
+<li>Kum yatağı + cam → mıknatıslı <strong>üst modül</strong> olarak oturt (merkezleme pimleri).</li>
+<li>Kum doldur, desen (<code>firmware/patterns/</code> → Atatürk imzası / spiral) yükle, test.</li>
+</ol>
+<hr />
+<p><strong>İlgili dosyalar:</strong> <code>BOM_uretim.md</code> (malzeme+fiyat), <code>montaj_sheet.svg</code> (çizim),
+<code>montaj_hesap.py</code> (parametrik geometri — ölçü değişince yeniden üretir),
+<code>../../hardware/pcb/</code> (kontrol kartı), <code>../../hardware/sand_table.scad</code> (3D model).</p></article>
+</div>
+<footer><div class="wrap"><span>Kinetik Kum Sanatı Masası · üretim paketi</span><a href="https://github.com/emirhan-yakar/kinetic-sand-table">github.com/emirhan-yakar/kinetic-sand-table ↗</a></div></footer>
+</body></html>

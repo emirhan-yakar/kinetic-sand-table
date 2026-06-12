@@ -120,9 +120,10 @@ bpy.ops.mesh.primitive_torus_add(major_radius=(R+WELL_R)/2,minor_radius=(R-WELL_
     location=(0,0,TOP_Z),major_segments=160,minor_segments=20)
 Rim=bpy.context.active_object; Rim.name="Rim"; bpy.ops.object.shade_smooth()
 
-# --- kum diski (render'da gercek oluk icin yuksek-coz grid; glb'de silindir) ---
+# --- kum diski (still'de gercek oluk displacement; video'da duz kum + ilerleyen tube; glb'de silindir) ---
 R_CAP=WELL_R*0.985
-if MODE!="glb" and os.path.exists(GROOVE_HMAP):
+GROOVE3D = (MODE not in ("glb","video")) and os.path.exists(GROOVE_HMAP)
+if GROOVE3D:
     import bmesh
     bpy.ops.mesh.primitive_grid_add(x_subdivisions=600,y_subdivisions=600,size=2*R_CAP,location=(0,0,SAND_TOP))
     Sand=bpy.context.active_object; Sand.name="Sand"
@@ -150,8 +151,8 @@ for i,(x,y) in enumerate(pts): sp.points[i].co=(x,y,SAND_TOP-0.0006,1)
 # yogun portre desenlerinde cizgiler birlesmesin -> ince oluk (hafif geometri)
 cu.bevel_depth=(0.0007 if len(pts)>6000 else 0.0015); cu.bevel_resolution=1
 Groove=bpy.data.objects.new("Groove",cu); link(Groove)
-# render'da oluk = gercek kum displacement (asagi); ince tup sadece glb/patlatma icin
-if MODE!="glb" and os.path.exists(GROOVE_HMAP): Groove.hide_render=True
+# still'de oluk = displacement (tube gizli); video'da tube gorunur (ilerleyen cizim)
+if GROOVE3D: Groove.hide_render=True
 ball_xy=pts[-1]
 
 # --- celik bilye (desenin ucunda) ---
@@ -214,13 +215,18 @@ else:
 Sand.data.materials.append(sm)
 
 # --- GERCEK OLUK: yuksek-coz grid + Displace modifier (bounded, OOM yok) ---
-if MODE!="glb" and os.path.exists(GROOVE_HMAP):
+if GROOVE3D:
     gtex=bpy.data.textures.new("groove","IMAGE"); gtex.image=bpy.data.images.load(GROOVE_HMAP)
     gtex.image.colorspace_settings.name='Non-Color'; gtex.extension='EXTEND'
     dm=Sand.modifiers.new("groove","DISPLACE")
     dm.texture=gtex; dm.texture_coords='UV'; dm.direction='Z'
     dm.mid_level=0.5; dm.strength=0.007    # oluk ~1.6mm cukur + kenar kabarma
-grm,_=mat("Groove",(0.42,0.33,0.21),rough=0.97); Groove.data.materials.append(grm)
+# video'da gorunur ilerleyen oluk: acik, hafif isikli (taze cizilmis kum gibi)
+if MODE=="video":
+    grm,_=mat("Groove",(0.90,0.78,0.52),rough=0.7,emis=(0.95,0.82,0.55),emis_str=0.55)
+else:
+    grm,_=mat("Groove",(0.42,0.33,0.21),rough=0.97)
+Groove.data.materials.append(grm)
 stm,_=mat("Steel",(0.80,0.80,0.82),rough=0.07,metal=1.0); Ball.data.materials.append(stm)
 # LED: goze batmayan yumusak/los glow -> dusuk emisyon (glare esigi 1.7'yi gecip
 # hafif halo verir ama beyaz yanmaz); hafif sicak-beyaz-mavi ton
@@ -309,12 +315,12 @@ elif MODE=="video":
     # ---- reklam animasyonu: kamera yorungede doner + bilye deseni cizer ----
     N=96; DRAW_END=N-15
     emp=bpy.data.objects.new("tgt",None); emp.location=(0,0,0.30); link(emp)
-    cd=bpy.data.cameras.new("Cam"); cd.lens=46; cd.dof.use_dof=True; cd.dof.aperture_fstop=4.0
+    cd=bpy.data.cameras.new("Cam"); cd.lens=46; cd.dof.use_dof=True; cd.dof.aperture_fstop=6.3
     cam=bpy.data.objects.new("Cam",cd); link(cam); scene.camera=cam
     con=cam.constraints.new('TRACK_TO'); con.target=emp; con.track_axis='TRACK_NEGATIVE_Z'; con.up_axis='UP_Y'
-    for f,ang in ((1,math.radians(-30)),(N,math.radians(30))):
-        r=1.8; cam.location=(r*math.sin(ang),-r*math.cos(ang),1.0); cam.keyframe_insert("location",frame=f)
-    cd.dof.focus_distance=1.8
+    for f,ang in ((1,math.radians(-32)),(N,math.radians(32))):
+        r=1.62; cam.location=(r*math.sin(ang),-r*math.cos(ang),1.35); cam.keyframe_insert("location",frame=f)  # daha tepeden -> imza okunur
+    cd.dof.focus_distance=2.1
     Groove.data.bevel_factor_start=0.0
     for f in range(1,DRAW_END+1):
         fac=(f-1)/(DRAW_END-1)
@@ -332,7 +338,12 @@ elif MODE=="video":
     scene.render.ffmpeg.constant_rate_factor='HIGH'; scene.render.ffmpeg.ffmpeg_preset='GOOD'; scene.render.ffmpeg.audio_codec='NONE'
     scene.render.filepath=os.path.join(DIR,"table_ad.mp4")
     add_post()
-    print("VIDEO render: %d frame @720p"%N); bpy.ops.render.render(animation=True); print("VIDEO BITTI",scene.render.filepath)
+    if os.environ.get("ONEFRAME"):  # tek kare PNG (dogrulama)
+        fr=int(os.environ["ONEFRAME"]); scene.frame_set(fr)
+        scene.render.image_settings.file_format='PNG'; scene.render.filepath=os.path.join(DIR,"vid_check.png")
+        bpy.ops.render.render(write_still=True); print("ONEFRAME BITTI",fr)
+    else:
+        print("VIDEO render: %d frame @720p"%N); bpy.ops.render.render(animation=True); print("VIDEO BITTI",scene.render.filepath)
 else:
     setcam(MODE)
     scene.render.engine='CYCLES'

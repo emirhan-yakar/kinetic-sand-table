@@ -1,0 +1,62 @@
+<!DOCTYPE html><html lang="tr"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Firmware & Yazılım — Kinetik Kum Masası</title>
+<link rel="stylesheet" href="style.css"></head><body>
+<nav class="nav"><div class="wrap"><a class="brand" href="index.html">Kinetik Kum Masası <small>· üretim paketi</small></a><a class="link" href="index.html">Genel Bakış</a><a class="link" href="gorseller.html">Görseller</a><a class="link" href="simulasyon.html">Simülasyon</a><a class="link active" href="muhendislik.html">Mühendislik</a><a class="link" href="https://github.com/emirhan-yakar/kinetic-sand-table" target="_blank">GitHub ↗</a></div></nav>
+<div class="wrap">
+  <div class="dochead"><a class="back" href="muhendislik.html">← Mühendislik &amp; Üretim</a><div class="dlrow"><a class="btn" href="firmware/fluidnc_config.yaml">⬇ FluidNC config</a></div></div>
+  <article class="prose"><h1>Firmware &amp; Yazılım — gerçek mimari</h1>
+<blockquote>
+<p><strong>Durum:</strong> Mimari + config <strong>hazır</strong>; cihaza yüklenip <strong>doğrulanmadı</strong> (PCB henüz üretilmedi).
+Hazır açık kaynak yazılım kullanılır — sıfırdan firmware yazmaya gerek yok.</p>
+</blockquote>
+<h2>Mimari</h2>
+<p>Kinetik kum masaları iki katmanlı çalışır:</p>
+<ol>
+<li><strong>Hareket: ESP32 + FluidNC</strong> — G-code yorumlar, TMC2209 sürücülerle θ/ρ motorlarını sürer.
+   - Pinler kontrol kartıyla eşleşir: <strong><code>fluidnc_config.yaml</code></strong> (bu klasörde).
+   - FluidNC'nin kendi <strong>WebUI</strong>'si var; SD karttan G-code oynatabilir.</li>
+<li><strong>Desen/UX: Dune Weaver (opsiyonel, Raspberry Pi)</strong> — <code>.thr</code> desen kütüphanesi, canlı
+   önizleme, <strong>LED senkron (WLED)</strong>, zamanlama. <code>.thr</code>'yi G-code'a çevirip FluidNC'ye gönderir.</li>
+</ol>
+<pre><code>.thr (Sandify/Dune Weaver) --(theta-rho -&gt; G-code)--&gt; FluidNC (ESP32) --&gt; TMC2209 --&gt; motorlar
+                                                          └ WebUI / SD
+LED: WS2812B  &lt;-- WLED veya Dune Weaver LED modulu (idle/playing/scheduled)
+</code></pre>
+<p><strong>İki seçenek:</strong>
+- <strong>A (sade, EVT):</strong> Sadece FluidNC. Desenler offline <code>.thr→G-code</code> çevrilip SD'ye/WebUI'a.
+- <strong>B (tam UX, ürün):</strong> A + Raspberry Pi Zero 2 W'de Dune Weaver app (+~500 ₺).</p>
+<h2>Kurulum</h2>
+<ol>
+<li><strong>FluidNC yükle</strong> (ESP32): https://github.com/bdring/FluidNC — web installer (<code>http://install.fluidnc.com</code>) veya esptool.</li>
+<li><code>fluidnc_config.yaml</code>'i karta yükle (FluidNC WebUI → Files veya SD). Pinler PCB ile eşleşir.</li>
+<li><strong>Kalibrasyon (donanımda, ZORUNLU):</strong>
+   - <code>steps_per_mm</code> (X=ρ ve A=θ) gerçek dişli/mikroadıma göre ayarla (config'deki değerler tahmini).
+   - ρ home (endstop) yönü/menzili; θ tam tur = doğru derece.
+   - TMC2209 akımı ~0.6–0.9A (standalone'da pot/UART'da config).</li>
+<li><strong>Desen akışı:</strong> <code>firmware/patterns/*.thr</code> (Atatürk imza, spiral, klasik) → Sandify/Dune Weaver
+   ile G-code'a çevir → oynat. (Üretici: <code>firmware/patterns/*.py</code>.)</li>
+<li><strong>Dune Weaver (opsiyonel):</strong> Raspberry Pi'ye kur (https://github.com/tuanchris/dune-weaver),
+   FluidNC'yi seri/USB ile bağla, <code>.thr</code> kütüphanesi + LED + zamanlama.</li>
+</ol>
+<h2>LED (WS2812B)</h2>
+<ul>
+<li><strong>WLED</strong> (ESP ayrı veya aynı) ya da Dune Weaver LED modülü ile sürülür — idle/playing/scheduled modları.</li>
+<li>Donanım notu: 3.3V→5V <strong>level shifter</strong> gerekir (bkz. <code>docs/uretim/PCB_inceleme.md</code> #2).</li>
+</ul>
+<h2>Önemli — dürüst notlar</h2>
+<ul>
+<li>Bu config <strong>donanımda doğrulanmadı</strong>; ilk bring-up'ta pin/yön/akım testleri gerekir
+  (<code>docs/uretim/URETIM_DOSYASI.md</code> §5).</li>
+<li>İlk prototipte <strong>standalone TMC</strong> (UART yok) önerilir — daha az risk; UART'ı DVT'de ekle.</li>
+<li>Polar kinematik: θ = sürekli dönme (A ekseni), ρ = lineer (X ekseni). <code>.thr</code> (theta rad, rho 0..1)
+  → G-code (A derece, X = rho×max_yarıçap). Çevrim Sandify/Dune Weaver tarafında.</li>
+</ul>
+<h2>Dosyalar</h2>
+<ul>
+<li><code>fluidnc_config.yaml</code> — FluidNC pin/eksen config (PCB ile eşleşir)</li>
+<li><code>patterns/</code> — <code>.thr</code> desenleri + üreteçler (imza izi, spiral, görüntü→theta-rho)</li>
+</ul></article>
+</div>
+<footer><div class="wrap"><span>Kinetik Kum Sanatı Masası · üretim paketi</span><a href="https://github.com/emirhan-yakar/kinetic-sand-table">github.com/emirhan-yakar/kinetic-sand-table ↗</a></div></footer>
+</body></html>

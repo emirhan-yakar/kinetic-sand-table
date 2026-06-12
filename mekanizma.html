@@ -1,0 +1,186 @@
+<!DOCTYPE html><html lang="tr"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mekanizma Tasarımı — Kinetik Kum Masası</title>
+<link rel="stylesheet" href="style.css"></head><body>
+<nav class="nav"><div class="wrap"><a class="brand" href="index.html">Kinetik Kum Masası <small>· üretim paketi</small></a><a class="link" href="index.html">Genel Bakış</a><a class="link" href="gorseller.html">Görseller</a><a class="link" href="simulasyon.html">Simülasyon</a><a class="link active" href="muhendislik.html">Mühendislik</a><a class="link" href="https://github.com/emirhan-yakar/kinetic-sand-table" target="_blank">GitHub ↗</a></div></nav>
+<div class="wrap">
+  <div class="dochead"><a class="back" href="muhendislik.html">← Mühendislik &amp; Üretim</a></div>
+  <article class="prose"><h1>Mekanizma Tasarımı — polar (θ-ρ) kinetik sürücü</h1>
+<p>Bilyeyi kumun altından mıknatısla sürükleyen <strong>dönen-kol (rotating arm)</strong> mekanizması.
+Sisyphus/Dune Weaver tipi. Mevcut <strong>kontrol kartı</strong> (J3 = ρ motor, J5 = endstop) ve <strong>FluidNC</strong>
+(X = ρ, A = θ) ile <strong>tutarlı</strong> tasarlanmıştır.</p>
+<p><img alt="mekanizma kesiti" src="docs/uretim/mekanizma_kesit.png" /></p>
+<h2>1) Mimari ve katman dizilimi (alttan üste)</h2>
+<pre><code>   ┌─ cam (temperli Ø552)                              ← sabit (üst modül, mıknatıslı)
+   │   kum + çelik bilye (Ø12 krom)                    ← sabit tepsi içinde
+   ├─ KUM TEPSİSİ tabanı (alüminyum/akrilik ≤4mm, ferromanyetik DEĞİL)  ← sabit
+   │      ↕ hava aralığı ~4–6 mm   (manyetik kuplaj)
+   │   ┌ MIKNATIS (N52) — taşıyıcı üstünde
+   │   ├ TAŞIYICI (MGN12H araba) ── MGN12 RAY ─────────  ← DÖNEN kol üstünde (ρ ekseni)
+   ├─ DÖNEN KOL (Al 5mm)  + ρ motoru (NEMA17, kolda) + GT2 kayış
+   ├─ LAZY-SUSAN / turntable rulman (Ø100–150)          ← θ dönme yatağı
+   ├─ ŞASİ plakası (Al 4mm, sabit)                       ← sasi.dxf/step
+   │   θ motoru (NEMA17, şasi altında) + GT2 redüksiyon
+   │   SLIP RING (kapsül, merkez) — ρ motor+endstop kablosu döner tarafa
+   └─ kontrol kartı + 12V SMPS (şasi altı/yanı)
+</code></pre>
+<h2>2) θ ekseni (dönme)</h2>
+<ul>
+<li><strong>Yatak:</strong> Lazy-susan / turntable rulman (Ø100–150 mm) veya ince-kesit bilyalı rulman.
+  Kolu + ρ tertibatını taşır, merkezde slip ring için <strong>boşluk</strong> (Ø≥40).</li>
+<li><strong>Tahrik:</strong> NEMA17 → <strong>GT2 kayış</strong>, motor kasnağı <strong>20T</strong> → eksen kasnağı <strong>60T</strong> = <strong>3:1 redüksiyon</strong>.
+  (tork + çözünürlük artışı; ucuz, geri boşluksuza yakın).</li>
+<li><strong>Çözünürlük:</strong> 1.8° motor × 16 µstep = 3200 step/dev × 3 = <strong>9600 step / kol turu</strong> → <strong>26.667 step/derece</strong>.
+  R=250 mm'de yay çözünürlüğü = 2π·250·(0.0375°/360) ≈ <strong>0.16 mm</strong> (sub-mm ✓).</li>
+<li><strong>Sürekli dönme:</strong> FluidNC <strong>A</strong> ekseni limitsiz; slip ring kabloyu sınırsız tur sağlar.</li>
+</ul>
+<h2>3) ρ ekseni (yarıçap)</h2>
+<ul>
+<li><strong>Ray:</strong> <strong>MGN12</strong> lineer ray (kol boyunca), <strong>MGN12H</strong> araba = taşıyıcı.</li>
+<li><strong>Tahrik:</strong> kolun pivot ucunda <strong>NEMA17</strong> (kolla birlikte döner) → <strong>GT2 kapalı kayış</strong> → taşıyıcı.
+  Kasnak <strong>20T</strong> = 40 mm/dev.</li>
+<li><strong>Çözünürlük:</strong> 3200 step/dev / 40 mm = <strong>80 step/mm</strong> → 0.0125 mm/step (✓).</li>
+<li><strong>Strok:</strong> 0 → R_max ≈ <strong>250 mm</strong> (ray ~280 mm). Merkez ucunda <strong>endstop</strong> (ρ home).</li>
+<li>FluidNC <strong>X</strong>: <code>steps_per_mm: 80</code>, <code>max_travel_mm: ~250</code>.</li>
+</ul>
+<h2>4) Slip ring (dönen tarafa güç+sinyal)</h2>
+<p>ρ motoru kolla döndüğü için kablosu <strong>kapsül slip ring</strong>'ten geçer (merkez ekseninde):
+- <strong>Geçen iletkenler:</strong> ρ motor 4 (A+,A−,B+,B−) + endstop 2 = <strong>6 hat</strong> → <strong>8–12 yollu, ≥2A</strong> kapsül slip ring (Ø12.5).
+- Sürücüler <strong>bazda</strong> (ana PCB): J3 → slip ring → ρ motor; J5 → slip ring → endstop. <strong>PCB ile tutarlı.</strong>
+- LED <strong>sabit</strong> rim'de → slip ring <strong>gerekmez</strong>.</p>
+<h2>5) Mıknatıs ve kuplaj</h2>
+<ul>
+<li><strong>Mıknatıs:</strong> N52 <strong>Ø20×10</strong> (veya Ø15×8), taşıyıcı üstünde, kutup yukarı.</li>
+<li><strong>Aralık:</strong> tepsi tabanı (≤4 mm, <strong>ferromanyetik değil</strong>) + hava ~4–6 mm = toplam ~8–10 mm.</li>
+<li><strong>Bilye:</strong> Ø12 krom çelik. Bu aralıkta N52 Ø20×10 çekme kuvveti ≫ ince kumda sürükleme direnci
+  (tipik &lt;1 N orta hızda) → güvenli kuplaj. Aralık büyürse mıknatısı büyüt / kademe yap.</li>
+</ul>
+<h2>6) Hesap özeti</h2>
+<table>
+<thead>
+<tr>
+<th>Büyüklük</th>
+<th>Değer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>θ step/derece</td>
+<td><strong>26.667</strong> (3200×3 / 360)</td>
+</tr>
+<tr>
+<td>θ çözünürlük @R250</td>
+<td><strong>0.16 mm</strong></td>
+</tr>
+<tr>
+<td>ρ step/mm</td>
+<td><strong>80</strong> (3200 / 40)</td>
+</tr>
+<tr>
+<td>ρ çözünürlük</td>
+<td><strong>0.0125 mm</strong></td>
+</tr>
+<tr>
+<td>ρ strok</td>
+<td>~250 mm</td>
+</tr>
+<tr>
+<td>θ redüksiyon</td>
+<td>3:1 (20T→60T GT2)</td>
+</tr>
+<tr>
+<td>Motor</td>
+<td>2× NEMA17 (1.8°, ~0.4 N·m), TMC2209 ~0.6–0.9A</td>
+</tr>
+</tbody>
+</table>
+<h2>7) Yükseklik / sığma bütçesi (drum gövdesi ~147 mm)</h2>
+<p>Şasi 4 + lazy-susan ~10 + kol 5 + ray+araba ~21 + mıknatıs/aralık ~10 ≈ <strong>50 mm</strong> (tepsi altına).
+θ motoru şasi <strong>altında</strong> (34 mm). <strong>ρ motoru (34 mm) kolda</strong> en yüksek öğe → ya kol ucunda yana
+sarkıtılır ya gövde yüksekliği buna göre. → <strong>Doğrulanacak fit kalemi.</strong></p>
+<h2>8) Eklenecek BOM (mekanizma)</h2>
+<table>
+<thead>
+<tr>
+<th>Parça</th>
+<th>Örnek</th>
+<th>TR tedarik</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Lazy-susan/turntable rulman Ø100–150</td>
+<td>turntable bearing</td>
+<td>yatak/robotik satıcı</td>
+</tr>
+<tr>
+<td>GT2 kayış + kasnak 20T/60T + idler</td>
+<td>6 mm GT2 set</td>
+<td>Robotistan/Motorobit</td>
+</tr>
+<tr>
+<td>MGN12 ray + MGN12H araba (~300 mm)</td>
+<td>MGN12</td>
+<td>lineer hareket satıcı</td>
+</tr>
+<tr>
+<td>Kapsül slip ring 8–12 yol ≥2A</td>
+<td>Ø12.5 kapsül</td>
+<td>robotik/otomasyon</td>
+</tr>
+<tr>
+<td>N52 mıknatıs Ø20×10</td>
+<td>neodyum</td>
+<td>yurtiçi neodyum</td>
+</tr>
+<tr>
+<td>Krom çelik bilye Ø12</td>
+<td>bilye</td>
+<td>rulman/bilye satıcı</td>
+</tr>
+</tbody>
+</table>
+<h2>9) Firmware tutarlılığı (<code>../../firmware/fluidnc_config.yaml</code>)</h2>
+<ul>
+<li><strong>A (θ):</strong> <code>steps_per_mm: 26.667</code>, sürekli (<code>max_travel</code> büyük).</li>
+<li><strong>X (ρ):</strong> <code>steps_per_mm: 80.0</code>, <code>max_travel_mm: 250</code>, <code>limit_neg_pin</code> (endstop, slip ring'den).</li>
+<li><code>.thr</code> (θ rad, ρ 0..1) → G-code: <strong>A = derece</strong>, <strong>X = ρ × 250 mm</strong>.</li>
+</ul>
+<h2>10) Riskler ve doğrulama</h2>
+<table>
+<thead>
+<tr>
+<th>Risk</th>
+<th>Önlem / doğrulama</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>θ yatak boşluğu/salınımı → desen kayması</td>
+<td>kaliteli ince-kesit rulman; kayış gerginliği</td>
+</tr>
+<tr>
+<td>ρ motoru kolda yükseklik</td>
+<td>fit testi (gövde yüksekliği vs motor) — <strong>Fusion'da STEP ile doğrula</strong></td>
+</tr>
+<tr>
+<td>slip ring gürültü/kontak</td>
+<td>≥2A kaliteli kapsül; ρ akımını düşük tut</td>
+</tr>
+<tr>
+<td>mıknatıs aralığı büyük → bilye kaçar</td>
+<td>aralığı ≤10 mm tut; gerekirse mıknatıs büyüt; hız limiti</td>
+</tr>
+<tr>
+<td>kuplaj hızda kopar</td>
+<td>max_rate'i kalibrasyonda bul (FluidNC)</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Sonraki adım:</strong> bu mimariyi <strong>Fusion 360</strong>'a aktar (STEP + COTS: MGN12, lazy-susan, slip ring,
+NEMA17 modelleri) → fit/çakışma + yükseklik bütçesini doğrula. Bu doküman o doğrulamanın girdisidir.</p>
+</blockquote></article>
+</div>
+<footer><div class="wrap"><span>Kinetik Kum Sanatı Masası · üretim paketi</span><a href="https://github.com/emirhan-yakar/kinetic-sand-table">github.com/emirhan-yakar/kinetic-sand-table ↗</a></div></footer>
+</body></html>

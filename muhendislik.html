@@ -1,12 +1,7 @@
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<!DOCTYPE html><html lang="tr"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Mühendislik & Üretim — Kinetik Kum Masası</title>
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
+<link rel="stylesheet" href="style.css"></head><body>
 
 <nav class="nav"><div class="wrap">
   <a class="brand" href="index.html">Kinetik Kum Masası <small>· üretim paketi</small></a>
@@ -17,130 +12,92 @@
   <a class="link" href="https://github.com/emirhan-yakar/kinetic-sand-table" target="_blank">GitHub ↗</a>
 </div></nav>
 
-<div class="wrap">
+<!-- DURUM -->
+<section class="section" style="border-top:0"><div class="wrap">
+  <p class="kicker">Üretim Gerçekleme</p>
+  <h2>Fikirden gerçek ürüne — dürüst durum</h2>
+  <p class="sub">Bir deneme değil; profesyonel donanım geliştirme (NPI) disiplinine göre. Her alt
+    sistemin gerçek olgunluğu açıkça belirtilir.</p>
+  <div class="card pad" style="overflow-x:auto"><table>
+    <tr><th>Alt sistem</th><th>Durum</th><th>Not</th></tr>
+    <tr><td>Mekanik tasarım</td><td class="st-wip">🟡 Tasarlandı</td><td>Kinematik + kesit + montaj + DXF/STEP; fiziksel prototip yok</td></tr>
+    <tr><td><b>Kontrol kartı (PCB)</b></td><td class="st-wip">🟠 Rev-B — fiziksel test EDİLMEDİ</td><td>Bulgular işlendi, yeniden route (0 short); sıra: prototip + bring-up</td></tr>
+    <tr><td>Firmware</td><td class="st-wip">🟠 Mimari + config</td><td>FluidNC + Dune Weaver; cihazda doğrulanmadı</td></tr>
+    <tr><td>BOM / maliyet</td><td class="st-ok">🟢 Hazır</td><td>Gerçek malzeme + TR fiyat + MSRP</td></tr>
+    <tr><td>Görseller</td><td class="st-ok">🟢 Hazır</td><td>Render + reklam filmi + sim</td></tr>
+  </table>
+  <div class="note"><b>PCB test edildi mi?</b> Hayır — yazılımda tasarlandı, DRC geçti, ama fiziksel
+    üretilip ölçülmedi. Üretim öncesi yol: inceleme → prototip → bring-up testi.</div>
+  </div>
+</div></section>
 
-  <!-- GERCEKLEME DURUMU -->
-  <section class="block" style="border-top:0">
-    <h2 class="kicker">Üretim Gerçekleme</h2>
-    <h3>Gerçek ürün durumu — dürüst değerlendirme</h3>
-    <p class="sub">Bu bir deneme değil; profesyonel donanım geliştirme (NPI) disiplinine göre.
-       Her alt sistemin gerçek olgunluğu açıkça belirtilir.</p>
-    <div class="card pad"><div style="overflow:auto"><table>
-      <tr><th>Alt sistem</th><th>Durum</th><th>Not</th></tr>
-      <tr><td>Mekanik tasarım</td><td>🟡 Tasarlandı</td><td>Geometri + montaj sheet + patlatma; fiziksel prototip yapılmadı</td></tr>
-      <tr><td><b>Kontrol kartı (PCB)</b></td><td>🟠 <b>Rev-B</b> tasarlandı (bulgular işlendi), DRC temiz — <b>fiziksel test EDİLMEDİ</b></td><td>UART adres, LED level-shifter, giriş koruması, bulk cap, EN pull-up eklendi → yeniden route (0 short). Sıra: prototip + bring-up</td></tr>
-      <tr><td>Firmware</td><td>🟠 Yazılmadı — mimari+config var</td><td>FluidNC + Dune Weaver; örnek config hazır, cihazda doğrulanmadı</td></tr>
-      <tr><td>BOM / maliyet / tedarik</td><td>🟢 Hazır</td><td>Gerçek malzeme + TR fiyat</td></tr>
-      <tr><td>Görseller</td><td>🟢 Hazır</td><td>Ön-görselleştirme (satış için fiziksel ürün fotosu gerekir)</td></tr>
-    </table></div>
-    <p style="margin:14px 0 0"><b>PCB test edildi mi?</b> Hayır — yazılımda tasarlandı, DRC geçti,
-      ama <b>fiziksel üretilip ölçülmedi.</b> Üretim öncesi yol: inceleme düzeltmeleri → prototip → bring-up testi.</p>
-    </div>
-    <div class="cta" style="margin-top:16px">
-      <a class="lnk" href="docs/uretim/URETIM_DOSYASI.md"><span>📐</span><span>Üretim gerçekleme dosyası<br><span class="t">mimari · NPI · test · COGS · fiyat · risk</span></span></a>
-      <a class="lnk" href="docs/uretim/PCB_inceleme.md"><span>🔎</span><span>PCB elektriksel inceleme<br><span class="t">bulgular + üretim öncesi düzeltmeler</span></span></a>
-      <a class="lnk" href="firmware/fluidnc_config.yaml"><span>⚙️</span><span>FluidNC config<br><span class="t">PCB pinmap ile eşleşir</span></span></a>
-      <a class="lnk" href="docs/uretim/ELEKTRIK_TALIMATI.pdf"><span>🔌</span><span>Elektrik talimatı (PDF)<br><span class="t">harness şeması · pinout · QA test fişi</span></span></a>
-      <a class="lnk" href="docs/uretim/elektrik_montaj.md"><span>🧰</span><span>Elektrik montaj (MD)<br><span class="t">konnektör · slip ring · kablaj</span></span></a>
-      <a class="lnk" href="docs/uretim/QA_kontrol_listesi.md"><span>✅</span><span>QA / FCT test fişi<br><span class="t">ölçüm değerleriyle</span></span></a>
-    </div>
-  </section>
+<!-- DOKUMANLAR -->
+<section class="section"><div class="wrap">
+  <p class="kicker">Üretim dosyaları</p>
+  <h2>Her doküman ayrı sayfada</h2>
+  <p class="sub">İçerik sayfa içinde okunabilir; ilgili PDF/CAD çıktıları her sayfadan indirilebilir.</p>
+  <div class="grid g3">
+    <a class="doc" href="uretim-dosyasi.html"><span class="ic">📐</span><div><h4>Üretim gerçekleme dosyası</h4><p>mimari · NPI · test · COGS · risk</p></div></a>
+    <a class="doc" href="pcb-inceleme.html"><span class="ic">🔎</span><div><h4>PCB elektriksel inceleme</h4><p>Rev-B bulguları + düzeltmeler</p></div></a>
+    <a class="doc" href="mekanizma.html"><span class="ic">⚙️</span><div><h4>Mekanizma tasarımı</h4><p>θ/ρ kinematik · kesit · hesap</p></div></a>
+    <a class="doc" href="elektrik.html"><span class="ic">🔌</span><div><h4>Elektrik montaj</h4><p>harness · pinout · slip ring</p></div></a>
+    <a class="doc" href="qa.html"><span class="ic">✅</span><div><h4>QA / FCT test fişi</h4><p>ölçüm değerleriyle</p></div></a>
+    <a class="doc" href="montaj.html"><span class="ic">🪛</span><div><h4>Materyal / mekanik montaj</h4><p>vida · tolerans · sıra</p></div></a>
+    <a class="doc" href="bom.html"><span class="ic">💰</span><div><h4>BOM & maliyet</h4><p>gerçek fiyat · MSRP</p></div></a>
+    <a class="doc" href="dxf.html"><span class="ic">✂️</span><div><h4>CNC / lazer DXF + STEP</h4><p>şasi · ayak · kol</p></div></a>
+    <a class="doc" href="firmware.html"><span class="ic">💻</span><div><h4>Firmware & yazılım</h4><p>FluidNC + Dune Weaver</p></div></a>
+  </div>
+</div></section>
 
-  <!-- PCB -->
-  <section class="block">
-    <h2 class="kicker">Kontrol Kartı · KiCad 9</h2>
-    <h3>Tam routing'li PCB</h3>
-    <p class="sub">Freerouting ile tam yönlendirildi — DRC:
-      <span class="pill">0 ratsnest</span> <span class="pill">0 kısa devre</span> <span class="pill">0 bakır clearance</span>.
-      ESP32 + 2× TMC2209 + WS2812 + güç. Final Gerber + STEP 3D üretildi.</p>
-    <div class="grid g3">
-      <div class="card"><img src="hardware/pcb/final/plots/final-F_Cu-routed.png" alt="F.Cu" style="aspect-ratio:1/1;object-fit:contain;background:#0d1117">
-        <div class="cap"><b>Üst bakır</b> — sinyal routing (196 iz + 12 via, Rev-B)</div></div>
-      <div class="card"><img src="hardware/pcb/final/plots/final-B_Cu-groundplane.png" alt="B.Cu" style="aspect-ratio:1/1;object-fit:contain;background:#0d1117">
-        <div class="cap"><b>Alt bakır</b> — GND ground plane (clearance'lı)</div></div>
-      <div class="card"><img src="hardware/pcb/plots/assembly.svg.png" alt="assembly" style="aspect-ratio:1/1;object-fit:contain;background:#0d1117">
-        <div class="cap"><b>Montaj çizimi</b> — ESP32 + 2× TMC2209 + buck + klemensler</div></div>
-    </div>
-    <div class="cta" style="margin-top:16px">
-      <a class="lnk" href="hardware/pcb/final/controller.step"><span>📦</span><span>STEP 3D model<br><span class="t">controller.step (2.1 MB)</span></span></a>
-      <a class="lnk" href="hardware/pcb/final/gerbers/"><span>🛠️</span><span>Gerber + Excellon<br><span class="t">fab'a hazır</span></span></a>
-      <a class="lnk" href="hardware/pcb/jlcpcb/"><span>🏭</span><span>JLCPCB üretim paketi<br><span class="t">Gerber zip + BOM + CPL (dizgiye hazır)</span></span></a>
-      <a class="lnk" href="hardware/pcb/final/DRC_SUMMARY.txt"><span>✅</span><span>DRC raporu<br><span class="t">DRC_SUMMARY.txt</span></span></a>
-    </div>
-  </section>
+<!-- GORSELLER -->
+<section class="section"><div class="wrap">
+  <p class="kicker">Mühendislik görselleri</p>
+  <h2>Kart · mekanizma · montaj</h2>
+  <div class="grid g2" style="margin-top:22px">
+    <div class="card hov"><img src="hardware/pcb/final/plots/final-F_Cu-routed.png" style="background:#0d1117" alt="PCB">
+      <div class="cap"><b>PCB üst bakır</b> — Rev-B tam routing (196 iz + 12 via) · <a href="pcb-inceleme.html">inceleme →</a></div></div>
+    <div class="card hov"><img src="docs/uretim/mekanizma_kesit.png" style="background:#fff" alt="mekanizma">
+      <div class="cap"><b>Mekanizma kesiti</b> — θ/ρ + slip ring + aralık · <a href="mekanizma.html">detay →</a></div></div>
+    <div class="card hov"><img src="docs/uretim/montaj_patlatma.png" style="background:#fff" alt="patlatma">
+      <div class="cap"><b>Patlatılmış montaj</b> — 13 numaralı parça · <a href="montaj.html">montaj →</a></div></div>
+    <div class="card hov"><img src="docs/uretim/wiring_diagram.png" style="background:#fff" alt="harness">
+      <div class="cap"><b>Bağlantı / harness</b> — tel renk + AWG + pinout · <a href="elektrik.html">elektrik →</a></div></div>
+  </div>
+</div></section>
 
-  <!-- MONTAJ -->
-  <section class="block">
-    <h2 class="kicker">Montaj Sheet</h2>
-    <h3>Hesaplanmış geometri + mıknatıslı modüler yapı</h3>
-    <p class="sub">Patlatılmış görünüm (13 parça) + ölçülü teknik çizim. Geometri <code>montaj_hesap.py</code> ile parametrik.</p>
-    <div class="grid g2">
-      <div class="card" style="background:#fff"><img src="docs/uretim/montaj_patlatma.png" alt="patlatılmış montaj" style="width:100%">
-        <div class="cap" style="color:#333"><b>Patlatılmış görünüm</b> — numaralı parça lejantı (IKEA tarzı)</div></div>
-      <div class="card" style="background:#fff;padding:8px"><img src="docs/uretim/montaj_sheet.svg" alt="montaj sheet" style="width:100%"></div>
-    </div>
-    <div class="grid g3" style="margin-top:18px">
-      <div class="card pad"><h4>Ana ölçüler</h4><ul>
-        <li>Drum Ø600 · H toplam <b>467 mm</b></li>
-        <li>Kum havuzu Ø540 × 50</li>
-        <li>Temperli cam Ø552 × 6</li></ul></div>
-      <div class="card pad"><h4>Ayaklar (4)</h4><ul>
-        <li><b>8° splay</b>, boy 320 mm</li>
-        <li>Bağlantı PCD Ø420 (45°/135°/225°/315°)</li>
-        <li>Ayak ucu Ø509 → stabil</li></ul></div>
-      <div class="card pad"><h4>Mıknatıslı üst modül</h4><ul>
-        <li>8× N52 Ø20×3 @ Ø572</li>
-        <li>Tutma <b>21.6 kgf</b>, SF <b>5.2×</b></li>
-        <li>Elle kaldırılır → bakım erişimi</li></ul></div>
-    </div>
-    <div class="cta" style="margin-top:16px">
-      <a class="lnk" href="docs/uretim/montaj.md"><span>🔧</span><span>Montaj rehberi<br><span class="t">vida çizelgesi · tolerans · sıra</span></span></a>
-      <a class="lnk" href="docs/uretim/montaj_sheet.svg"><span>📐</span><span>Ölçülü çizim (SVG)</span></a>
-      <a class="lnk" href="docs/uretim/dxf/"><span>✂️</span><span>CNC/lazer DXF<br><span class="t">şasi · ayak plakası · kol</span></span></a>
-      <a class="lnk" href="docs/uretim/MONTAJ_KILAVUZU.pdf"><span>📖</span><span>Montaj kılavuzu (PDF)<br><span class="t">IKEA tarzı, 7 adım, numaralı</span></span></a>
-      <a class="lnk" href="docs/uretim/mekanizma_tasarim.md"><span>⚙️</span><span>Mekanizma tasarımı<br><span class="t">θ/ρ kinematik · kesit · hesap</span></span></a>
-    </div>
-  </section>
+<!-- INDIRMELER -->
+<section class="section"><div class="wrap">
+  <p class="kicker">İndirilebilir çıktılar</p>
+  <h2>Fab & atölyeye hazır</h2>
+  <div class="btns">
+    <a class="btn primary" href="hardware/pcb/jlcpcb/">🏭 JLCPCB paketi (Gerber+BOM+CPL)</a>
+    <a class="btn" href="hardware/pcb/final/controller.step">📦 PCB STEP 3D</a>
+    <a class="btn" href="docs/uretim/dxf/">✂️ DXF + STEP (mekanik)</a>
+    <a class="btn" href="docs/uretim/MONTAJ_KILAVUZU.pdf">📖 Montaj kılavuzu (PDF)</a>
+    <a class="btn" href="docs/uretim/ELEKTRIK_TALIMATI.pdf">🔌 Elektrik talimatı (PDF)</a>
+  </div>
+</div></section>
 
-  <!-- BOM / MALIYET -->
-  <section class="block" id="maliyet">
-    <h2 class="kicker">BOM & Maliyet</h2>
-    <h3>Gerçek malzeme · Türkiye fiyatı</h3>
-    <p class="sub">Gerçekçi 2026 perakende (₺). Detay + tedarik kaynakları: <a href="docs/uretim/BOM_uretim.md">BOM_uretim.md</a>.</p>
-    <div class="grid g2">
-      <div class="card pad"><div style="overflow:auto"><table>
-        <tr><th>Grup</th><th>Prototip ₺</th><th>Seri ₺/ad</th></tr>
-        <tr><td>Ahşap (ceviz kaplama, ayak)</td><td>3.900</td><td>2.150</td></tr>
-        <tr><td>Temperli cam</td><td>850</td><td>600</td></tr>
-        <tr><td>Mekanik (motor, ray, slip ring, Al)</td><td>2.930</td><td>1.680</td></tr>
-        <tr><td>Mıknatıs (N52) + bilye</td><td>561</td><td>360</td></tr>
-        <tr><td>Güç / LED (WS2812B)</td><td>730</td><td>485</td></tr>
-        <tr><td>Kontrol kartı</td><td>1.170</td><td>440</td></tr>
-        <tr><td>Sarf / bağlantı</td><td>686</td><td>410</td></tr>
-        <tr><th>Malzeme toplam</th><th>≈ 10.800</th><th>≈ 6.100</th></tr>
-        <tr><th>+ işçilik → gerçekçi</th><th>≈ 13.5–15k</th><th>≈ 7.300</th></tr>
-      </table></div></div>
-      <div class="card pad">
-        <h4>Nereden alınır</h4>
-        <ul>
-          <li><b>Elektronik/motor/ray/slip ring:</b> Robotistan, Motorobit, Direnç.net</li>
-          <li><b>LED:</b> Samm Teknoloji, LED Pazarı (toplu: LCSC/Aliexpress)</li>
-          <li><b>Mıknatıs N52:</b> yurtiçi neodyum satıcıları</li>
-          <li><b>Ahşap gövde/CNC + ayak:</b> yerel CNC ahşap / mobilya atölyesi</li>
-          <li><b>Temperli cam:</b> yerel temperli cam imalatçısı (rodajlı)</li>
-          <li><b>Alüminyum lazer (şasi/kol):</b> sac-alüminyum lazer atölyesi</li>
-          <li><b>PCB:</b> JLCPCB/PCBWay veya yurtiçi PCB</li>
-        </ul>
-        <p style="margin:10px 0 0"><a href="docs/realizm_yol_haritasi.md">📈 Gerçeklik yol haritası — sonraki aşamalar</a></p>
-        <p style="margin:10px 0 0"><b>Hedef satış fiyatı:</b> seri COGS ~7.800 ₺ → <b>MSRP ≈ 21.900 ₺ (~$650)</b>
-          (≈%64 brüt marj; benzer ürün $699). Lansman: 17.900 ₺.</p>
-        <p style="margin:10px 0 0;color:var(--mut)">Yazılım: <b>0 ₺</b> (açık kaynak FluidNC + Dune Weaver). Tam analiz: <a href="docs/uretim/URETIM_DOSYASI.md">üretim dosyası</a>.</p>
-      </div>
-    </div>
-  </section>
+<!-- MALIYET -->
+<section class="section"><div class="wrap">
+  <p class="kicker">Maliyet & fiyat</p>
+  <h2>Seri COGS ~7.800 ₺ → MSRP ~21.900 ₺</h2>
+  <div class="grid g2" style="margin-top:20px">
+    <div class="card pad"><h3>Özet</h3><ul style="color:var(--mut);font-size:15px">
+      <li>Prototip maliyet: <b style="color:var(--ink)">~13.5–15k ₺</b></li>
+      <li>Seri (50+) COGS: <b style="color:var(--ink)">~7.800 ₺</b> (~$230)</li>
+      <li>Hedef <b style="color:var(--acc2)">MSRP ≈ 21.900 ₺ (~$650)</b> · ~%64 brüt marj</li>
+      <li>Benzer ürün: $699</li></ul>
+      <div class="btns"><a class="btn" href="bom.html">BOM & maliyet detayı →</a></div></div>
+    <div class="card pad"><h3>Yazılım/firmware</h3><ul style="color:var(--mut);font-size:15px">
+      <li><b style="color:var(--ink)">0 ₺</b> — açık kaynak FluidNC + Dune Weaver</li>
+      <li>Tam analiz: <a href="uretim-dosyasi.html">üretim gerçekleme dosyası</a></li>
+      <li>Sıradaki: Fusion fit doğrulama → PCB sipariş → bring-up → EVT/DVT</li></ul></div>
+  </div>
+</div></section>
 
-</div>
-<footer><div class="wrap">Kinetik Kum Sanatı Masası ·
-  <a href="https://github.com/emirhan-yakar/kinetic-sand-table">GitHub</a></div></footer>
-</body>
-</html>
+<footer><div class="wrap">
+  <span>Kinetik Kum Sanatı Masası · üretim paketi</span>
+  <a href="https://github.com/emirhan-yakar/kinetic-sand-table">github.com/emirhan-yakar/kinetic-sand-table ↗</a>
+</div></footer>
+</body></html>

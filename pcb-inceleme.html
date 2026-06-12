@@ -1,0 +1,101 @@
+<!DOCTYPE html><html lang="tr"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PCB Elektriksel İnceleme — Kinetik Kum Masası</title>
+<link rel="stylesheet" href="style.css"></head><body>
+<nav class="nav"><div class="wrap"><a class="brand" href="index.html">Kinetik Kum Masası <small>· üretim paketi</small></a><a class="link" href="index.html">Genel Bakış</a><a class="link" href="gorseller.html">Görseller</a><a class="link" href="simulasyon.html">Simülasyon</a><a class="link active" href="muhendislik.html">Mühendislik</a><a class="link" href="https://github.com/emirhan-yakar/kinetic-sand-table" target="_blank">GitHub ↗</a></div></nav>
+<div class="wrap">
+  <div class="dochead"><a class="back" href="muhendislik.html">← Mühendislik &amp; Üretim</a></div>
+  <article class="prose"><h1>PCB Elektriksel İnceleme — dürüst değerlendirme</h1>
+<p><strong>Kart:</strong> ESP32 + 2× TMC2209 + WS2812 + güç (<code>hardware/pcb/controller.kicad_pcb</code>)</p>
+<h2>Durum (net)</h2>
+<ul>
+<li>✅ <strong>Rev-B uygulandı</strong> — aşağıdaki inceleme bulguları <code>build_kicad.py</code>'ye işlendi,
+  yeniden route edildi (Freerouting), <strong>DRC: 0 short, 0 ratsnest, 0 bakır clearance</strong>.
+  Yeni Gerber + STEP üretildi (<code>hardware/pcb/final/</code>).</li>
+<li>✅ Rev-B eklenen bileşenler: <strong>U2</strong> (74AHCT1G125 level-shifter), <strong>F1</strong> (sigorta) +
+  <strong>Q1</strong> (P-FET ters polarite) + <strong>D1/R2</strong> (gate clamp/pulldown), <strong>C6</strong> (100µF bulk),
+  <strong>C7/C8</strong> (VM decap), <strong>R3</strong> (10k EN pull-up), <strong>R4</strong> (1k UART), ayrı UART adresleri.</li>
+<li>❌ <strong>Hâlâ fiziksel ÜRETİLMEDİ/TEST EDİLMEDİ.</strong> Rev-B tasarımı dondurdu; sıra prototip + bring-up.</li>
+<li>⚠️ Rev-B tasarım değerleri (P-FET parça seçimi, zener 10V, PTC ~3A) <strong>üretim öncesi
+  bir donanımcı tarafından son kez gözden geçirilmeli</strong> (özellikle Vgs limiti / koruma topolojisi).</li>
+</ul>
+<blockquote>
+<p>DRC "geometri/clearance" kontrolüdür — <strong>devrenin doğru çalışacağını garanti etmez.</strong>
+Aşağıdakiler ancak gözden geçirme ile yakalanır.</p>
+</blockquote>
+<hr />
+<h2>Bulgular ve düzeltmeler (üretim öncesi ZORUNLU)</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Bulgu</th>
+<th>Risk</th>
+<th>Düzeltme (Rev-B)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>TMC2209 UART adres çakışması</strong> — A1 ve A2'nin MS1/MS2 pinleri aynı nete (N_MS1/N_MS2) bağlı → iki sürücü <strong>aynı UART adresi</strong> → ayrı ayrı adreslenemez</td>
+<td>Yüksek (UART config çalışmaz)</td>
+<td>Her sürücüye <strong>ayrı adres</strong>: A1 MS1=GND,MS2=GND (adr 0); A2 MS1=VIO,MS2=GND (adr 1). MS pinlerini ayır.</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>WS2812 data seviye uyumu</strong> — DIN 3.3V (GPIO4 üzerinden 330Ω); 5V WS2812 HIGH eşiği ~3.5V &gt; 3.3V</td>
+<td>Orta (kararsız LED)</td>
+<td><strong>Level shifter</strong> (74AHCT125) 3.3→5V, veya ilk pikseli ~4.3V besle, ya da 3.3V toleranslı SK6812.</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>Yarım-çift UART eksik bağlantı</strong> — sürücü PDN_UART tek hat; ESP32 TX→1k→PDN ve RX←PDN gerekir; mevcut tasarımda 1k yok, RX hattı sürücülere bağlı değil</td>
+<td>Orta (UART iletişim)</td>
+<td>TX'e <strong>1kΩ</strong> seri + RX'i PDN hattına bağla (tek-hat half-duplex).</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>VM (12V) bulk kondansatör yok</strong> — sürücü yanında 12V tampon eksik (datasheet ≥100µF önerir)</td>
+<td>Orta (motor gürültü/reset)</td>
+<td>Her sürücü VM'ine yakın <strong>100µF/25V</strong> + 100nF.</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>Giriş koruması yok</strong> — 12V girişte ters polarite koruması ve sigorta yok</td>
+<td>Orta (yanlış bağlantıda hasar)</td>
+<td><strong>P-MOSFET ters polarite</strong> + <strong>sigorta/PTC</strong> (örn. 5A).</td>
+</tr>
+<tr>
+<td>6</td>
+<td><strong>EN boot durumu</strong> — sürücü EN (active-low) boot anında belirsiz → motor istem dışı sürülebilir</td>
+<td>Düşük/Orta</td>
+<td><strong>10kΩ pull-up</strong> (EN→VIO) → boot'ta sürücüler pasif.</td>
+</tr>
+<tr>
+<td>7</td>
+<td><strong>GPIO5 strapping</strong> — ρ DIR = GPIO5 (strapping pin)</td>
+<td>Düşük</td>
+<td>TMC DIR yüksek-Z giriş olduğu için kabul edilebilir; istenirse non-strapping GPIO (33) kullan.</td>
+</tr>
+</tbody>
+</table>
+<h2>Basitleştirme önerisi (EVT için risk azaltıcı)</h2>
+<p>İlk prototipte <strong>UART'ı atla, sürücüleri standalone modda</strong> kullan (MS1/MS2/SPREAD pinleriyle
+mikro-adım + akım onboard ayar). FluidNC STEP/DIR ile çalışır; #1 ve #3 bulguları <strong>ortadan kalkar.</strong>
+UART'ı (runtime akım/mikroadım) DVT'de ekle. → daha az arıza noktası, daha hızlı bring-up.</p>
+<h2>Üretim öncesi adım sırası</h2>
+<ol>
+<li>Rev-B: bulguları KiCad'de uygula (build_kicad.py'de net/komponent ekle), DRC + <strong>göz incelemesi</strong>.</li>
+<li>(Önerilir) hızlı <strong>breadboard doğrulaması</strong>: ESP32 + 2 TMC2209 modül + 1 LED → FluidNC bring-up,
+   hat/pin doğrula → ardından PCB'ye geç.</li>
+<li>PCB'yi <strong>5 adet</strong> bastır+dizgi (yedekli), <code>bring-up</code> testi (<code>URETIM_DOSYASI.md</code> §5.1).</li>
+<li>Firmware entegrasyon testi → DVT.</li>
+</ol>
+<h2>Güç bütçesi (kontrol)</h2>
+<ul>
+<li>5V: ESP32 ~0.25A + sürücü VIO ~0.05A + <strong>WS2812 60 LED × ~60mA(max) = 3.6A</strong> → buck <strong>≥4–5A</strong> şart (BOM'da var). İdle/tipik çok düşük; max tam-beyaz tasarım sınırı.</li>
+<li>12V: 2× NEMA17 ~0.6–0.9A/faz → ~2–3A tepe → 12V 6A SMPS yeterli.</li>
+</ul></article>
+</div>
+<footer><div class="wrap"><span>Kinetik Kum Sanatı Masası · üretim paketi</span><a href="https://github.com/emirhan-yakar/kinetic-sand-table">github.com/emirhan-yakar/kinetic-sand-table ↗</a></div></footer>
+</body></html>

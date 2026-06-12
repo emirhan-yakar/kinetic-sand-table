@@ -1,0 +1,51 @@
+<!DOCTYPE html><html lang="tr"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Gerçeklik Yol Haritası — Kinetik Kum Masası</title>
+<link rel="stylesheet" href="style.css"></head><body>
+<nav class="nav"><div class="wrap"><a class="brand" href="index.html">Kinetik Kum Masası <small>· üretim paketi</small></a><a class="link" href="index.html">Genel Bakış</a><a class="link" href="gorseller.html">Görseller</a><a class="link" href="simulasyon.html">Simülasyon</a><a class="link active" href="muhendislik.html">Mühendislik</a><a class="link" href="https://github.com/emirhan-yakar/kinetic-sand-table" target="_blank">GitHub ↗</a></div></nav>
+<div class="wrap">
+  <div class="dochead"><a class="back" href="muhendislik.html">← Mühendislik &amp; Üretim</a></div>
+  <article class="prose"><h1>Gerçeklik Yol Haritası — sonraki aşamalar</h1>
+<p>Mevcut durum: kod-tabanlı Blender/Cycles render (stüdyo HDRI + gerçek PBR doku) + WebGL simülasyon.
+"Gerçekten gerçek" hisse ulaşmak için aşamalar (etkili → maliyetli sırayla):</p>
+<h2>1) Kum oluğu = gerçek geometri (en yüksek etki)</h2>
+<p>Şu an desen, kumun üstünde ince bir <strong>çizgi/tüp</strong>. Gerçekte bilye kumda <strong>oluk açar</strong>:
+çukur + iki yanda kabarma (berm) + grenli gölge.
+- <strong>Render:</strong> kumu yüksek alt-bölmeli mesh yap; <code>.thr</code> yolundan bir <strong>yükseklik haritası (heightmap)</strong>
+  üret (yol boyunca Gauss çukur + kenar kabarma) → <strong>displacement</strong> modifier. Cycles adaptive subdiv.
+  Bilye geçtikçe gerçek gölge/AO oluşur → fotoğraf gibi.
+- <strong>Sim (WebGL):</strong> aynı heightmap'i bir doku olarak kuma uygula (normal/parallax); bilye ilerledikçe
+  heightmap'e çukur "boya" (render-to-texture) → canlı oyulan kum.</p>
+<h2>2) Mekanizmanın görünür çalışması</h2>
+<p>Bilye tek başına yörünge izliyor; gerçekte <strong>dönen kol + taşıyıcı + mıknatıs</strong> kumun altında hareket eder.
+- θ-ρ kinematiğini hesapla: her kare bilyenin (theta,rho)'suna göre kolu döndür, taşıyıcıyı kaydır,
+  mıknatısı bilyenin tam altına koy. Hem sim hem video bunu göstersin → mekanizma inandırıcı olur.</p>
+<h2>3) Render kalitesi (foto-kalibrasyon)</h2>
+<ul>
+<li><strong>Sample</strong> 384 → 1024+, <strong>DOF/bokeh</strong>, hafif <strong>film grain + kromatik</strong> (gerçek lens hissi).</li>
+<li><strong>Kostik:</strong> cam → kum ışık kırılması (Cycles caustics / MNEE) → cam gerçekçiliği büyük sıçrar.</li>
+<li><strong>Gerçek referans:</strong> benzer ürün fotoğraflarıyla ışık/poz eşle.</li>
+</ul>
+<h2>4) Malzeme doğrulama (ölçülü PBR)</h2>
+<ul>
+<li>Gerçek <strong>ceviz, kum, cam</strong> örneklerini tarayıp (polarized foto / fotogrametri) doğru
+  albedo–roughness–normal çıkar. Tahmini değerler yerine ölçülmüş → "CG kokusu" gider.</li>
+<li>Kum: gerçek granül boyutu/rengi (kuvars vs silis), nemli/kuru sheen.</li>
+</ul>
+<h2>5) WebGL simülasyon gerçekçiliği</h2>
+<ul>
+<li>Gerçek <strong>HDRI environment</strong> (zaten studio.hdr) + <strong>SSAO</strong> + <strong>yumuşak gölge</strong> + <strong>DOF</strong>.</li>
+<li>Kum <strong>parallax/normal</strong> shader; oluk için (1)'deki heightmap.</li>
+<li>Alternatif: gerçekçilik kritikse, sim yerine <strong>pre-rendered döngü video</strong> (Cycles) göster;
+  etkileşim için ayrı basit sim. (Gerçek zamanlı asla TV-reklam fotoğraf-gerçekçiliğinde olmaz.)</li>
+</ul>
+<h2>6) Fiziksel prototip → gerçek foto/video (altın standart)</h2>
+<p>CAD render hiçbir zaman %100 değil. <strong>Gerçek prototip</strong> üretip (BOM + montaj hazır) gerçek
+fotoğraf/video çekmek, en inandırıcı "reklam" malzemesidir. Render'lar ön-görselleştirme;
+satış görseli için fiziksel ürün şart.</p>
+<h2>Öncelik önerisi</h2>
+<p>1 (oluk geometrisi) + 2 (mekanizma hareketi) → görselin "gerçek cihaz" hissini en çok artıran ikisi.
+Sonra 3–4 (render/materyal kalibrasyonu). Nihai: 6 (gerçek prototip).</p></article>
+</div>
+<footer><div class="wrap"><span>Kinetik Kum Sanatı Masası · üretim paketi</span><a href="https://github.com/emirhan-yakar/kinetic-sand-table">github.com/emirhan-yakar/kinetic-sand-table ↗</a></div></footer>
+</body></html>

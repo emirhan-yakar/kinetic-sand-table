@@ -1,0 +1,75 @@
+<!DOCTYPE html><html lang="tr"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CNC / Lazer DXF + STEP — Kinetik Kum Masası</title>
+<link rel="stylesheet" href="style.css"></head><body>
+<nav class="nav"><div class="wrap"><a class="brand" href="index.html">Kinetik Kum Masası <small>· üretim paketi</small></a><a class="link" href="index.html">Genel Bakış</a><a class="link" href="gorseller.html">Görseller</a><a class="link" href="simulasyon.html">Simülasyon</a><a class="link active" href="muhendislik.html">Mühendislik</a><a class="link" href="https://github.com/emirhan-yakar/kinetic-sand-table" target="_blank">GitHub ↗</a></div></nav>
+<div class="wrap">
+  <div class="dochead"><a class="back" href="muhendislik.html">← Mühendislik &amp; Üretim</a></div>
+  <article class="prose"><h1>CNC / Lazer Kesim DXF Dosyaları</h1>
+<p>Alüminyum şasi, ayak plakası ve dönen kol için 2D kesim dosyaları (mm, DXF R2010).
+Lazer / CNC router / su jeti atölyesine doğrudan gönderilebilir.</p>
+<table>
+<thead>
+<tr>
+<th>Dosya</th>
+<th>Parça</th>
+<th>Malzeme / kalınlık</th>
+<th>Adet</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sasi.dxf</code></td>
+<td>Mekanizma şasi diski Ø520</td>
+<td>Alüminyum <strong>6082 / 5754, 4 mm</strong></td>
+<td>1</td>
+</tr>
+<tr>
+<td><code>ayak_plakasi.dxf</code></td>
+<td>Ayak bağlantı plakası 60×60</td>
+<td>Alüminyum 4 mm veya çelik 3 mm</td>
+<td><strong>4</strong></td>
+</tr>
+<tr>
+<td><code>kol.dxf</code></td>
+<td>Dönen kol (θ) 320×40</td>
+<td>Alüminyum 5 mm</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<p>Her <code>.dxf</code> yanında <code>*_preview.png</code> (görsel kontrol).</p>
+<h2>3D STEP (mekanik CAD doğrulama)</h2>
+<p>Aynı parçalar <strong>3D katı</strong> olarak da var (<code>*.step</code>) — Fusion 360 / FreeCAD / SolidWorks'te
+açıp montaj/fitment doğrulamasına başlamak için (<code>make_step.py</code>, cadquery ile üretildi):
+<code>sasi.step</code> (Ø520×4, 820 cm³) · <code>ayak_plakasi.step</code> (60×60×4) · <code>kol.step</code> (320×40×5).</p>
+<blockquote>
+<p>Bunlar <strong>kesim parçalarının</strong> katılarıdır; tam fitment için satın alınan COTS parçaları
+(MGN12 ray, lazy-susan, slip ring, NEMA17) CAD'e ekleyip doğrula.</p>
+</blockquote>
+<h2>Delik şeması (özet)</h2>
+<ul>
+<li><strong>Şasi:</strong> dış Ø520 · drum bağlantı 4× M4 @ Ø500 PCD · merkez Ø90 (slip ring + kayış boşluğu) ·
+  turntable 4× M4 @ Ø120 · θ motor NEMA17 (Ø22 + 4× M3 @ 31×31, offset) · PCB 4× M3 (92×67) · kablo yuvası.</li>
+<li><strong>Ayak plakası:</strong> 60×60 · 4× M5 @ 36×36 · merkez Ø20 (ayak tenon). <strong>8° splay açısı plakada değil,
+  eğimli ayak/braket veya ara takozda</strong> verilir (DXF düz kesimdir).</li>
+<li><strong>Kol:</strong> pivot ucu 4× M3 @ Ø30 + merkez Ø8 · MGN12 ray M3 @ 20 mm · ρ motor NEMA17 ucu.</li>
+</ul>
+<h2>⚠️ Üretim öncesi doğrulama (ZORUNLU)</h2>
+<p>Delik konumları <strong>temsilidir</strong> — atölyeye göndermeden önce <strong>gerçek parçalarla</strong> doğrula:
+- <strong>MGN12 ray</strong> delik pitch'i (20 vs 25 mm) → satın alınan raya göre.
+- <strong>Lazy-susan / turntable</strong> civata dairesi → satın alınan rulmana göre.
+- <strong>Slip ring</strong> gövde/bore çapı → seçilen modele göre (merkez Ø90 boşluk).
+- <strong>NEMA17</strong> = standart (31×31 M3, Ø22 pilot) ✓.
+- Toleranslar: gecme delikler (M3=3.2, M4=4.5, M5=5.5); sıkı geçme gerekiyorsa düşür.</p>
+<blockquote>
+<p>Bunlar 2D <strong>kesim</strong> dosyalarıdır; 3D montaj/açı için <code>montaj.md</code>, <code>montaj_sheet.svg</code>,
+<code>montaj_patlatma.png</code>. Nihai mekanik CAD (Fusion 360 / SolidWorks) ile son kontrol önerilir.</p>
+</blockquote>
+<h2>Yeniden üretmek</h2>
+<pre><code>python3 make_dxf.py    # ezdxf gerekir:  pip install ezdxf
+</code></pre>
+<p>Ölçüler <code>make_dxf.py</code> başındaki sabitlerden (montaj_hesap.py ile tutarlı) gelir.</p></article>
+</div>
+<footer><div class="wrap"><span>Kinetik Kum Sanatı Masası · üretim paketi</span><a href="https://github.com/emirhan-yakar/kinetic-sand-table">github.com/emirhan-yakar/kinetic-sand-table ↗</a></div></footer>
+</body></html>

@@ -1,0 +1,320 @@
+<!DOCTYPE html><html lang="tr"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>QA / FCT Test Fişi — Kinetik Kum Masası</title>
+<link rel="stylesheet" href="style.css"></head><body>
+<nav class="nav"><div class="wrap"><a class="brand" href="index.html">Kinetik Kum Masası <small>· üretim paketi</small></a><a class="link" href="index.html">Genel Bakış</a><a class="link" href="gorseller.html">Görseller</a><a class="link" href="simulasyon.html">Simülasyon</a><a class="link active" href="muhendislik.html">Mühendislik</a><a class="link" href="https://github.com/emirhan-yakar/kinetic-sand-table" target="_blank">GitHub ↗</a></div></nav>
+<div class="wrap">
+  <div class="dochead"><a class="back" href="muhendislik.html">← Mühendislik &amp; Üretim</a><div class="dlrow"><a class="btn" href="docs/uretim/ELEKTRIK_TALIMATI.pdf">⬇ Elektrik+QA (PDF)</a></div></div>
+  <article class="prose"><h1>QA / Bring-up &amp; Fonksiyonel Test Fişi (FCT)</h1>
+<p><strong>Ünite seri no:</strong> <strong><em>_</em></strong><strong><em>_</em>  <strong>Tarih:</strong> </strong><strong><em>_</em></strong>_  <strong>Operatör:</strong> <strong><em>_</em></strong><strong><em>_</em>
+<strong>Rev:</strong> PCB Rev-B · FluidNC </strong>__  <strong>Sonuç:</strong> ☐ GEÇTİ  ☐ KALDI  <strong>İmza:</strong> <strong><em>_</em></strong>___</p>
+<blockquote>
+<p>Sırayı atlamayın. Her adımda <strong>ölç → yaz → işaretle</strong>. Bir KALDI varsa durun, kök neden bulun.</p>
+</blockquote>
+<hr />
+<h2>1) Gelen muayene + emniyet (güç YOK)</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Kontrol</th>
+<th>Beklenen</th>
+<th>Ölçüm</th>
+<th>✓/✗</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1.1</td>
+<td>Görsel: lehim/komponent/yön (U2,Q1,D1 polarite)</td>
+<td>kusursuz</td>
+<td>—</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>1.2</td>
+<td>12V–GND kısa devre (ohm)</td>
+<td>yüksek (&gt;1kΩ)</td>
+<td>_____ Ω</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>1.3</td>
+<td>5V–GND kısa devre</td>
+<td>yüksek</td>
+<td>_____ Ω</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>1.4</td>
+<td>3V3–GND kısa devre</td>
+<td>yüksek</td>
+<td>_____ Ω</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>1.5</td>
+<td>PE topraklama sürekliliği (gövde)</td>
+<td>&lt;0.1 Ω</td>
+<td>_____ Ω</td>
+<td>☐</td>
+</tr>
+</tbody>
+</table>
+<h2>2) Güç verme (motor BAĞLI DEĞİL)</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Test noktası</th>
+<th>Beklenen</th>
+<th>Ölçüm</th>
+<th>✓/✗</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2.1</td>
+<td>J1 giriş</td>
+<td>11.4–12.6 V</td>
+<td>_____ V</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>2.2</td>
+<td>5V rayı (buck çıkışı)</td>
+<td>4.90–5.10 V</td>
+<td>_____ V</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>2.3</td>
+<td>3V3 rayı (ESP32)</td>
+<td>3.25–3.35 V</td>
+<td>_____ V</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>2.4</td>
+<td>Boşta akım (12V)</td>
+<td>&lt; 0.30 A</td>
+<td>_____ A</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>2.5</td>
+<td>ESP32/sürücü ısınma (1 dk)</td>
+<td>el ile ılık-altı</td>
+<td>—</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>2.6</td>
+<td>Ters polarite testi (kısa, bilerek ters)</td>
+<td>hasar yok (Q1 keser)</td>
+<td>—</td>
+<td>☐</td>
+</tr>
+</tbody>
+</table>
+<h2>3) Haberleşme / firmware</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Kontrol</th>
+<th>Beklenen</th>
+<th>✓/✗</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3.1</td>
+<td>FluidNC açılıyor (seri/WebUI)</td>
+<td>versiyon banner</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>3.2</td>
+<td><code>$Stepper</code> / config okunuyor</td>
+<td>hata yok</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>3.3</td>
+<td>(UART modu) iki sürücü ayrı adres yanıtı</td>
+<td>addr 0 ve 1</td>
+<td>☐</td>
+</tr>
+</tbody>
+</table>
+<h2>4) Hareket (motorlar bağlı, mekanizma serbest)</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Test</th>
+<th>Beklenen</th>
+<th>Ölçüm</th>
+<th>✓/✗</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>4.1</td>
+<td>TMC akım ayarı</td>
+<td>0.6–0.9 A/faz</td>
+<td>_____ A</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>4.2</td>
+<td>θ tam tur (A 360°)</td>
+<td>kayma/atlama yok</td>
+<td>—</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>4.3</td>
+<td>ρ ileri/geri (X 0→250→0)</td>
+<td>düzgün, ses az</td>
+<td>—</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>4.4</td>
+<td>ρ homing (endstop)</td>
+<td>tetikler, durur</td>
+<td>—</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>4.5</td>
+<td>θ yön / ρ yön doğru</td>
+<td>desenle uyumlu</td>
+<td>—</td>
+<td>☐</td>
+</tr>
+</tbody>
+</table>
+<h2>5) LED</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Test</th>
+<th>Beklenen</th>
+<th>✓/✗</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>5.1</td>
+<td>Tüm LED yanıyor (test deseni)</td>
+<td>eksik/yanlış renk yok</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>5.2</td>
+<td>Level-shifter (DIN 5V) kararlı</td>
+<td>titreme yok</td>
+<td>☐</td>
+</tr>
+</tbody>
+</table>
+<h2>6) Fonksiyonel (sistem, kum+bilye)</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Test</th>
+<th>Beklenen</th>
+<th>✓/✗</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>6.1</td>
+<td>Mıknatıs bilyeyi sürüklüyor</td>
+<td>kaçırma yok (orta hız)</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>6.2</td>
+<td>Tam desen (Atatürk imza / spiral)</td>
+<td>temiz oluk, merkezde</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>6.3</td>
+<td>Kuplaj max hız (kalibrasyon)</td>
+<td>_____ mm/s’de stabil</td>
+<td>☐</td>
+</tr>
+</tbody>
+</table>
+<h2>7) Dayanıklılık</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Test</th>
+<th>Beklenen</th>
+<th>✓/✗</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>7.1</td>
+<td>24h burn-in (sürekli desen)</td>
+<td>hata/ısınma/atlama yok</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>7.2</td>
+<td>Gürültü seviyesi</td>
+<td>kabul (≤ ____ dBA)</td>
+<td>☐</td>
+</tr>
+</tbody>
+</table>
+<h2>8) Final QA</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Kontrol</th>
+<th>✓/✗</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>8.1</td>
+<td>Cam/üst modül mıknatıs oturuyor, boşluk yok</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>8.2</td>
+<td>Ayak stabilite (sallanma yok)</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>8.3</td>
+<td>Etiket / seri no / kullanım kılavuzu</td>
+<td>☐</td>
+</tr>
+<tr>
+<td>8.4</td>
+<td>Ambalaj uygun</td>
+<td>☐</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Notlar:</strong> <strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>_____</p>
+<blockquote>
+<p>Test noktaları: 12V=J1, 5V=C1/BK1 çıkışı, 3V3=ESP32 3V3 pini, akım=seri ampermetre.
+Akış: <code>elektrik_montaj.md</code> → bu fiş → <code>URETIM_DOSYASI.md §5</code>.</p>
+</blockquote></article>
+</div>
+<footer><div class="wrap"><span>Kinetik Kum Sanatı Masası · üretim paketi</span><a href="https://github.com/emirhan-yakar/kinetic-sand-table">github.com/emirhan-yakar/kinetic-sand-table ↗</a></div></footer>
+</body></html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html><html lang="tr"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Elektrik Montaj — Kinetik Kum Masası</title>
+<link rel="stylesheet" href="style.css"></head><body>
+<nav class="nav"><div class="wrap"><a class="brand" href="index.html">Kinetik Kum Masası <small>· üretim paketi</small></a><a class="link" href="index.html">Genel Bakış</a><a class="link" href="gorseller.html">Görseller</a><a class="link" href="simulasyon.html">Simülasyon</a><a class="link active" href="muhendislik.html">Mühendislik</a><a class="link" href="https://github.com/emirhan-yakar/kinetic-sand-table" target="_blank">GitHub ↗</a></div></nav>
+<div class="wrap">
+  <div class="dochead"><a class="back" href="muhendislik.html">← Mühendislik &amp; Üretim</a><div class="dlrow"><a class="btn" href="docs/uretim/ELEKTRIK_TALIMATI.pdf">⬇ Elektrik talimatı (PDF)</a></div></div>
+  <article class="prose"><h1>Elektrik Montaj Talimatı (Electrical Work Instruction)</h1>
+<blockquote>
+<p>⚠️ <strong>220 VAC</strong> ile çalışılır. Mains bağlantılarını <strong>yetkili</strong> yapsın. Topraklama zorunlu.
+Kart <strong>ESD</strong>'ye duyarlı — topraklı bileklik kullanın. Tüm bağlantılar <strong>güç KAPALI</strong> yapılır.</p>
+</blockquote>
+<p><img alt="bağlantı şeması" src="docs/uretim/wiring_diagram.png" /></p>
+<p>Materyal/mekanik montaj <strong>ayrı</strong> sayfadadır: <a href="montaj.html"><code>montaj.md</code></a> (+ IKEA PDF: <code>MONTAJ_KILAVUZU.pdf</code>).</p>
+<hr />
+<h2>1) Konnektör pinout (kontrol kartı)</h2>
+<p>Kart üzeri konum (mm, kart orijinine göre) + tel:</p>
+<table>
+<thead>
+<tr>
+<th>Konnektör</th>
+<th>Konum</th>
+<th>Pin → Net</th>
+<th>Tel (renk · AWG)</th>
+<th>Gider</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>J1</strong> güç</td>
+<td>(6, 60)</td>
+<td>1=12V · 2=GND</td>
+<td>kırmızı/siyah · 18</td>
+<td>12V SMPS</td>
+</tr>
+<tr>
+<td><strong>J2</strong> θ motor</td>
+<td>(6, 6)</td>
+<td>1=A1 2=A2 3=B1 4=B2</td>
+<td>siyah/yeşil/kırmızı/mavi · 22</td>
+<td>NEMA17 θ (gövde içi)</td>
+</tr>
+<tr>
+<td><strong>J3</strong> ρ motor</td>
+<td>(72, 6)</td>
+<td>1=A1 2=A2 3=B1 4=B2</td>
+<td>siyah/yeşil/kırmızı/mavi · 22</td>
+<td><strong>slip ring → ρ motor</strong></td>
+</tr>
+<tr>
+<td><strong>J4</strong> LED</td>
+<td>(66, 60)</td>
+<td>1=5V 2=DIN 3=GND</td>
+<td>kırmızı/beyaz/siyah · 20</td>
+<td>WS2812B halka (level-shifter’lı)</td>
+</tr>
+<tr>
+<td><strong>J5</strong> endstop</td>
+<td>(40, 6)</td>
+<td>1=3V3 2=SİNYAL 3=GND</td>
+<td>—/sarı/siyah · 26</td>
+<td><strong>slip ring → endstop</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>NEMA17 faz eşlemesi modele göre değişir — <strong>bobin çiftlerini ohmmetre ile doğrula</strong>
+(aynı bobinin iki ucu ~2–4 Ω; çiftler arası açık devre). Yanlış çift → motor titrer/dönmez.</p>
+</blockquote>
+<h2>2) Slip ring tel haritası (8 yollu kapsül)</h2>
+<p>ρ motoru kolla döndüğü için kablosu slip ring’ten geçer (stator=baz, rotor=kol):</p>
+<table>
+<thead>
+<tr>
+<th>Slip ring teli</th>
+<th>Sinyal</th>
+<th>Stator ucu</th>
+<th>Rotor ucu</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>W1</td>
+<td>ρ A1</td>
+<td>J3-1</td>
+<td>ρ motor A1</td>
+</tr>
+<tr>
+<td>W2</td>
+<td>ρ A2</td>
+<td>J3-2</td>
+<td>ρ motor A2</td>
+</tr>
+<tr>
+<td>W3</td>
+<td>ρ B1</td>
+<td>J3-3</td>
+<td>ρ motor B1</td>
+</tr>
+<tr>
+<td>W4</td>
+<td>ρ B2</td>
+<td>J3-4</td>
+<td>ρ motor B2</td>
+</tr>
+<tr>
+<td>W5</td>
+<td>endstop sinyal</td>
+<td>J5-2</td>
+<td>endstop sinyal</td>
+</tr>
+<tr>
+<td>W6</td>
+<td>GND (lojik)</td>
+<td>J5-3</td>
+<td>endstop GND</td>
+</tr>
+<tr>
+<td>W7,W8</td>
+<td>yedek</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Sürücüler <strong>bazda</strong> (PCB’de) — slip ring <strong>motor akımı</strong> (~0.8A) taşır; ≥2A/yol şart.
+LED <strong>sabit</strong> rim’de → slip ring’e <strong>girmez</strong>.</p>
+</blockquote>
+<h2>3) Montaj sırası (elektrik)</h2>
+<ol>
+<li><strong>SMPS girişi (mains):</strong> 220VAC L/N + <strong>topraklama (PE)</strong> → SMPS; giriş hattına <strong>sigorta</strong>.
+   Mains kablolarını <strong>ferrül + yalıtım</strong>; gövdeye gerilim aktarımı yok.</li>
+<li><strong>12V → J1:</strong> SMPS 12V(+)/GND → J1 (kırmızı/siyah 18AWG). Polariteyi doğrula (karttaki ters-polarite
+   koruması yedektir, yine de doğru bağla).</li>
+<li><strong>θ motor → J2:</strong> bobin çiftlerini ohmmetre ile bul, A1A2/B1B2 sırasıyla bağla.</li>
+<li><strong>Slip ring:</strong> stator W1–W6 → J3 (4) + J5 (2); rotor W1–W6 → ρ motor (4) + endstop (2).
+   Slip ring’i dönme ekseninde merkeze sabitle; rotor kablosunu kola, stator kablosunu baza.</li>
+<li><strong>LED → J4:</strong> 5V/DIN/GND. DIN karttaki <strong>level-shifter</strong> çıkışından; ilk LED’e gider.
+   LED gücü ayrı 5V hattıyla beslenebilir (60 LED tam beyaz ~3.6A).</li>
+<li><strong>Kablo yönetimi:</strong> spiral/kanal, <strong>gerilim azaltıcı (strain relief)</strong>, dönen kol kablosuna
+   <strong>bükülme payı</strong> (slip ring’e kadar serbest döner). Tüm kabloları <strong>etiketle</strong>.</li>
+</ol>
+<h2>4) İlk güç verme (motor BAĞLAMADAN)</h2>
+<p>Önce QA listesi §2: 12V/5V/3V3 ölçümü + ESP32 boot. <strong>Sonra</strong> motorları bağla.
+→ Tam prosedür: <a href="qa.html"><code>QA_kontrol_listesi.md</code></a></p>
+<h2>5) Güvenlik / CE</h2>
+<ul>
+<li>Mains izolasyonu, <strong>PE topraklama</strong> sürekliliği (&lt;0.1Ω), çift yalıtım veya topraklı gövde.</li>
+<li>Sigorta (giriş), SMPS <strong>CE/EMC</strong>’li.</li>
+<li>LED/motor düşük gerilim (SELV) tarafı mains’ten ayrık.</li>
+<li>Üretimde <strong>hi-pot / topraklama süreklilik</strong> testi (QA §1) önerilir.</li>
+</ul></article>
+</div>
+<footer><div class="wrap"><span>Kinetik Kum Sanatı Masası · üretim paketi</span><a href="https://github.com/emirhan-yakar/kinetic-sand-table">github.com/emirhan-yakar/kinetic-sand-table ↗</a></div></footer>
+</body></html>
