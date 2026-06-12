@@ -11,6 +11,13 @@ Lazer / CNC router / su jeti atölyesine doğrudan gönderilebilir.
 
 Her `.dxf` yanında `*_preview.png` (görsel kontrol).
 
+## 3D STEP (mekanik CAD doğrulama)
+Aynı parçalar **3D katı** olarak da var (`*.step`) — Fusion 360 / FreeCAD / SolidWorks'te
+açıp montaj/fitment doğrulamasına başlamak için (`make_step.py`, cadquery ile üretildi):
+`sasi.step` (Ø520×4, 820 cm³) · `ayak_plakasi.step` (60×60×4) · `kol.step` (320×40×5).
+> Bunlar **kesim parçalarının** katılarıdır; tam fitment için satın alınan COTS parçaları
+> (MGN12 ray, lazy-susan, slip ring, NEMA17) CAD'e ekleyip doğrula.
+
 ## Delik şeması (özet)
 - **Şasi:** dış Ø520 · drum bağlantı 4× M4 @ Ø500 PCD · merkez Ø90 (slip ring + kayış boşluğu) ·
   turntable 4× M4 @ Ø120 · θ motor NEMA17 (Ø22 + 4× M3 @ 31×31, offset) · PCB 4× M3 (92×67) · kablo yuvası.
