@@ -278,7 +278,7 @@ def setcam(mode):
     cd=bpy.data.cameras.new("Cam"); cd.lens=lens
     c=bpy.data.objects.new("Cam",cd); c.location=loc; link(c); scene.camera=c
     d=Vector(tgt)-Vector(loc); c.rotation_euler=d.to_track_quat('-Z','Y').to_euler()
-    cd.dof.use_dof=True; cd.dof.focus_distance=(Vector(tgt)-Vector(loc)).length; cd.dof.aperture_fstop=4.5
+    cd.dof.use_dof=True; cd.dof.focus_distance=(Vector(tgt)-Vector(loc)).length; cd.dof.aperture_fstop=3.6
 
 # ============================ CIKTI ============================
 def gpu():
@@ -353,9 +353,13 @@ else:
         for d in pr.devices: d.use=True
         scene.cycles.device='GPU'
     except Exception as e: print("GPU?",e)
-    scene.cycles.samples=384; scene.cycles.use_denoising=True
-    scene.view_settings.view_transform='Filmic'; scene.view_settings.look='Medium High Contrast'
-    scene.view_settings.exposure=0.15
+    scene.cycles.samples=512; scene.cycles.use_denoising=True
+    try:  # AgX = Blender'in modern/gercekci tone mapping'i (Filmic'ten ustun)
+        scene.view_settings.view_transform='AgX'; scene.view_settings.look='AgX - Punchy'
+        scene.view_settings.exposure=0.45
+    except Exception:
+        scene.view_settings.view_transform='Filmic'; scene.view_settings.look='Medium High Contrast'
+        scene.view_settings.exposure=0.15
     scene.render.resolution_x=2000; scene.render.resolution_y=1375
     scene.render.image_settings.file_format='PNG'
     scene.render.filepath=os.path.join(DIR,f"room_{MODE}.png")
