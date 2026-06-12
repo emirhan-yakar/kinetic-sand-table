@@ -1,108 +1,89 @@
 #!/usr/bin/env python3
-# Mekanizma KESIT diyagrami (yan kesit, semaik). PIL. -> mekanizma_kesit.png
-import os, math
-from PIL import Image, ImageDraw, ImageFont
+# Mekanizma KESITI - profesyonel teknik kesit (matplotlib, taramali). -> mekanizma_kesit.png
+import os, math, matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+from matplotlib.patches import Rectangle, Polygon, Circle, FancyArrowPatch
 HERE=os.path.dirname(os.path.abspath(__file__))
-W,H=1400,1000
-im=Image.new("RGB",(W,H),(255,255,255)); d=ImageDraw.Draw(im)
-def F(sz,b=True):
-    for p in (["/System/Library/Fonts/Supplemental/Arial Bold.ttf"] if b else [])+["/System/Library/Fonts/Supplemental/Arial.ttf"]:
-        try: return ImageFont.truetype(p,sz)
-        except: pass
-    return ImageFont.load_default()
-INK=(30,30,36); BLUE=(20,110,220); MUT=(120,120,130)
-WOOD=(150,95,55); GLASS=(150,200,225); SAND=(196,168,110); STEEL=(120,125,135)
-ALU=(180,182,188); MOT=(70,75,85); MAG=(225,70,60); BEAR=(120,160,210); RING=(150,120,200)
+INK="#1a1a20"; BLUE="#1769c8"; GRN="#1f8a4c"; GR="#9a9a9a"
+W_WOOD="#7a5230"; W_AL="#c9cdd2"; W_SAND="#cdb277"; W_GLASS="#bcd6e6"; W_MOT="#5b6068"; W_MAG="#cf5247"
 
-CX=470; FY=880; s=1.4
-def Y(h): return FY-h*s
-def X(x): return CX+x*s
-def box(x0,h0,x1,h1,fill,outline=INK,wd=2):
-    d.rectangle((X(x0),Y(h1),X(x1),Y(h0)),fill=fill,outline=outline,width=wd)
+fig=plt.figure(figsize=(11.5,8.2)); ax=fig.add_axes([0.02,0.04,0.70,0.9]); ax.set_aspect("equal"); ax.axis("off")
+fig.text(0.03,0.95,"MEKANİZMA KESİTİ — yan kesit (şematik, ölçüsüz)",fontsize=15,fontweight="bold",color=INK)
+fig.text(0.03,0.915,"θ = dönen kol · ρ = taşıyıcı · bilye kumun altından mıknatısla sürüklenir",fontsize=10,color="#555")
 
-d.text((40,28),"KİNETİK KUM MASASI — MEKANİZMA KESİTİ (şematik, yan kesit)",font=F(26),fill=INK)
-d.text((40,62),"θ = dönme (kol) · ρ = yarıçap (taşıyıcı) · bilye kumun altından mıknatısla sürüklenir",font=F(17,False),fill=MUT)
+def R(x0,y0,x1,y1,fc,hatch=None,ec=INK,lw=1.2,a=1):
+    ax.add_patch(Rectangle((x0,y0),x1-x0,y1-y0,facecolor=fc,edgecolor=ec,lw=lw,hatch=hatch,alpha=a))
 
-# --- ayaklar (8 derece splay) ---
-for sgn in(-1,1):
-    top=sgn*210; foot=sgn*254
-    d.line((X(top),Y(320),X(foot),Y(0)),fill=WOOD,width=14)
-
-# --- govde (drum) ---
-box(-300,320,-270,467,WOOD)      # sol duvar
-box(270,320,300,467,WOOD)        # sag duvar
-box(-300,320,300,332,WOOD)       # taban
-# --- cam ust ---
-box(-276,464,276,470,GLASS)
-# --- kum tepsisi + kum ---
-box(-270,406,270,410,(210,210,214))      # tepsi tabani (ferromanyetik DEGIL)
-box(-270,410,270,460,SAND)               # kum
+# --- olculer (mm, kesit) ---
+H=467; BODY=320; WO=300; WI=270; SAND_T=410; SAND_TOP=460; GLASS=461
+# ayaklar (kesitte iki, egik)
+for s in(-1,1):
+    ax.add_patch(Polygon([(s*210,BODY),(s*224,BODY),(s*262,8),(s*248,8)],closed=True,facecolor=W_WOOD,edgecolor=INK,lw=1,hatch="////"))
+# govde duvarlari (ahsap, tarali)
+R(-WO,BODY,-WI,H,W_WOOD,"////"); R(WI,BODY,WO,H,W_WOOD,"////"); R(-WO,BODY,WO,BODY+14,W_WOOD,"////")
+# cam
+R(-276,GLASS,276,H,W_GLASS,None,ec=INK,lw=1)
+# kum + tepsi
+R(-WI,SAND_T,WI,SAND_TOP,W_SAND,"....",ec=INK,lw=.8)
+R(-WI,406,WI,SAND_T,W_AL,None,ec=INK,lw=.8)   # tepsi tabani (Al)
 # bilye
-br=150; d.ellipse((X(br)-9,Y(462)-9,X(br)+9,Y(462)+9),fill=STEEL,outline=INK)
+ax.add_patch(Circle((150,468),7,facecolor="#b9bcc2",edgecolor=INK,lw=1,zorder=6))
 
-# --- MEKANIZMA ---
-box(-260,356,260,360,ALU)                # sasi plakasi
-box(-21,322,21,356,MOT)                  # theta motoru (sasi alti)
-d.text((X(0)-70,Y(322)-2),"θ motor +3:1",font=F(13),fill=(255,255,255))
-box(-75,360,75,372,BEAR)                 # lazy-susan rulman
-box(-14,360,14,374,RING)                 # slip ring (merkez)
-# donen kol (saga uzanir)
-box(-30,372,250,378,(205,150,90))
-# MGN12 ray (kol ustu)
-box(0,378,250,381,STEEL)
-# tasiyici + miknatis (rho=150)
-box(br-25,381,br+25,394,ALU)             # tasiyici (MGN12H)
-box(br-12,394,br+12,402,MAG)             # miknatis N52
-# rho motoru (kol pivot ucu)
-box(-30,378,12,412,MOT)
-d.text((X(-30)+4,Y(412)+4),"ρ motor",font=F(13),fill=(255,255,255))
+# ===== MEKANIZMA =====
+mz=332
+R(-258,340,258,346,W_AL,"\\\\\\\\")            # sasi plakasi (Al)
+R(-72,346,72,356,W_AL,None,ec=INK,lw=1)         # lazy-susan / turntable
+R(-14,346,14,392,W_AL,None,ec=INK,lw=1)         # slip ring (merkez)
+R(-30,356,30,372,W_MOT,None,ec=INK,lw=1)        # buyuk theta kasnak
+# theta motoru (offset, govde + boss + saft)
+R(64,332,106,366,W_MOT,None,ec=INK,lw=1); R(74,366,96,372,W_MOT); R(82,372,88,386,W_MOT)
+ax.text(85,328,"θ motor",fontsize=8,ha="center",va="top",color=INK)
+# kol + MGN12 ray
+R(-30,384,250,392,W_AL,None,ec=INK,lw=1)        # kol
+R(0,392,250,398,W_MOT,None,ec=INK,lw=.8)        # MGN12 ray
+# tasiyici + miknatis (rho=140)
+R(140-26,398,140+26,412,W_AL,None,ec=INK,lw=1)  # MGN12H araba
+R(140-12,412,140+12,420,W_MAG,None,ec=INK,lw=1) # miknatis
+# rho motoru (kol ucu)
+R(228,384,250,418,W_MOT,None,ec=INK,lw=1); R(234,418,244,424,W_MOT)
+ax.text(239,380,"ρ motor",fontsize=8,ha="center",va="top",color=INK)
 
-# --- aralik (gap) oku ---
-gx=X(br+45)
-d.line((gx,Y(402),gx,Y(410)),fill=BLUE,width=2)
-d.line((gx-5,Y(402),gx+5,Y(402)),fill=BLUE,width=2); d.line((gx-5,Y(410),gx+5,Y(410)),fill=BLUE,width=2)
-d.text((gx+8,(Y(402)+Y(410))//2-9),"aralık ~4–6 mm",font=F(14),fill=BLUE)
+# --- aralik (gap) ---
+ax.annotate("",(166,420),(166,406),arrowprops=dict(arrowstyle="<->",color=BLUE,lw=1))
+ax.text(172,413,"aralık ~4–6 mm",fontsize=8,color=BLUE,va="center")
+# --- theta donme oku ---
+ax.add_patch(FancyArrowPatch((-34,378),(34,378),connectionstyle="arc3,rad=-0.55",arrowstyle="-|>",mutation_scale=14,color=BLUE,lw=1.6))
+ax.text(0,366,"θ",fontsize=15,color=BLUE,ha="center",fontweight="bold")
+# --- rho ok ---
+ax.annotate("",(244,406),(20,406),arrowprops=dict(arrowstyle="-|>",color=GRN,lw=1.6))
+ax.text(130,400,"ρ",fontsize=15,color=GRN,ha="center",fontweight="bold")
 
-# --- theta donme oku (merkez ust) ---
-cx0,cy0=X(0),Y(388)
-d.arc((cx0-46,cy0-22,cx0+46,cy0+22),200,520,fill=BLUE,width=3)
-d.polygon([(cx0+44,cy0-6),(cx0+52,cy0-2),(cx0+42,cy0+6)],fill=BLUE)
-d.text((cx0-12,cy0-46),"θ",font=F(22),fill=BLUE)
-# --- rho ok (kol boyunca) ---
-d.line((X(20),Y(388),X(230),Y(388)),fill=(0,150,80),width=3)
-d.polygon([(X(230),Y(388)-6),(X(242),Y(388)),(X(230),Y(388)+6)],fill=(0,150,80))
-d.text((X(120),Y(388)-26),"ρ",font=F(22),fill=(0,150,80))
+ax.set_xlim(-340,300); ax.set_ylim(-10,500)
 
-# --- etiketler (sag sutun, leader ile) ---
-labels=[
- (276,467,"Temperli cam üst modül (mıknatıslı)"),
- (180,460,"Kum + çelik bilye Ø12"),
- (200,408,"Kum tepsisi tabanı (Al/akrilik ≤4mm, ferromanyetik DEĞİL)"),
- (br+12,398,"N52 mıknatıs (taşıyıcı üstünde)"),
- (br+25,388,"Taşıyıcı = MGN12H araba"),
- (250,379,"MGN12 ray (ρ ekseni)"),
- (250,375,"Dönen kol (Al 5mm)"),
- (75,366,"Lazy-susan / turntable rulman (θ yatak)"),
- (14,367,"Slip ring (ρ motor+endstop kablosu)"),
- (260,358,"Şasi plakası (Al 4mm) — sasi.step"),
- (300,400,"Ahşap gövde (drum)"),
- (254,40,"Ayaklar (4×, 8° splay)"),
-]
-lx=980; ly=150
-d.line((lx-18,140,lx-18,860),fill=(235,235,238),width=1)
-for (hx,hh,t) in labels:
-    px,py=X(hx),Y(hh)
-    d.ellipse((px-4,py-4,px+4,py+4),fill=BLUE)
-    d.line((px,py,lx-22,ly+8),fill=(200,205,215),width=1)
-    d.text((lx,ly),t,font=F(15,False),fill=INK); ly+=46
+# ===== sag etiket sutunu (leader) =====
+labels=[(276,464,"Temperli cam üst modül (mıknatıslı)"),(150,460,"Kum + çelik bilye Ø12"),
+ (200,408,"Kum tepsisi (Al/akrilik ≤4mm — ferromanyetik DEĞİL)"),(152,418,"N52 mıknatıs"),
+ (166,405,"Taşıyıcı (MGN12H araba)"),(250,395,"MGN12 ray (ρ ekseni)"),(250,388,"Dönen kol (Al)"),
+ (239,400,"ρ motoru (NEMA17, kolda)"),(72,351,"Lazy-susan / turntable yatağı (θ)"),
+ (14,360,"Slip ring (ρ motor+endstop kablosu)"),(30,364,"θ büyük kasnak (3:1)"),
+ (258,343,"Şasi plakası (Al 4mm)"),(300,400,"Ahşap gövde (drum)"),(262,40,"Ayaklar (4×, 8°)")]
+import numpy as np
+lx=0.74; ax2=fig.add_axes([0,0,1,1]); ax2.axis("off")
+# eksen->figure donusumu icin display->axes2 transform
+fig.canvas.draw()
+ly=0.90
+for (hx,hy,t) in labels:
+    px,py=ax.transData.transform((hx,hy)); fx,fy=fig.transFigure.inverted().transform((px,py))
+    ax2.plot([fx,lx-0.008],[fy,ly+0.006],color="#cfcfd6",lw=.7,transform=fig.transFigure)
+    ax2.add_patch(Circle((fx,fy),0.004,color=BLUE,transform=fig.transFigure))
+    fig.text(lx,ly,t,fontsize=8.6,color=INK,va="center")
+    ly-=0.045
+# cozunurluk kutusu
+fig.text(lx,0.20,"ÇÖZÜNÜRLÜK",fontsize=10,color=BLUE,fontweight="bold")
+for i,t in enumerate(["θ: 3:1 redüksiyon → 26.667 step/derece (~0.16mm @R250)",
+                      "ρ: GT2 20T → 80 step/mm (0.0125mm)","Tahrik: 2× NEMA17 + TMC2209"]):
+    fig.text(lx,0.165-i*0.028,t,fontsize=8,color="#444")
 
-# hesap kutusu
-d.rounded_rectangle((lx,720,W-30,860),radius=12,outline=(220,220,226),width=2)
-d.text((lx+14,732),"Çözünürlük",font=F(16),fill=BLUE)
-for i,t in enumerate(["θ: 3200×3 / 360 = 26.667 step/derece  (≈0.16mm @R250)",
-                      "ρ: 3200 / 40 = 80 step/mm  (0.0125mm)",
-                      "θ redüksiyon 3:1 (GT2 20T→60T) · ρ strok ~250mm"]):
-    d.text((lx+14,762+i*30),t,font=F(13,False),fill=INK)
-
-im.save(os.path.join(HERE,"mekanizma_kesit.png"))
+fig.savefig(os.path.join(HERE,"mekanizma_kesit.png"),dpi=140,facecolor="white")
 print("mekanizma_kesit.png yazildi")

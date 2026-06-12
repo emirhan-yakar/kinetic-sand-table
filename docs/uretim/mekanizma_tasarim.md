@@ -6,6 +6,8 @@ Sisyphus/Dune Weaver tipi. Mevcut **kontrol kartı** (J3 = ρ motor, J5 = endsto
 
 ![mekanizma kesiti](mekanizma_kesit.png)
 
+![mekanizma patlatılmış](mekanizma_patlatma.png)
+
 ## 1) Mimari ve katman dizilimi (alttan üste)
 ```
    ┌─ cam (temperli Ø552)                              ← sabit (üst modül, mıknatıslı)

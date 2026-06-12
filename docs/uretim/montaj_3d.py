@@ -84,7 +84,11 @@ for ob in scene.objects:
             labels.append({"no":v[1],"text":v[2],"x":co.x*RES[0],"y":(1-co.y)*RES[1]})
             done.add(k)
 labels.sort(key=lambda l:l["no"])
-json.dump({"img":os.path.basename(OUT),"res":RES,"labels":labels},
+# montaj ekseni: (0,0,z) ust/alt -> ekranda dash-dot cizgi (profesyonel patlatma)
+def proj(z):
+    co=world_to_camera_view(scene,cam,Vector((0,0,z))); return [co.x*RES[0],(1-co.y)*RES[1]]
+axis=[proj(0.62),proj(0.02)]
+json.dump({"img":os.path.basename(OUT),"res":RES,"labels":labels,"axis":axis},
           open(os.path.join(HERE,"montaj_patlatma_labels.json"),"w"),ensure_ascii=False,indent=1)
 
 print("RENDER ->",OUT)

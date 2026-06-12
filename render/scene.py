@@ -90,6 +90,21 @@ def cyl(name,r,d,z,v=96,r2=None):
 def box(name,sx,sy,sz,loc):
     bpy.ops.mesh.primitive_cube_add(location=loc); o=bpy.context.active_object; o.name=name
     o.scale=(sx/2,sy/2,sz/2); bpy.ops.object.transform_apply(scale=True); return o
+def _join(name,parts):
+    bpy.ops.object.select_all(action='DESELECT')
+    for p in parts: p.select_set(True)
+    bpy.context.view_layer.objects.active=parts[0]; bpy.ops.object.join()
+    o=bpy.context.active_object; o.name=name; return o
+def nema17(name,loc,length=0.034):
+    # gercekci NEMA17: govde + on boss + saft + GT2 kasnak (+Z'ye bakar)
+    bz=loc[2]+length/2
+    body=box(name+"_b",0.0423,0.0423,length,loc)
+    bm=body.modifiers.new("bv","BEVEL"); bm.width=0.004; bm.segments=2; bm.limit_method='ANGLE'
+    bpy.context.view_layer.objects.active=body; bpy.ops.object.modifier_apply(modifier="bv")
+    boss=cyl(name+"_boss",0.011,0.005,bz+0.0025,28)
+    sh=cyl(name+"_sh",0.0025,0.02,bz+0.013,16)
+    pul=cyl(name+"_pul",0.0085,0.008,bz+0.018,28)
+    return _join(name,[body,boss,sh,pul])
 
 # ============================ GEOMETRI ============================
 # --- govde (drum) + kum havuzu ---
@@ -170,18 +185,24 @@ Glass.visible_camera = MODE in ("dark","room")
 
 # ===== ic mekanizma (drum icinde, kumun altinda) =====
 MECH_Z=BASE_Z+0.012
-BasePlate=cyl("BasePlate",WELL_R*0.98,0.006,BASE_Z+0.006,96)
-PCB=box("PCB",0.10,0.075,0.004,(0.12,0.0,BASE_Z+0.02)); PCB.rotation_euler=(0,0,math.radians(20))
-ThetaMotor=box("Theta_Motor",0.042,0.042,0.04,(0,0,MECH_Z+0.02))
-cyl("ts",0.011,0.02,MECH_Z+0.05,16); shaft=bpy.context.active_object; shaft.name="theta_shaft"
-# kol
-Arm=box("Arm",WELL_R*1.5,0.03,0.01,(WELL_R*0.30,0,MECH_Z+0.06))
-RhoMotor=box("Rho_Motor",0.03,0.03,0.028,(WELL_R*0.80,0,MECH_Z+0.06))
-Carriage=box("Carriage",0.03,0.03,0.012,(WELL_R*0.45,0,MECH_Z+0.072))
-Magnet=cyl("Magnet",0.009,0.01,MECH_Z+0.084,24)
-# birlestir: kol grubu
-for o in (shaft,):
-    pass
+BasePlate=cyl("BasePlate",WELL_R*0.96,0.005,BASE_Z+0.006,96)   # sasi plakasi
+PCB=box("PCB",0.10,0.075,0.004,(0.14,0.0,BASE_Z+0.02)); PCB.rotation_euler=(0,0,math.radians(18))
+# theta_shaft = merkez turntable tertibati: lazy-susan + buyuk kasnak + slip ring
+_lz=cyl("lz",0.072,0.010,MECH_Z+0.006,48)          # lazy-susan / turntable disk
+_bp=cyl("bp",0.030,0.013,MECH_Z+0.018,36)          # buyuk theta kasnagi (GT2 60T)
+_sr=cyl("sr",0.013,0.036,MECH_Z+0.030,24)          # slip ring kapsul (merkez eksen)
+theta_shaft=_join("theta_shaft",[_lz,_bp,_sr])
+# theta motoru (offset -> kayis tahrik)
+ThetaMotor=nema17("Theta_Motor",(0.085,0,MECH_Z+0.000),length=0.034)
+# kol + MGN12 ray (turntable ustunde) -> tek "Arm"
+_arm=box("ar",WELL_R*1.42,0.030,0.008,(WELL_R*0.30,0,MECH_Z+0.044))
+_rail=box("rl",WELL_R*1.26,0.013,0.008,(WELL_R*0.30,0,MECH_Z+0.052))
+Arm=_join("Arm",[_arm,_rail])
+# tasiyici (MGN12H) + miknatis
+Carriage=box("Carriage",0.026,0.034,0.014,(WELL_R*0.52,0,MECH_Z+0.060))
+Magnet=cyl("Magnet",0.010,0.011,MECH_Z+0.073,24)
+# rho motoru (kol ucunda)
+RhoMotor=nema17("Rho_Motor",(WELL_R*0.96,0,MECH_Z+0.040),length=0.030)
 
 # --- zemin (room disinda da hafif yansima icin) ---
 bpy.ops.mesh.primitive_plane_add(size=14,location=(0,0,0))
@@ -239,7 +260,7 @@ stm,_=mat("Steel",(0.80,0.80,0.82),rough=0.07,metal=1.0); Ball.data.materials.ap
 LEDc=(0.45,0.62,0.95) if MODE=="dark" else (0.55,0.68,0.92)
 lm,_=mat("LED",(0,0,0),emis=LEDc,emis_str=(6.0 if MODE=="dark" else 3.2)); LED.data.materials.append(lm)
 alu,_=mat("Aluminum",(0.55,0.56,0.58),rough=0.35,metal=1.0)
-for o in (ThetaMotor,RhoMotor,shaft,Carriage): o.data.materials.append(alu)
+for o in (ThetaMotor,RhoMotor,theta_shaft,Carriage): o.data.materials.append(alu)
 arm_m,_=mat("ArmAlu",(0.7,0.71,0.73),rough=0.3,metal=1.0); Arm.data.materials.append(arm_m)
 mag,_=mat("Magnet",(0.15,0.15,0.17),rough=0.4,metal=1.0); Magnet.data.materials.append(mag)
 pcbm,_=mat("PCB",(0.06,0.30,0.16),rough=0.45); PCB.data.materials.append(pcbm)
