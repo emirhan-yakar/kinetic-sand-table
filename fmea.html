@@ -1,0 +1,309 @@
+<!DOCTYPE html><html lang="tr"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FMEA & Gereksinim İzlenebilirlik — DEVRAN</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml"><meta name="theme-color" content="#0d0f13"><meta property="og:type" content="website"><meta property="og:title" content="DEVRAN — Kinetik Kum Sanatı Masası"><meta property="og:description" content="Ø60cm polar kinetik kum sanatı masası. Üretime hazır mühendislik paketi."><meta property="og:image" content="render/room_hero.png">
+<link rel="stylesheet" href="style.css"></head><body>
+<nav class="nav"><div class="wrap"><a class="brand" href="index.html"><img class="mark" src="assets/mark.svg" alt="">DEVRAN <small>· kinetik kum sanatı</small></a><a class="link" href="index.html">Genel Bakış</a><a class="link" href="gorseller.html">Görseller</a><a class="link" href="simulasyon.html">Simülasyon</a><a class="link active" href="muhendislik.html">Mühendislik</a><a class="link" href="en/index.html">EN</a><a class="link" href="https://github.com/emirhan-yakar/kinetic-sand-table" target="_blank">GitHub ↗</a></div></nav>
+<div class="wrap">
+  <div class="dochead"><a class="back" href="muhendislik.html">← Mühendislik &amp; Üretim</a></div>
+  <article class="prose"><h1>FMEA + Gereksinim &amp; Test İzlenebilirliği</h1>
+<p>Hata Modu ve Etkileri Analizi (FMEA) + ürün gereksinim spesifikasyonu (PRD) ve
+gereksinim→test izleme matrisi. Global donanım geliştirmede standart mühendislik rigoru.</p>
+<hr />
+<h2>1) Ürün gereksinimleri (PRD — özet)</h2>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Gereksinim</th>
+<th>Doğrulama (test)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>R1</strong></td>
+<td>Desen çözünürlüğü ≥ sub-mm (kenar)</td>
+<td>T-MECH-1</td>
+</tr>
+<tr>
+<td><strong>R2</strong></td>
+<td>θ sürekli dönme, ρ 0–250 mm, homing</td>
+<td>T-MOT-2/3</td>
+</tr>
+<tr>
+<td><strong>R3</strong></td>
+<td>Bilye kaçırmadan sürüklenir (≤ hedef hız)</td>
+<td>T-FUNC-1</td>
+</tr>
+<tr>
+<td><strong>R4</strong></td>
+<td>Gürültü ≤ ~35 dBA (oturma odası)</td>
+<td>T-NOISE</td>
+</tr>
+<tr>
+<td><strong>R5</strong></td>
+<td>5V/12V raylar tolerans içinde, LED kararlı</td>
+<td>T-PWR-1/2, T-LED</td>
+</tr>
+<tr>
+<td><strong>R6</strong></td>
+<td>7/24 çalışmada atlama/ısınma yok (ömür)</td>
+<td>T-BURN (≥24h, hedef ≥1000h)</td>
+</tr>
+<tr>
+<td><strong>R7</strong></td>
+<td>Üst modül emniyetli tutma (SF ≥ 3)</td>
+<td>hesap: SF 5.2× ✓</td>
+</tr>
+<tr>
+<td><strong>R8</strong></td>
+<td>Ağ güvenliği: yetkisiz erişim yok</td>
+<td>T-SEC</td>
+</tr>
+<tr>
+<td><strong>R9</strong></td>
+<td>Devrilme stabilitesi (mobilya std)</td>
+<td>T-STAB</td>
+</tr>
+<tr>
+<td><strong>R10</strong></td>
+<td>EMC/emniyet uyumlu</td>
+<td><a href="sertifikasyon.html">sertifikasyon</a></td>
+</tr>
+</tbody>
+</table>
+<h2>2) FMEA (S=şiddet, O=olasılık, D=tespit; RPN=S×O×D, 1–10)</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Öğe / fonksiyon</th>
+<th>Hata modu</th>
+<th>Etki</th>
+<th style="text-align: right;">S</th>
+<th style="text-align: right;">O</th>
+<th style="text-align: right;">D</th>
+<th style="text-align: right;">RPN</th>
+<th>Önlem</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>F1</td>
+<td>12V giriş</td>
+<td>ters polarite</td>
+<td>kart hasarı</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">42</td>
+<td>P-FET + sigorta (Rev-B) ✓</td>
+</tr>
+<tr>
+<td>F2</td>
+<td>WS2812 data</td>
+<td>3.3V seviye yetersiz</td>
+<td>LED titrer/yanmaz</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">72</td>
+<td>level-shifter (Rev-B) ✓</td>
+</tr>
+<tr>
+<td>F3</td>
+<td>TMC2209 UART</td>
+<td>adres çakışması</td>
+<td>sürücü ayarlanamaz</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">90</td>
+<td>ayrı MS adres (Rev-B) ✓</td>
+</tr>
+<tr>
+<td>F4</td>
+<td>Slip ring</td>
+<td>kontak gürültü/aşınma</td>
+<td>ρ motor kesilir</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">112</td>
+<td>≥2A kaliteli kapsül, akım düşük; periyodik bakım</td>
+</tr>
+<tr>
+<td>F5</td>
+<td>Manyetik kuplaj</td>
+<td>hızda bilye kaçar</td>
+<td>desen bozulur</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">50</td>
+<td>hız limiti + aralık ≤10mm + mıknatıs büyüt</td>
+</tr>
+<tr>
+<td>F6</td>
+<td>θ yatak</td>
+<td>boşluk/salınım</td>
+<td>desen kayması</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">120</td>
+<td>kaliteli ince-kesit rulman + kayış gerginliği</td>
+</tr>
+<tr>
+<td>F7</td>
+<td>ρ kayış</td>
+<td>atlama (skip)</td>
+<td>konum kayması</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">120</td>
+<td>doğru gerginlik + akım; homing referansı</td>
+</tr>
+<tr>
+<td>F8</td>
+<td>Motor/sürücü</td>
+<td>aşırı ısınma</td>
+<td>kapanma/ömür</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">72</td>
+<td>akım 0.6–0.9A, havalandırma, burn-in</td>
+</tr>
+<tr>
+<td>F9</td>
+<td>Temperli cam</td>
+<td>kırılma</td>
+<td>yaralanma</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">36</td>
+<td>temperli + rodaj + yük testi</td>
+</tr>
+<tr>
+<td>F10</td>
+<td>Üst mıknatıs modül</td>
+<td>parmak sıkışması</td>
+<td>yaralanma</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">63</td>
+<td>ikaz + kaldırma tasarımı</td>
+</tr>
+<tr>
+<td>F11</td>
+<td>Firmware</td>
+<td>güç kesintisi sonrası kayıp</td>
+<td>yeniden home gerek</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">60</td>
+<td>açılışta auto-home + durum kaydı</td>
+</tr>
+<tr>
+<td>F12</td>
+<td>Ağ</td>
+<td>yetkisiz erişim</td>
+<td>kontrol ele geçer</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">105</td>
+<td>AP şifre, yerel ağ, OTA imzalama, port kısıtla</td>
+</tr>
+<tr>
+<td>F13</td>
+<td>Wi-Fi/EMC</td>
+<td>parazit/uyumsuzluk</td>
+<td>sertifika kalır</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">96</td>
+<td>ön-sertifikalı modül + EMC pre-scan</td>
+</tr>
+</tbody>
+</table>
+<p><strong>En yüksek RPN'ler (öncelik):</strong> F6/F7 (mekanik boşluk/atlama, 120), F4 (slip ring, 112), F12 (güvenlik, 105),
+F13 (EMC, 96), F3 (90). Bunlar <strong>prototip/bring-up testinde</strong> özellikle doğrulanmalı.</p>
+<h2>3) Gereksinim → Test izleme matrisi</h2>
+<table>
+<thead>
+<tr>
+<th>Gereksinim</th>
+<th>Test (QA fişi / plan)</th>
+<th>Durum</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>R1</td>
+<td>T-MECH-1 (çözünürlük)</td>
+<td>hesap ✓ · donanım ⏳</td>
+</tr>
+<tr>
+<td>R2</td>
+<td><a href="qa.html">QA</a> §4.2–4.4</td>
+<td>⏳ prototip</td>
+</tr>
+<tr>
+<td>R3</td>
+<td>QA §6.1</td>
+<td>⏳</td>
+</tr>
+<tr>
+<td>R4</td>
+<td>T-NOISE (dBA ölçüm)</td>
+<td>⏳</td>
+</tr>
+<tr>
+<td>R5</td>
+<td>QA §2.1–2.3, §5</td>
+<td>⏳</td>
+</tr>
+<tr>
+<td>R6</td>
+<td>QA §7.1 burn-in</td>
+<td>⏳</td>
+</tr>
+<tr>
+<td>R7</td>
+<td>mıknatıs hesabı (SF 5.2×)</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>R8</td>
+<td>T-SEC (penetrasyon)</td>
+<td>⏳</td>
+</tr>
+<tr>
+<td>R9</td>
+<td>T-STAB (devrilme)</td>
+<td>⏳</td>
+</tr>
+<tr>
+<td>R10</td>
+<td><a href="sertifikasyon.html">sertifikasyon</a></td>
+<td>⏳</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>"⏳" kalemler <strong>fiziksel prototip</strong> gerektirir — yazılımda kapatılamaz. FMEA, bring-up ve
+DVT test planının girdisidir (<a href="uretim-dosyasi.html">üretim dosyası §5</a>).</p>
+</blockquote>
+<h2>4) Süreç (global pro)</h2>
+<p>Tasarım → <strong>FMEA</strong> (bu) → risk azaltma → prototip → <strong>bring-up + DVT testleri</strong> (gereksinime bağlı) →
+ECO ile düzeltme → PVT → üretim. Her revizyonda FMEA güncellenir (<a href="CHANGELOG.md">CHANGELOG</a>).</p></article>
+</div>
+<footer><div class="wrap"><span>DEVRAN · kinetik kum sanatı masası · açık kaynak üretim paketi</span><a href="https://github.com/emirhan-yakar/kinetic-sand-table">github.com/emirhan-yakar/kinetic-sand-table ↗</a></div></footer>
+</body></html>

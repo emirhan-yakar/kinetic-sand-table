@@ -1,0 +1,139 @@
+<!DOCTYPE html><html lang="tr"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sertifikasyon & Uyumluluk — DEVRAN</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml"><meta name="theme-color" content="#0d0f13"><meta property="og:type" content="website"><meta property="og:title" content="DEVRAN — Kinetik Kum Sanatı Masası"><meta property="og:description" content="Ø60cm polar kinetik kum sanatı masası. Üretime hazır mühendislik paketi."><meta property="og:image" content="render/room_hero.png">
+<link rel="stylesheet" href="style.css"></head><body>
+<nav class="nav"><div class="wrap"><a class="brand" href="index.html"><img class="mark" src="assets/mark.svg" alt="">DEVRAN <small>· kinetik kum sanatı</small></a><a class="link" href="index.html">Genel Bakış</a><a class="link" href="gorseller.html">Görseller</a><a class="link" href="simulasyon.html">Simülasyon</a><a class="link active" href="muhendislik.html">Mühendislik</a><a class="link" href="en/index.html">EN</a><a class="link" href="https://github.com/emirhan-yakar/kinetic-sand-table" target="_blank">GitHub ↗</a></div></nav>
+<div class="wrap">
+  <div class="dochead"><a class="back" href="muhendislik.html">← Mühendislik &amp; Üretim</a></div>
+  <article class="prose"><h1>Sertifikasyon &amp; Uyumluluk Yol Haritası</h1>
+<p>Premium, <strong>şebeke beslemeli (adaptörlü), ağ bağlantılı, ağır cam + güçlü mıknatıs</strong> içeren bir
+mobilya-elektronik ürünü global satmak için gerekenler. Bunlar <strong>pazarlık dışı</strong> — yoksa yasal satılamaz.</p>
+<blockquote>
+<p>Strateji: ürün <strong>SELV (≤24V DC)</strong> tarafında kalsın; şebeke gerilimi <strong>harici, zaten sertifikalı
+bir adaptörde</strong> olsun → ürünün kendi sertifikasyon yükü ciddi azalır (en kritik tasarım kararı).</p>
+</blockquote>
+<h2>1) Hedef pazara göre zorunlu işaretler</h2>
+<table>
+<thead>
+<tr>
+<th>Pazar</th>
+<th>İşaret / standart</th>
+<th>Kapsam</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>AB</strong></td>
+<td><strong>CE</strong> — EMC 2014/30, LVD/(adaptör), <strong>EN 62368-1</strong> (AV/BT emniyet), <strong>RoHS</strong> 2011/65, <strong>REACH</strong>, WEEE</td>
+<td>emniyet + EMC + kimyasal + e-atık</td>
+</tr>
+<tr>
+<td><strong>AB radyo</strong></td>
+<td><strong>RED 2014/53</strong> (Wi-Fi/BT)</td>
+<td>telsiz modülü (ESP32) — <strong>ön-sertifikalı modül kullan</strong></td>
+</tr>
+<tr>
+<td><strong>ABD</strong></td>
+<td><strong>FCC Part 15B</strong> (+15C telsiz)</td>
+<td>EMC / radyo</td>
+</tr>
+<tr>
+<td><strong>İngiltere</strong></td>
+<td><strong>UKCA</strong></td>
+<td>CE muadili</td>
+</tr>
+<tr>
+<td><strong>Kanada</strong></td>
+<td>ISED</td>
+<td>radyo</td>
+</tr>
+<tr>
+<td><strong>Genel</strong></td>
+<td><strong>EN 60335</strong> (ev aletleri) <em>veya</em> 62368-1 + mobilya <strong>devrilme/stabilite</strong></td>
+<td>mekanik emniyet</td>
+</tr>
+</tbody>
+</table>
+<h2>2) Ürün-özel emniyet riskleri (test edilmeli)</h2>
+<ul>
+<li><strong>Güçlü mıknatıs (N52):</strong> sıkışma/yutma; çocuk erişimi; manyetik alan (kalp pili uyarısı, ambalaj ikazı).</li>
+<li><strong>Temperli cam:</strong> kırılma davranışı (temperli zorunlu), kenar emniyeti, yük dayanımı.</li>
+<li><strong>Devrilme/stabilite:</strong> sehpa standardı (örn. ağırlık + ayak açısı; biz 8° splay + SF 5.2× ile tasarladık).</li>
+<li><strong>Isınma:</strong> motor/sürücü yüzey sıcaklığı sınırları; uzun çalışmada.</li>
+<li><strong>Sıkışma:</strong> mıknatıslı üst modül (≈21.6 kgf) — parmak ikazı + tasarımsal emniyet.</li>
+</ul>
+<h2>3) Akış ve tahmini bütçe (TR'den global)</h2>
+<table>
+<thead>
+<tr>
+<th>Adım</th>
+<th>Ne</th>
+<th>Tahmini maliyet</th>
+<th>Süre</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ön-uyumluluk (pre-scan)</td>
+<td>EMC ön-tarama (akredite lab) — erken hata yakala</td>
+<td>15–40k ₺</td>
+<td>1–2 hafta</td>
+</tr>
+<tr>
+<td>Tasarım düzeltme</td>
+<td>filtre, kılıflama, topraklama</td>
+<td>mühendislik</td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>CE dosyası</strong></td>
+<td>EMC + 62368 emniyet testi + teknik dosya + DoF (Declaration of Conformity)</td>
+<td>80–200k ₺</td>
+<td>4–8 hafta</td>
+</tr>
+<tr>
+<td><strong>FCC</strong></td>
+<td>Part 15B (ABD hedefliyse)</td>
+<td>60–150k ₺</td>
+<td>3–6 hafta</td>
+</tr>
+<tr>
+<td>RoHS/REACH</td>
+<td>malzeme beyanı + (gerekirse) test</td>
+<td>10–30k ₺</td>
+<td>1–3 hafta</td>
+</tr>
+<tr>
+<td>Telsiz</td>
+<td><strong>ön-sertifikalı ESP32 modülü</strong> → modül sertifikası devral (büyük tasarruf)</td>
+<td>düşük</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Rakamlar TR akredite lab (TÜRKAK) / TÜV SÜD / Intertek / SGS / Eurofins seviyesi tahminidir;
+kapsam ve adetle değişir. <strong>Modül sertifikası devralma</strong> ve <strong>harici adaptör</strong> en büyük iki tasarruf.</p>
+</blockquote>
+<h2>4) Akredite test lab seçenekleri (TR / global)</h2>
+<p>TÜV SÜD · TÜV Rheinland · Intertek · SGS · Eurofins · UL · (TR akredite EMC labları).
+Erken aşamada <strong>bir labla ön-görüşme</strong> → kapsam/maliyet netleşir.</p>
+<h2>5) Tasarım tarafında şimdi yapılabilecekler (pre-compliance)</h2>
+<ul>
+<li><strong>Ön-sertifikalı ESP32 modülü</strong> (FCC/CE/RED ID'li) seç → telsiz testini büyük oranda atla.</li>
+<li><strong>Harici CE'li adaptör</strong> (12V DC) → şebeke emniyeti adaptörde.</li>
+<li><strong>EMC için PCB'de:</strong> giriş filtresi, ferrit, düzgün GND, ekranlı motor kablosu (Rev-C'de eklenebilir).</li>
+<li><strong>Topraklama / SELV ayrımı</strong>, sigorta (zaten Rev-B'de).</li>
+<li>Kullanım kılavuzunda <strong>mıknatıs/cam/çocuk</strong> ikazları + ambalaj sembolleri.</li>
+</ul>
+<h2>6) Belgeler (teknik dosya içeriği)</h2>
+<p>Teknik dosya, DoF, test raporları, risk analizi (<a href="fmea.html">FMEA</a>), şema/PCB, BOM, kullanım kılavuzu,
+etiket/işaretleme. Üretim sürekliliği için <strong>üretim kontrolü</strong> (FAI/QA — <a href="qa.html">QA fişi</a>).</p>
+<blockquote>
+<p><strong>Önce hangi pazar?</strong> AB+TR ile başla (CE+UKCA yoksa bile AB), ABD'yi (FCC) ölçeklerken ekle.
+İlk hedef tek pazar → maliyet/odak.</p>
+</blockquote></article>
+</div>
+<footer><div class="wrap"><span>DEVRAN · kinetik kum sanatı masası · açık kaynak üretim paketi</span><a href="https://github.com/emirhan-yakar/kinetic-sand-table">github.com/emirhan-yakar/kinetic-sand-table ↗</a></div></footer>
+</body></html>
